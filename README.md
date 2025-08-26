@@ -67,8 +67,8 @@ A modular, upgradeable smart contract system built on the ERC-2535 Diamond Proxy
 
 ```bash
 # Clone the repository
-git clone https://github.com/GeniusVentures/diamonds-base.git
-cd diamonds-base
+git clone https://github.com/GeniusVentures/diamonds-monitor-dev.git
+cd diamonds-monitor-dev
 
 # Install dependencies
 yarn install
@@ -229,7 +229,7 @@ yarn test test/integration/defender/DefenderDeployment.test.ts
 ## 📁 Project Structure
 
 ```bash
-diamonds-base/
+diamonds-monitor-dev/
 ├── contracts/                    # Solidity smart contracts
 │   └── examplediamond/           # Diamond facet contracts
 │       ├── facets/               # Individual facet implementations
