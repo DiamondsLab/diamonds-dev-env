@@ -1,6 +1,5 @@
 import { BaseContract } from 'ethers';
-import { ethers } from 'hardhat';
-import { parseEther, Interface, FunctionFragment } from 'ethers';
+import { parseEther, Interface } from 'ethers';
 import { debug } from 'debug';
 import * as chai from 'chai';
 
@@ -16,13 +15,13 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 chai.use(chaiAsPromised);
 
 declare global {
-  export var debuglog: debug.Debugger;
+  var debuglog: debug.Debugger | undefined;
 }
 
-global.debuglog = debug('UnitTest:log');
-global.debuglog.color = '158';
+(global as any).debuglog = debug('UnitTest:log');
+(global as any).debuglog.color = '158';
 
-export const debuglog = global.debuglog;
+export const debuglog = (global as any).debuglog;
 
 export interface IFacetDeployedInfo {
   address?: string;

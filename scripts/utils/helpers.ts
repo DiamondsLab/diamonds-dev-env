@@ -1,4 +1,3 @@
-import { ethers } from 'hardhat';
 import { Interface, parseEther, FunctionFragment } from 'ethers';
 
 export function getInterfaceID(contractInterface: Interface) {

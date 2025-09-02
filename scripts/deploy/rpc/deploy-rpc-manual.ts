@@ -6,7 +6,6 @@
  */
 
 import { RPCDiamondDeployer, RPCDiamondDeployerConfig } from '../../setup/RPCDiamondDeployer';
-import { ethers } from 'ethers';
 import * as dotenv from 'dotenv';
 import chalk from 'chalk';
 import { Command } from 'commander';

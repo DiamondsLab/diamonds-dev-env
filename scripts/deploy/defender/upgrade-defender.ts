@@ -5,8 +5,7 @@
  * Handles diamond upgrades using DefenderDiamondDeployer
  */
 
-import { DefenderDiamondDeployer, DefenderDiamondDeployerConfig } from '../../setup/DefenderDiamondDeployer';
-import { ethers } from 'hardhat';
+import { DefenderDiamondDeployer } from '../../setup/DefenderDiamondDeployer';
 import hre from 'hardhat';
 import * as dotenv from 'dotenv';
 

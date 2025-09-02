@@ -5,7 +5,7 @@
  * Deploys Example Diamond contracts using DefenderDiamondDeployer
  */
 
-import { DefenderDiamondDeployer, DefenderDiamondDeployerConfig } from '../../setup/DefenderDiamondDeployer';
+import { DefenderDiamondDeployer } from '../../setup/DefenderDiamondDeployer';
 import { ethers } from 'hardhat';
 import hre from 'hardhat';
 import * as dotenv from 'dotenv';

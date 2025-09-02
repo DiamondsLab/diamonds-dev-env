@@ -14,10 +14,9 @@ import hre from 'hardhat';
 import type { HardhatEthersProvider } from '@nomicfoundation/hardhat-ethers/internal/hardhat-ethers-provider';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import { join } from 'path';
-import { readFileSync, existsSync } from 'fs';
+import { existsSync } from 'fs';
 import 'hardhat-diamonds';
 import 'hardhat-multichain';
-import type { HardhatUserConfig } from 'hardhat/types';
 import * as dotenv from 'dotenv';
 import chalk from 'chalk';
 
