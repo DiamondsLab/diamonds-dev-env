@@ -105,6 +105,10 @@ jobs:
     - name: Publish to NPM
       working-directory: ./packages/diamonds-monitor
       run: |
+        if [ -z "$NODE_AUTH_TOKEN" ]; then
+          echo "NPM_TOKEN not configured, skipping publish"
+          exit 0
+        fi
         if [ $(npm view . version) != $(node -p "require('./package.json').version") ]; then
           npm publish
         else
