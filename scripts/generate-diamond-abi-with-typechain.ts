@@ -7,17 +7,23 @@ import chalk from 'chalk';
  */
 async function generateDiamondAbiWithTypechain(options: DiamondAbiGenerationOptions) {
 	try {
-		console.log(chalk.blue(`🚀 Generating Diamond ABI for ${options.diamondName}...`));
+		if (options.verbose) {
+			console.log(chalk.blue(`🚀 Generating Diamond ABI for ${options.diamondName}...`));
+		}
 
 		const result = await generateDiamondAbi(options);
 
-		console.log(chalk.green(`✅ Diamond ABI generated: ${result.outputPath}`));
-		console.log(chalk.blue(`   Functions: ${result.stats.totalFunctions}`));
-		console.log(chalk.blue(`   Events: ${result.stats.totalEvents}`));
-		console.log(chalk.blue(`   Facets: ${result.stats.facetCount}`));
+		if (options.verbose) {
+			console.log(chalk.green(`✅ Diamond ABI generated: ${result.outputPath}`));
+			console.log(chalk.blue(`   Functions: ${result.stats.totalFunctions}`));
+			console.log(chalk.blue(`   Events: ${result.stats.totalEvents}`));
+			console.log(chalk.blue(`   Facets: ${result.stats.facetCount}`));
+		}
 
 		// Generate TypeScript types directly using TypeChain
-		console.log(chalk.blue('🔧 Regenerating TypeChain types for Diamond...'));
+		if (options.verbose) {
+			console.log(chalk.blue('🔧 Regenerating TypeChain types for Diamond...'));
+		}
 
 		await runCommand(
 			'npx',
@@ -34,11 +40,15 @@ async function generateDiamondAbiWithTypechain(options: DiamondAbiGenerationOpti
 			},
 		);
 
-		console.log(chalk.green('✅ TypeChain types regenerated successfully!'));
+		if (options.verbose) {
+			console.log(chalk.green('✅ TypeChain types regenerated successfully!'));
+		}
 
 		return result;
 	} catch (error) {
-		console.error(chalk.red('❌ Failed to generate diamond ABI:'), error);
+		if (options.verbose) {
+			console.error(chalk.red('❌ Failed to generate diamond ABI:'), error);
+		}
 		throw error;
 	}
 }
