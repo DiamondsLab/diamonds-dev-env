@@ -6,14 +6,45 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "rootDirs": ["./scripts", "./test", "./test-suites", "./typechain-types"],
+    "rootDirs": [
+      "./scripts",
+      "./test",
+      "./test-suites",
+      "./typechain-types",
+      "./packages/*/src"
+    ],
     "outDir": "dist",
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": false,
     "typeRoots": ["node_modules/@types", "./types"],
+    "baseUrl": ".",
+    "paths": {
+      "diamonds-monitor": ["./packages/diamonds-monitor/src/index"]
+    }
   },
-  "include": ["./scripts", "./test", "./test-suites", "./typechain-types"],
+  "include": [
+    "./scripts",
+    "./test",
+    "./test-suites",
+    "./typechain-types",
+    "./packages/*/src/**/*"
+  ],
   "files": ["./hardhat.config.ts"],
-  "exclude": ["./notes/**/*", "./node_modules", "./dist", "./artifacts", "./coverage", "./cache", "./types"],
+  "exclude": [
+    "./notes/**/*",
+    "./node_modules",
+    "./dist",
+    "./artifacts",
+    "./coverage",
+    "./cache",
+    "./types",
+    "./packages/*/node_modules",
+    "./packages/*/dist"
+  ],
+  "references": [
+    {
+      "path": "./packages/diamonds-monitor"
+    }
+  ]
 }

@@ -1,53 +1,307 @@
-# Diamonds Base Project
+# Diamonds Monitor Development Environment
 
-A modular, upgradeable smart contract system built on the ERC-2535 Diamond Proxy Standard, providing a flexible foundation for decentralized autonomous organization (DAO) functionality.
+Professional development environment for the `diamonds-monitor` node module and ERC-2535 Diamond Proxy Standard projects.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Hardhat](https://img.shields.io/badge/Built%20with-Hardhat-FFDB1C.svg)](https://hardhat.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Solidity](https://img.shields.io/badge/Solidity-%23363636.svg?logo=solidity&logoColor=white)](https://soliditylang.org/)
+[![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?logo=yarn&logoColor=white)](https://yarnpkg.com/)
+
+## �️ Project Structure
+
+This repository serves as a professional development environment for building, testing, and deploying the `diamonds-monitor` npm package alongside ERC-2535 Diamond Proxy contracts.
+
+```bash
+diamonds-monitor-devenv/
+├── packages/
+│   └── diamonds-monitor/          # Main NPM package
+│       ├── src/                   # TypeScript source code
+│       ├── dist/                  # Compiled output
+│       ├── coverage/              # Test coverage reports
+│       └── package.json           # Package configuration
+├── contracts/                     # Diamond proxy contracts
+├── test/                          # Contract tests
+├── scripts/                       # Development scripts
+├── deployments/                   # Deployment artifacts
+└── .github/workflows/             # CI/CD pipelines
+```
 
 ## 🌟 Features
 
-- **💎 Diamond Proxy Architecture**: Implements ERC-2535 for unlimited contract size and modularity
-- **🔄 Seamless Upgrades**: Add, replace, or remove functionality without changing the main contract address
-- **🏗️ Modular Design**: Organized facet system for clear separation of concerns
-- **🛡️ Enterprise Security**: OpenZeppelin Defender integration for production deployments
-- **🧪 Comprehensive Testing**: Multi-chain testing environment with extensive test coverage
-- **⚡ TypeScript Integration**: Full type safety with auto-generated TypeScript bindings
-- **🌐 Multi-Network Support**: Deploy across multiple EVM-compatible networks
-- **📊 Advanced Monitoring**: Real-time deployment tracking and status monitoring
+### Diamonds Monitor Package
 
-## 🏗️ Architecture
+- **� Diamond Contract Monitoring**: Real-time monitoring of ERC-2535 diamond proxies
+- **🔍 Facet Management**: Comprehensive tools for managing facets and function selectors
+- **📊 Health Checks**: Automated health monitoring and diagnostics
+- **🚨 Event Monitoring**: Track diamond cut events and contract changes
+- **🛠️ Developer Tools**: Utilities for diamond development and debugging
 
-### Diamond Proxy Pattern (ERC-2535)
+### Development Environment
+
+- **🏗️ Yarn Workspaces**: Monorepo structure for managing multiple packages
+- **🧪 Comprehensive Testing**: Unit tests, integration tests, and coverage reporting
+- **� TypeScript Support**: Full type safety with modern TypeScript features
+- **📋 Code Quality**: ESLint, Prettier, and Husky for code formatting and git hooks
+- **🚀 CI/CD Pipeline**: Automated testing, building, and publishing via GitHub Actions
+- **📦 Professional Packaging**: Ready for NPM publication with proper versioning
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js ≥ 18.0.0
+- Yarn ≥ 4.0.0
+- Git
+
+### Installation
 
 ```bash
-┌─────────────────┐
-│   Diamond       │  ← Main contract (never changes address)
-│   (Proxy)       │
-└─────────┬───────┘
-          │
-    ┌─────▼─────┐
-    │ Diamond   │
-    │ Storage   │
-    └─────┬─────┘
-          │
-    ┌─────▼─────────────────────────────┐
-    │           Facets                  │
-    ├─────────────┬─────────────────────┤
-    │ Ownership   │ Access Control      │
-    │ Facet       │ Facet               │
-    ├─────────────┼─────────────────────┤
-    │ Diamond     │ Diamond             │
-    │ Cut Facet   │ Loupe Facet         │
-    ├─────────────┼─────────────────────┤
-    │ Init        │ Custom              │
-    │ Facet       │ Facets              │
-    └─────────────┴─────────────────────┘
+# Clone the repository
+git clone <repository-url>
+cd diamonds-monitor-devenv
+
+# Install all dependencies
+yarn install
+
+# Build all packages
+yarn workspace:build
 ```
 
-### Core Facets
+### Development
+
+```bash
+# Start development mode (watches for changes)
+yarn dev
+
+# Build the diamonds-monitor package
+yarn monitor:build
+
+# Run diamonds-monitor tests
+yarn monitor:test
+
+# Run diamonds-monitor with coverage
+yarn workspace diamonds-monitor run test:coverage
+
+# Lint all code
+yarn lint
+
+# Format all code
+yarn format
+
+# Clean all build artifacts
+yarn workspace:clean
+```
+
+### Contract Development
+
+```bash
+# Compile contracts
+yarn compile
+
+# Run contract tests
+yarn test
+
+# Deploy contracts (configure networks in hardhat.config.ts)
+npx hardhat run scripts/deploy/rpc/deploy.ts --network <network>
+
+# Generate diamond ABI
+yarn generate-diamond-abi
+```
+
+## 📦 Package Management
+
+### Working with the Diamonds Monitor Package
+
+```bash
+# Install package dependencies
+yarn workspace diamonds-monitor install
+
+# Build the package
+yarn workspace diamonds-monitor run build
+
+# Run package tests
+yarn workspace diamonds-monitor run test
+
+# Run package linting
+yarn workspace diamonds-monitor run lint
+
+# Watch mode for development
+yarn workspace diamonds-monitor run build:watch
+```
+
+### Publishing
+
+The package is automatically published to NPM when changes are pushed to the main branch, provided the version has been updated.
+
+```bash
+# Manual publishing (from package directory)
+cd packages/diamonds-monitor
+npm publish
+
+# Beta release
+npm publish --tag beta
+```
+
+## � Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+# RPC endpoints
+MAINNET_RPC_URL=your_mainnet_rpc_url
+GOERLI_RPC_URL=your_goerli_rpc_url
+SEPOLIA_RPC_URL=your_sepolia_rpc_url
+
+# Private keys (for deployment)
+PRIVATE_KEY=your_private_key
+
+# API keys
+ETHERSCAN_API_KEY=your_etherscan_api_key
+COINMARKETCAP_API_KEY=your_coinmarketcap_api_key
+```
+
+### Workspace Configuration
+
+The project uses Yarn workspaces to manage multiple packages. Configuration is in:
+
+- `package.json` - Root workspace configuration
+- `packages/diamonds-monitor/package.json` - Package-specific configuration
+- `tsconfig.json` - TypeScript configuration with project references
+- `.yarnrc.yml` - Yarn configuration
+
+## 🧪 Testing
+
+### Running Tests
+
+```bash
+# Run all tests
+yarn workspace:test
+
+# Run specific package tests
+yarn monitor:test
+
+# Run with coverage
+yarn workspace diamonds-monitor run test:coverage
+
+# Run tests in watch mode
+yarn workspace diamonds-monitor run test:watch
+```
+
+### Test Structure
+
+- Unit tests: `packages/diamonds-monitor/src/__tests__/`
+- Integration tests: `test/integration/`
+- Contract tests: `test/`
+
+## 📋 Code Quality
+
+### Linting and Formatting
+
+```bash
+# Lint all code
+yarn lint
+
+# Format all code
+yarn format
+
+# Check formatting
+yarn format --check
+```
+
+### Git Hooks
+
+Husky is configured to run checks before commits:
+
+- **pre-commit**: Runs lint-staged to format and lint staged files
+- **pre-push**: Runs tests to ensure code quality
+
+## 🚀 CI/CD
+
+GitHub Actions workflows are configured for:
+
+### CI Pipeline (`ci.yml`)
+
+- **Testing**: Runs on Node.js 18.x and 20.x
+- **Linting**: ESLint and Prettier checks
+- **Building**: Compiles TypeScript and contracts
+- **Coverage**: Uploads coverage reports to Codecov
+
+### Publishing Pipeline
+
+- **Automatic**: Publishes to NPM on main branch pushes (when version changes)
+- **Beta**: Supports beta releases with `--tag beta`
+
+## 📖 API Documentation
+
+### Diamonds Monitor Package
+
+The `diamonds-monitor` package provides comprehensive tools for monitoring ERC-2535 Diamond Proxy contracts. See the [package README](./packages/diamonds-monitor/README.md) for detailed API documentation.
+
+Key classes:
+
+- `DiamondMonitor` - Main monitoring functionality
+- `FacetManager` - Facet management tools
+- Utility functions for diamond development
+
+## 🤝 Contributing
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
+3. **Commit** your changes: `git commit -m 'Add amazing feature'`
+4. **Push** to the branch: `git push origin feature/amazing-feature`
+5. **Open** a Pull Request
+
+### Development Guidelines
+
+- Follow TypeScript best practices
+- Write comprehensive tests for new features
+- Maintain 80%+ test coverage
+- Use conventional commit messages
+- Ensure all CI checks pass
+
+## 📋 Scripts Reference
+
+### Root Level Scripts
+
+| Script                   | Description                        |
+| ------------------------ | ---------------------------------- |
+| `yarn workspace:install` | Install all workspace dependencies |
+| `yarn workspace:build`   | Build all packages                 |
+| `yarn workspace:test`    | Run tests for all packages         |
+| `yarn workspace:lint`    | Lint all packages                  |
+| `yarn workspace:clean`   | Clean all build artifacts          |
+
+### Package Level Scripts
+
+| Script               | Description                           |
+| -------------------- | ------------------------------------- |
+| `yarn monitor:build` | Build diamonds-monitor package        |
+| `yarn monitor:test`  | Test diamonds-monitor package         |
+| `yarn monitor:lint`  | Lint diamonds-monitor package         |
+| `yarn monitor:dev`   | Development mode for diamonds-monitor |
+
+### Contract Scripts
+
+| Script                      | Description                |
+| --------------------------- | -------------------------- |
+| `yarn compile`              | Compile Solidity contracts |
+| `yarn test`                 | Run contract tests         |
+| `yarn generate-diamond-abi` | Generate diamond ABI files |
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- 📫 **Issues**: [GitHub Issues](https://github.com/GeniusVentures/diamonds-monitor/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/GeniusVentures/diamonds-monitor/discussions)
+- 📖 **Documentation**: [Package Documentation](./packages/diamonds-monitor/README.md)
+
+---
 
 - **DiamondCutFacet**: Handles diamond upgrades (add/replace/remove facets)
 - **DiamondLoupeFacet**: Inspection functions for facets and selectors
@@ -136,7 +390,7 @@ yarn build              # Build TypeScript, compile contracts, and generate ABI 
 yarn test               # Run all tests
 yarn coverage           # Run tests with coverage report
 
-# ABI Generation Scripts  
+# ABI Generation Scripts
 yarn generate-diamond-abi           # Generate Diamond ABI
 yarn generate-diamond-abi-typechain # Generate Diamond ABI with TypeChain types
 ```
@@ -205,7 +459,7 @@ The project automatically generates a combined Diamond ABI with TypeScript types
 # Generate Diamond ABI
 yarn generate-diamond-abi
 
-# Generate with TypeChain types  
+# Generate with TypeChain types
 yarn generate-diamond-abi-typechain
 
 # Build everything (compile + generate ABI)
@@ -388,14 +642,14 @@ npx ts-node scripts/deploy/rpc/upgrade-rpc.ts ExampleDiamond sepolia --dry-run
 ### TypeScript Integration
 
 ```typescript
-import { ExampleDiamond } from '../diamond-typechain-types';
-import { ethers } from 'hardhat';
+import { ExampleDiamond } from "../diamond-typechain-types";
+import { ethers } from "hardhat";
 
 // Type-safe contract interaction
-const diamond = await ethers.getContractAt(
-  'ExampleDiamond',
-  diamondAddress
-) as ExampleDiamond;
+const diamond = (await ethers.getContractAt(
+  "ExampleDiamond",
+  diamondAddress,
+)) as ExampleDiamond;
 
 // All functions are typed and auto-completed
 await diamond.transferOwnership(newOwner);

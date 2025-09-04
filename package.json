@@ -1,7 +1,11 @@
 {
-  "name": "diamonds-monitor-dev",
+  "name": "diamonds-monitor-devenv",
   "version": "1.0.0",
-  "description": "ERC-2535 Diamond Proxy Standard Base Project",
+  "description": "Professional development environment for diamonds-monitor and ERC-2535 Diamond Proxy projects",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "main": "index.ts",
   "scripts": {
     "test": "npx hardhat test",
@@ -11,7 +15,21 @@
     "coverage": "npx hardhat coverage",
     "build": "npx hardhat compile && npx tsc && npx ts-node scripts/generate-diamond-abi-with-typechain.ts",
     "generate-diamond-abi": "npx ts-node scripts/diamond-abi-generator.ts",
-    "generate-diamond-abi-typechain": "npx ts-node scripts/generate-diamond-abi-with-typechain.ts"
+    "generate-diamond-abi-typechain": "npx ts-node scripts/generate-diamond-abi-with-typechain.ts",
+    "workspace:install": "yarn install",
+    "workspace:build": "yarn workspaces foreach -A run build",
+    "workspace:test": "yarn workspaces foreach -A run test",
+    "workspace:lint": "yarn workspaces foreach -A run lint",
+    "workspace:clean": "yarn workspaces foreach -A run clean && yarn clean",
+    "monitor:build": "yarn workspace diamonds-monitor run build",
+    "monitor:test": "yarn workspace diamonds-monitor run test",
+    "monitor:lint": "yarn workspace diamonds-monitor run lint",
+    "monitor:dev": "yarn workspace diamonds-monitor run dev",
+    "dev": "concurrently \"yarn monitor:dev\" \"yarn compile --watch\"",
+    "lint": "eslint . --ext .ts,.js --fix",
+    "format": "prettier --write \"**/*.{ts,js,json,md,sol}\"",
+    "precommit": "yarn lint && yarn format && yarn test",
+    "prepare": "husky"
   },
   "authors": [
     "Am0rfu5"
@@ -46,6 +64,7 @@
     "abi2oas": "^0.1.4",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "concurrently": "^8.2.2",
     "contracts-starter": "https://github.com/mudgen/diamond-2-hardhat.git",
     "diamonds": "https://github.com/GeniusVentures/diamonds.git#develop",
     "dotenv": "^16.4.7",
@@ -62,6 +81,8 @@
     "hardhat-diamonds": "https://github.com/GeniusVentures/hardhat-diamonds.git#develop",
     "hardhat-gas-reporter": "^1.0.8",
     "hardhat-multichain": "https://github.com/GeniusVentures/hardhat-multichain#main",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.4.2",
     "prettier-plugin-solidity": "^1.4.1",
     "sinon": "^21.0.0",

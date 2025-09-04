@@ -1,0 +1,3 @@
+[submodule "packages/diamonds-monitor"]
+	path = packages/diamonds-monitor
+	url = https://github.com/GeniusVentures/diamonds-monitor.git
