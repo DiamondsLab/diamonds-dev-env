@@ -28,19 +28,22 @@
     "./test",
     "./test-suites",
     "./typechain-types",
-    "./packages/*/src/**/*"
+    "./packages/*/src/**/*",
+    "./packages/*/test/**/*"
   ],
   "files": ["./hardhat.config.ts"],
   "exclude": [
     "./notes/**/*",
-    "./node_modules",
-    "./dist",
-    "./artifacts",
-    "./coverage",
-    "./cache",
-    "./types",
-    "./packages/*/node_modules",
-    "./packages/*/dist"
+    "node_modules",
+    "dist",
+    "artifacts",
+    "coverage",
+    "cache",
+    "types",
+    "packages/*/node_modules",
+    "packages/*/dist",
+    "**/docs/**",
+    "packages/*/docs/**"
   ],
   "references": [
     {

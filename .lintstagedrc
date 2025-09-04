@@ -1,8 +1,10 @@
 {
   "*.{js,ts,json,md}": [
-    "prettier --write --ignore-unknown"
+    "prettier --write --ignore-unknown",
+    "git add"
   ],
   "*.{js,ts}": [
-    "eslint --fix --max-warnings=0 --no-error-on-unmatched-pattern --no-warn-ignored"
+    "eslint --fix --max-warnings=0 --no-error-on-unmatched-pattern",
+    "git add"
   ]
 }

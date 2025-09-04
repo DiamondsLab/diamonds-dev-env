@@ -17,7 +17,7 @@
     "generate-diamond-abi": "npx ts-node scripts/diamond-abi-generator.ts",
     "generate-diamond-abi-typechain": "npx ts-node scripts/generate-diamond-abi-with-typechain.ts",
     "workspace:install": "yarn install",
-    "workspace:build": "yarn workspaces foreach -A run build",
+    "workspace:build": "yarn workspace diamonds-monitor build && npx hardhat compile && npx tsc && npx ts-node scripts/generate-diamond-abi-with-typechain.ts",
     "workspace:test": "yarn workspaces foreach -A run test",
     "workspace:lint": "yarn workspaces foreach -A run lint",
     "workspace:clean": "yarn workspaces foreach -A run clean && yarn clean",
