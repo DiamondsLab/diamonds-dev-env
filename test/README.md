@@ -1,6 +1,6 @@
 # Diamond Tests
 
->> This directory contains the example tests for a Diamonds project.
+> > This directory contains the example tests for a Diamonds project.
 
 ## Test Structure
 
