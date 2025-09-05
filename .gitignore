@@ -23,6 +23,5 @@ diamond-abi/
 
 config/
 deployments
-test-assets
 test-mocks
 flat/

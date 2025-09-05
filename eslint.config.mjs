@@ -25,7 +25,7 @@ export default [
       "**/docs/**",
       // Project-specific directories to skip
       "**/typechain-types/**",
-      "**/diamond-typechain-types/**",
+      // "**/diamond-typechain-types/**",
       // Skip docs examples and package-specific configs
       "**/docs/**",
       "**/packages/**/hardhat.config.ts",
