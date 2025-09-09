@@ -29,7 +29,7 @@
     "./test-suites",
     "./typechain-types",
     "./packages/*/src/**/*",
-    "./packages/*/test/**/*"
+    "./packages/*/test/**/*.ts"
   ],
   "files": ["./hardhat.config.ts"],
   "exclude": [
