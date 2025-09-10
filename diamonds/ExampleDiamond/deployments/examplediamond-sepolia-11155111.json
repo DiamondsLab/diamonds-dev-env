@@ -1,7 +1,50 @@
 {
-  "DiamondAddress": "",
-  "DeployerAddress": "",
-  "DeployedFacets": {},
+  "DiamondAddress": "0xa0B6392Ab5E1B1bC71341e3581590027C0cC4D33",
+  "DeployerAddress": "0x6Ec7f5dFb77c7CAbAB4Ed722660b1d8bA1605B43",
+  "DeployedFacets": {
+    "DiamondCutFacet": {
+      "address": "0x1fEbD8fd4cD755b5623b75258461aD87D74cb255",
+      "tx_hash": "0x628149af26a10143cf96a86a12144ce91f0eaccbf270313c492b187c1c390750",
+      "version": 0,
+      "funcSelectors": ["0x1f931c1c"]
+    },
+    "DiamondLoupeFacet": {
+      "address": "0x062e78FC18fe47Aab2743b38f9558fCb5B4f0388",
+      "tx_hash": "0x628149af26a10143cf96a86a12144ce91f0eaccbf270313c492b187c1c390750",
+      "version": 0,
+      "funcSelectors": [
+        "0xcdffacc6",
+        "0x52ef6b2c",
+        "0xadfca15e",
+        "0x7a0ed627",
+        "0x01ffc9a7"
+      ]
+    },
+    "ExampleOwnershipFacet": {
+      "address": "0xfaaA112940a143a83E0F436Ac3Af64D9250338b0",
+      "tx_hash": "0x628149af26a10143cf96a86a12144ce91f0eaccbf270313c492b187c1c390750",
+      "version": 0,
+      "funcSelectors": [
+        "0xa217fddf",
+        "0x248a9ca3",
+        "0x9010d07c",
+        "0xca15c873",
+        "0x2f2ff15d",
+        "0x91d14854",
+        "0x8da5cb5b",
+        "0x36568abe",
+        "0xd547741f",
+        "0xf2fde38b",
+        "0xf72c0d8b"
+      ]
+    },
+    "ExampleInitFacet": {
+      "address": "0xD6a6C3fa7b98f552A1036b970ef5982Fe60FCF39",
+      "tx_hash": "0x628149af26a10143cf96a86a12144ce91f0eaccbf270313c492b187c1c390750",
+      "version": 1,
+      "funcSelectors": ["0xc47ea632", "0xd4fb2a3e", "0xfef41fe4"]
+    }
+  },
   "ExternalLibraries": {},
-  "protocolVersion": 0
+  "protocolVersion": 1
 }
