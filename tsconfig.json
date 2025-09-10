@@ -6,13 +6,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "rootDirs": [
-      "./scripts",
-      "./test",
-      "./test-suites",
-      "./typechain-types",
-      "./packages/*/src"
-    ],
+    "rootDirs": ["./scripts", "./test", "./test-suites", "./typechain-types"],
     "outDir": "dist",
     "resolveJsonModule": true,
     "allowJs": true,
@@ -23,14 +17,7 @@
       "diamonds-monitor": ["./packages/diamonds-monitor/src/index"]
     }
   },
-  "include": [
-    "./scripts",
-    "./test",
-    "./test-suites",
-    "./typechain-types",
-    "./packages/*/src/**/*",
-    "./packages/*/test/**/*.ts"
-  ],
+  "include": ["./scripts", "./test", "./test-suites", "./typechain-types"],
   "files": ["./hardhat.config.ts"],
   "exclude": [
     "./notes/**/*",
