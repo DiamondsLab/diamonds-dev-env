@@ -14,10 +14,16 @@
     "typeRoots": ["node_modules/@types", "./types"],
     "baseUrl": ".",
     "paths": {
-      "diamonds-monitor": ["./packages/diamonds-monitor/src/index"]
+      "hardhat-diamonds": ["./packages/hardhat-diamonds/src/index"]
     }
   },
-  "include": ["./scripts", "./test", "./test-suites", "./typechain-types"],
+  "include": [
+    "./scripts",
+    "./diamonds/ExampleDiamond/callbacks",
+    "./test",
+    "./test-suites",
+    "./typechain-types"
+  ],
   "files": ["./hardhat.config.ts"],
   "exclude": [
     "./notes/**/*",
@@ -34,7 +40,7 @@
   ],
   "references": [
     {
-      "path": "./packages/diamonds-monitor"
+      "path": "./packages/hardhat-diamonds"
     }
   ]
 }

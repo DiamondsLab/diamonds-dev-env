@@ -105,6 +105,9 @@ if (require.main === module) {
 		diamondName: diamondName,
 		verbose: verbose,
 		diamondsPath: 'diamonds',
+		contractPath: './contracts/examplediamond',
+		outputDir: 'diamond-abi',
+		networkName: 'hardhat',
 	};
 
 	generateDiamondAbiWithTypechain(options)

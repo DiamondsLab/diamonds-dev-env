@@ -1,5 +1,5 @@
 {
-  "protocolVersion": 2.0,
+  "protocolVersion": 1.0,
   "protocolInitFacet": "ExampleInitFacet",
   "protocolExcludeFuncSelectors": [],
   "facets": {
@@ -32,12 +32,6 @@
           "upgradeInit": "diamondUpgrade100()",
           "fromVersions": [0.0]
         }
-      }
-    },
-    "ExampleUpgradeFacet": {
-      "priority": 50,
-      "versions": {
-        "2.0": {}
       }
     }
   }

@@ -23,6 +23,8 @@ export interface DiamondAbiGenerationOptions {
 	verbose?: boolean;
 	/** Path to diamond configurations */
 	diamondsPath?: string;
+	/** Path to contract source files */
+	contractPath?: string;
 }
 
 /**
@@ -62,6 +64,7 @@ export class ProjectDiamondAbiGenerator {
 			networkName: 'hardhat',
 			chainId: 31337,
 			outputDir: './diamond-abi',
+			contractPath: './contracts/examplediamond',
 			includeSourceInfo: true,
 			validateSelectors: true,
 			verbose: false,
@@ -76,7 +79,7 @@ export class ProjectDiamondAbiGenerator {
 				networkName: this.options.networkName,
 				chainId: this.options.chainId,
 				deploymentsPath: this.options.diamondsPath,
-				contractsPath: './contracts',
+				contractsPath: this.options.contractPath,
 				// Configure diamond ABI path and filename using new Diamond configuration
 				diamondAbiPath: this.options.outputDir,
 				diamondAbiFileName: this.options.diamondName,
