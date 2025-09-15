@@ -32,6 +32,33 @@
       "console": "integratedTerminal"
     },
     {
+      "name": "DiamondABI Typechain Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "args": [
+        "ts-node",
+        // "compile",
+        // "./test/unit/diamond-abi-generator.test.ts",
+        "./scripts/generate-diamond-abi-with-typechain.ts"
+      ],
+      "runtimeArgs": ["--preserve-symlinks"],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/node_modules/**/*.js"
+      ],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/**/*.ts",
+        "${workspaceFolder}/node_modules/hardhat/**/*.js",
+        "${workspaceFolder}/node_modules/hardhat/**/*.ts"
+      ],
+      "sourceMaps": true,
+      "smartStep": true,
+      "console": "integratedTerminal"
+    },
+    {
       "name": "All Tests",
       "type": "node",
       "request": "launch",

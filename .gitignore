@@ -20,6 +20,6 @@ tmp
 notes/
 
 diamond-abi/
-deployments
+./deployments/
 test-mocks
 flat/
