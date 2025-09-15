@@ -105,34 +105,6 @@ function genSignature(name: string, inputs: Array<unknown>, type: string): strin
 	}, '')})`;
 }
 
-// function filterDuplicateFunctions(
-// 	abiElement: { type: string; name?: string; inputs?: Array<{ internalType: string }> },
-// 	index: number,
-// 	fullAbiL: Array<{
-// 		type: string;
-// 		name?: string;
-// 		inputs?: Array<{ internalType: string }>;
-// 	}>,
-// 	fullyQualifiedName: string,
-// ) {
-// 	if (['function', 'event'].includes(abiElement.type)) {
-// 		const funcSignature = genSignature(
-// 			abiElement.name || '',
-// 			abiElement.inputs || [],
-// 			abiElement.type,
-// 		);
-// 		if (elementSeenSet.has(funcSignature)) {
-// 			return false;
-// 		}
-// 		elementSeenSet.add(funcSignature);
-// 	} else if (abiElement.type === 'fallback') {
-// 		if (!fullyQualifiedName.match('ExampleDiamond.sol')) {
-// 			return false;
-// 		}
-// 	}
-// 	return true;
-// }
-
 const MOCK_CHAIN_ID = HH_CHAIN_ID ? parseInt(HH_CHAIN_ID) : 31337;
 // console.log(`Using chain ID: ${MOCK_CHAIN_ID}`);
 
