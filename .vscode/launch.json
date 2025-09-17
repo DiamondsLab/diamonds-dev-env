@@ -110,13 +110,8 @@
       "type": "node",
       "request": "launch",
       // "preLaunchTask": "tsc: build - tsconfig.json",
-      // "program": "yarn",
       "runtimeExecutable": "npx",
-      "args": [
-        "hardhat",
-        "test",
-        "test/unit/rpc/RPCDiamondDeployer.hardhat.test.ts"
-      ],
+      "args": ["hardhat", "test", "test/unit/defender/ErrorHandling.test.ts"],
       "runtimeArgs": ["--preserve-symlinks"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "skipFiles": [
