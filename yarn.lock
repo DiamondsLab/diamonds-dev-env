@@ -2737,7 +2737,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typechain/ethers-v6@npm:^0.5.0":
+"@typechain/ethers-v6@npm:^0.5.0, @typechain/ethers-v6@npm:^0.5.1":
   version: 0.5.1
   resolution: "@typechain/ethers-v6@npm:0.5.1"
   dependencies:
@@ -4551,24 +4551,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diamonds@https://github.com/GeniusVentures/diamonds.git":
-  version: 1.0.0
-  resolution: "diamonds@https://github.com/GeniusVentures/diamonds.git#commit=b69499fd75f560ac71ab0f47debce6ff68a39a05"
-  dependencies:
-    "@ethersproject/abstract-signer": "npm:^5.8.0"
-    axios: "npm:^1.10.0"
-    debug: "npm:^4.4.1"
-    fs-extra: "npm:^11.3.0"
-    lodash: "npm:^4.17.21"
-  peerDependencies:
-    ethers: ^6.0.0
-    hardhat: ^2.0.0
-    ts-node: ^10.0.0
-    typescript: ^5.0.0
-  checksum: 10c0/5a16e96054c65f5628fdb2912267b6fdb2d4d21eefbafa7ea5f31e44a8ede8bbc6608110bc3887eb4cfe6b63dc6824e976fc528a5a3ec9e82051aa2e5f0ef874
-  languageName: node
-  linkType: hard
-
 "diamonds@https://github.com/GeniusVentures/diamonds.git#develop":
   version: 1.0.0
   resolution: "diamonds@https://github.com/GeniusVentures/diamonds.git#commit=c84b230b7504e4bd4c6ac35d86499a29c8297157"
@@ -6101,7 +6083,7 @@ __metadata:
     "@nomicfoundation/ignition-core": "npm:^0.15.9"
     "@openzeppelin/defender-sdk": "npm:^2.0.0"
     "@openzeppelin/defender-sdk-proposal-client": "npm:^2.0.0"
-    "@typechain/ethers-v6": "npm:^0.5.0"
+    "@typechain/ethers-v6": "npm:^0.5.1"
     "@typechain/hardhat": "npm:^9.1.0"
     "@types/chai": "npm:^4.2.0"
     "@types/chai-as-promised": "npm:^8.0.1"
@@ -6141,7 +6123,7 @@ __metadata:
     solhint: "npm:^5.0.3"
     solidity-coverage: "npm:^0.8.0"
     ts-node: "npm:^10.9.2"
-    typechain: "npm:^8.3.0"
+    typechain: "npm:^8.3.2"
     typescript: "npm:>=4.5.0"
     uint32: "npm:^0.2.1"
     web3: "npm:^4.16.0"
@@ -6172,7 +6154,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^8.8.0"
     "@typescript-eslint/types": "npm:^8.8.0"
     chai: "npm:^4.5.0"
-    diamonds: "https://github.com/GeniusVentures/diamonds.git"
+    diamonds: "https://github.com/GeniusVentures/diamonds.git#develop"
     eslint: "npm:^8.57.1"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.2.1"
@@ -9734,7 +9716,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typechain@npm:^8.3.0":
+"typechain@npm:^8.3.0, typechain@npm:^8.3.2":
   version: 8.3.2
   resolution: "typechain@npm:8.3.2"
   dependencies:

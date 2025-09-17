@@ -50,7 +50,6 @@ const _abi = [
     ],
     name: "DiamondCut",
     type: "event",
-    _diamondFacet: "DiamondCutFacet",
   },
   {
     anonymous: false,
@@ -70,7 +69,6 @@ const _abi = [
     ],
     name: "InitLog",
     type: "event",
-    _diamondFacet: "ExampleInitFacet",
   },
   {
     anonymous: false,
@@ -90,7 +88,6 @@ const _abi = [
     ],
     name: "OwnershipTransferred",
     type: "event",
-    _diamondFacet: "ExampleOwnershipFacet",
   },
   {
     anonymous: false,
@@ -116,7 +113,6 @@ const _abi = [
     ],
     name: "RoleAdminChanged",
     type: "event",
-    _diamondFacet: "ExampleOwnershipFacet",
   },
   {
     anonymous: false,
@@ -142,7 +138,6 @@ const _abi = [
     ],
     name: "RoleGranted",
     type: "event",
-    _diamondFacet: "ExampleOwnershipFacet",
   },
   {
     anonymous: false,
@@ -168,7 +163,6 @@ const _abi = [
     ],
     name: "RoleRevoked",
     type: "event",
-    _diamondFacet: "ExampleOwnershipFacet",
   },
   {
     inputs: [
@@ -185,7 +179,6 @@ const _abi = [
     ],
     name: "InitializationFunctionReverted",
     type: "error",
-    _diamondFacet: "DiamondCutFacet",
   },
   {
     inputs: [],
@@ -199,8 +192,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "ExampleOwnershipFacet",
-    _diamondSelector: "0xa217fddf",
   },
   {
     inputs: [
@@ -241,8 +232,6 @@ const _abi = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
-    _diamondFacet: "DiamondCutFacet",
-    _diamondSelector: "0x1f931c1c",
   },
   {
     inputs: [],
@@ -250,8 +239,6 @@ const _abi = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
-    _diamondFacet: "ExampleInitFacet",
-    _diamondSelector: "0xc47ea632",
   },
   {
     inputs: [],
@@ -259,8 +246,6 @@ const _abi = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
-    _diamondFacet: "ExampleInitFacet",
-    _diamondSelector: "0xd4fb2a3e",
   },
   {
     inputs: [],
@@ -268,8 +253,6 @@ const _abi = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
-    _diamondFacet: "ExampleInitFacet",
-    _diamondSelector: "0xfef41fe4",
   },
   {
     inputs: [
@@ -289,8 +272,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "DiamondLoupeFacet",
-    _diamondSelector: "0xcdffacc6",
   },
   {
     inputs: [],
@@ -304,8 +285,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "DiamondLoupeFacet",
-    _diamondSelector: "0x52ef6b2c",
   },
   {
     inputs: [
@@ -325,8 +304,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "DiamondLoupeFacet",
-    _diamondSelector: "0xadfca15e",
   },
   {
     inputs: [],
@@ -352,8 +329,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "DiamondLoupeFacet",
-    _diamondSelector: "0x7a0ed627",
   },
   {
     inputs: [],
@@ -367,8 +342,6 @@ const _abi = [
     ],
     stateMutability: "pure",
     type: "function",
-    _diamondFacet: "ExampleUpgradeFacet",
-    _diamondSelector: "0xd3ce6863",
   },
   {
     inputs: [
@@ -388,8 +361,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "ExampleOwnershipFacet",
-    _diamondSelector: "0x248a9ca3",
   },
   {
     inputs: [
@@ -414,8 +385,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "ExampleOwnershipFacet",
-    _diamondSelector: "0x9010d07c",
   },
   {
     inputs: [
@@ -435,8 +404,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "ExampleOwnershipFacet",
-    _diamondSelector: "0xca15c873",
   },
   {
     inputs: [],
@@ -450,8 +417,6 @@ const _abi = [
     ],
     stateMutability: "pure",
     type: "function",
-    _diamondFacet: "ExampleUpgradeFacet",
-    _diamondSelector: "0x034899bc",
   },
   {
     inputs: [
@@ -470,8 +435,6 @@ const _abi = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
-    _diamondFacet: "ExampleOwnershipFacet",
-    _diamondSelector: "0x2f2ff15d",
   },
   {
     inputs: [
@@ -496,8 +459,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "ExampleOwnershipFacet",
-    _diamondSelector: "0x91d14854",
   },
   {
     inputs: [],
@@ -511,8 +472,6 @@ const _abi = [
     ],
     stateMutability: "pure",
     type: "function",
-    _diamondFacet: "ExampleUpgradeFacet",
-    _diamondSelector: "0xc52046de",
   },
   {
     inputs: [],
@@ -526,8 +485,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "ExampleOwnershipFacet",
-    _diamondSelector: "0x8da5cb5b",
   },
   {
     inputs: [
@@ -546,8 +503,6 @@ const _abi = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
-    _diamondFacet: "ExampleOwnershipFacet",
-    _diamondSelector: "0x36568abe",
   },
   {
     inputs: [
@@ -566,8 +521,6 @@ const _abi = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
-    _diamondFacet: "ExampleOwnershipFacet",
-    _diamondSelector: "0xd547741f",
   },
   {
     inputs: [
@@ -587,8 +540,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "DiamondLoupeFacet",
-    _diamondSelector: "0x01ffc9a7",
   },
   {
     inputs: [
@@ -602,8 +553,6 @@ const _abi = [
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
-    _diamondFacet: "ExampleOwnershipFacet",
-    _diamondSelector: "0xf2fde38b",
   },
   {
     inputs: [],
@@ -617,8 +566,6 @@ const _abi = [
     ],
     stateMutability: "view",
     type: "function",
-    _diamondFacet: "ExampleOwnershipFacet",
-    _diamondSelector: "0xf72c0d8b",
   },
 ] as const;
 
