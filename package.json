@@ -1,6 +1,6 @@
 {
   "name": "hardhat-diamonds-dev",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Professional development environment for hardhat-diamonds and ERC-2535 Diamond Proxy projects",
   "private": true,
   "workspaces": [
