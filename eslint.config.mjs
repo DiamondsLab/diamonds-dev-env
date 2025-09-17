@@ -23,6 +23,7 @@ export default [
       "**/coverage",
       "**/dist/**",
       "**/docs/**",
+      "**/*.d.ts",
       // Project-specific directories to skip
       "**/typechain-types/**",
       // "**/diamond-typechain-types/**",

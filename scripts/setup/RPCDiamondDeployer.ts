@@ -213,7 +213,7 @@ export class RPCDiamondDeployer {
 	 */
 	public static getDiamondConfigFromHardhat(diamondName: string): DiamondPathsConfig {
 		try {
-			return hre.diamonds.getDiamondConfig(diamondName);
+			return (hre as any).diamonds.getDiamondConfig(diamondName);
 		} catch (error) {
 			throw new Error(
 				`Failed to load diamond configuration for "${diamondName}": ${(error as Error).message}`,
@@ -336,7 +336,7 @@ export class RPCDiamondDeployer {
 		// Return existing instance or create new one
 		if (!this.instances.has(key)) {
 			// Get Hardhat diamonds configuration if available
-			const hardhatDiamonds: DiamondPathsConfig = hre.diamonds?.getDiamondConfig(
+			const hardhatDiamonds: DiamondPathsConfig = (hre as any).diamonds?.getDiamondConfig(
 				config.diamondName,
 			);
 

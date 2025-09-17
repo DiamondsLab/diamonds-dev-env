@@ -462,7 +462,7 @@ export class DefenderDiamondDeployer {
 
 		let hardhatDiamondConfig: any;
 		try {
-			hardhatDiamondConfig = hre.diamonds.getDiamondConfig(diamondName);
+			hardhatDiamondConfig = (hre as any).diamonds.getDiamondConfig(diamondName);
 		} catch (error) {
 			// Fallback when diamond config doesn't exist
 			hardhatDiamondConfig = {

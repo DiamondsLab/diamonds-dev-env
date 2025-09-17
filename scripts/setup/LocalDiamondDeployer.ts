@@ -108,7 +108,7 @@ export class LocalDiamondDeployer {
 			(await cutKey(config.diamondName, config.networkName!, config.chainId!.toString()));
 
 		if (!this.instances.has(key)) {
-			const hardhatDiamonds: DiamondPathsConfig = hre.diamonds?.getDiamondConfig(
+			const hardhatDiamonds: DiamondPathsConfig = (hre as any).diamonds?.getDiamondConfig(
 				config.diamondName,
 			);
 			const deployedDiamondDataFileName = `${config.diamondName.toLowerCase()}-${config.networkName!.toLowerCase()}-${config.chainId!.toString()}.json`;

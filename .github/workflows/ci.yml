@@ -49,13 +49,13 @@ jobs:
       run: yarn workspace:test
       
     - name: Run coverage
-      run: yarn workspace diamonds-monitor run test:coverage
+      run: yarn workspace hardhat-diamonds run test:coverage
       
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
-        file: ./packages/diamonds-monitor/coverage/lcov.info
-        flags: diamonds-monitor
+        file: ./packages/hardhat-diamonds/coverage/lcov.info
+        flags: hardhat-diamonds
         name: codecov-umbrella
 
   build-contracts:
@@ -121,7 +121,7 @@ jobs:
       run: yarn workspace:build
       
     - name: Publish to NPM
-      working-directory: ./packages/diamonds-monitor
+      working-directory: ./packages/hardhat-diamonds
       run: |
         if [ -z "$NODE_AUTH_TOKEN" ]; then
           echo "NPM_TOKEN not configured, skipping publish"

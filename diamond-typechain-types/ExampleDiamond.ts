@@ -61,11 +61,14 @@ export interface ExampleDiamondInterface extends Interface {
       | "facetAddresses"
       | "facetFunctionSelectors"
       | "facets"
+      | "getMonitorData"
       | "getRoleAdmin"
       | "getRoleMember"
       | "getRoleMemberCount"
+      | "getSelector"
       | "grantRole"
       | "hasRole"
+      | "isDeployed"
       | "owner"
       | "renounceRole"
       | "revokeRole"
@@ -118,6 +121,10 @@ export interface ExampleDiamondInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "facets", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "getMonitorData",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getRoleAdmin",
     values: [BytesLike]
   ): string;
@@ -130,12 +137,20 @@ export interface ExampleDiamondInterface extends Interface {
     values: [BytesLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "getSelector",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "grantRole",
     values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "hasRole",
     values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isDeployed",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -190,6 +205,10 @@ export interface ExampleDiamondInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "facets", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "getMonitorData",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getRoleAdmin",
     data: BytesLike
   ): Result;
@@ -201,8 +220,13 @@ export interface ExampleDiamondInterface extends Interface {
     functionFragment: "getRoleMemberCount",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSelector",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isDeployed", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceRole",
@@ -406,6 +430,8 @@ export interface ExampleDiamond extends BaseContract {
 
   facets: TypedContractMethod<[], [IDiamondLoupe.FacetStructOutput[]], "view">;
 
+  getMonitorData: TypedContractMethod<[], [string], "view">;
+
   getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
 
   getRoleMember: TypedContractMethod<
@@ -415,6 +441,8 @@ export interface ExampleDiamond extends BaseContract {
   >;
 
   getRoleMemberCount: TypedContractMethod<[role: BytesLike], [bigint], "view">;
+
+  getSelector: TypedContractMethod<[], [string], "view">;
 
   grantRole: TypedContractMethod<
     [role: BytesLike, account: AddressLike],
@@ -427,6 +455,8 @@ export interface ExampleDiamond extends BaseContract {
     [boolean],
     "view"
   >;
+
+  isDeployed: TypedContractMethod<[], [boolean], "view">;
 
   owner: TypedContractMethod<[], [string], "view">;
 
@@ -496,6 +526,9 @@ export interface ExampleDiamond extends BaseContract {
     nameOrSignature: "facets"
   ): TypedContractMethod<[], [IDiamondLoupe.FacetStructOutput[]], "view">;
   getFunction(
+    nameOrSignature: "getMonitorData"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "getRoleAdmin"
   ): TypedContractMethod<[role: BytesLike], [string], "view">;
   getFunction(
@@ -508,6 +541,9 @@ export interface ExampleDiamond extends BaseContract {
   getFunction(
     nameOrSignature: "getRoleMemberCount"
   ): TypedContractMethod<[role: BytesLike], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getSelector"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "grantRole"
   ): TypedContractMethod<
@@ -522,6 +558,9 @@ export interface ExampleDiamond extends BaseContract {
     [boolean],
     "view"
   >;
+  getFunction(
+    nameOrSignature: "isDeployed"
+  ): TypedContractMethod<[], [boolean], "view">;
   getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;

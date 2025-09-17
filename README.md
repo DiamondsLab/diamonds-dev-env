@@ -1,6 +1,6 @@
 # Diamonds Monitor Development Environment
 
-Professional development environment for the `diamonds-monitor` node module and ERC-2535 Diamond Proxy Standard projects.
+Professional development environment for the `hardhat-diamonds` node module and ERC-2535 Diamond Proxy Standard projects.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Hardhat](https://img.shields.io/badge/Built%20with-Hardhat-FFDB1C.svg)](https://hardhat.org/)
@@ -10,12 +10,12 @@ Professional development environment for the `diamonds-monitor` node module and 
 
 ## �️ Project Structure
 
-This repository serves as a professional development environment for building, testing, and deploying the `diamonds-monitor` npm package alongside ERC-2535 Diamond Proxy contracts.
+This repository serves as a professional development environment for building, testing, and deploying the `hardhat-diamonds` npm package alongside ERC-2535 Diamond Proxy contracts.
 
 ```bash
-diamonds-monitor-devenv/
+hardhat-diamonds-devenv/
 ├── packages/
-│   └── diamonds-monitor/          # Main NPM package
+│   └── hardhat-diamonds/          # Main NPM package
 │       ├── src/                   # TypeScript source code
 │       ├── dist/                  # Compiled output
 │       ├── coverage/              # Test coverage reports
@@ -59,7 +59,7 @@ diamonds-monitor-devenv/
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd diamonds-monitor-devenv
+cd hardhat-diamonds-devenv
 
 # Install all dependencies
 yarn install
@@ -74,14 +74,14 @@ yarn workspace:build
 # Start development mode (watches for changes)
 yarn dev
 
-# Build the diamonds-monitor package
+# Build the hardhat-diamonds package
 yarn monitor:build
 
-# Run diamonds-monitor tests
+# Run hardhat-diamonds tests
 yarn monitor:test
 
-# Run diamonds-monitor with coverage
-yarn workspace diamonds-monitor run test:coverage
+# Run hardhat-diamonds with coverage
+yarn workspace hardhat-diamonds run test:coverage
 
 # Lint all code
 yarn lint
@@ -115,19 +115,19 @@ yarn generate-diamond-abi
 
 ```bash
 # Install package dependencies
-yarn workspace diamonds-monitor install
+yarn workspace hardhat-diamonds install
 
 # Build the package
-yarn workspace diamonds-monitor run build
+yarn workspace hardhat-diamonds run build
 
 # Run package tests
-yarn workspace diamonds-monitor run test
+yarn workspace hardhat-diamonds run test
 
 # Run package linting
-yarn workspace diamonds-monitor run lint
+yarn workspace hardhat-diamonds run lint
 
 # Watch mode for development
-yarn workspace diamonds-monitor run build:watch
+yarn workspace hardhat-diamonds run build:watch
 ```
 
 ### Publishing
@@ -136,7 +136,7 @@ The package is automatically published to NPM when changes are pushed to the mai
 
 ```bash
 # Manual publishing (from package directory)
-cd packages/diamonds-monitor
+cd packages/hardhat-diamonds
 npm publish
 
 # Beta release
@@ -168,7 +168,7 @@ COINMARKETCAP_API_KEY=your_coinmarketcap_api_key
 The project uses Yarn workspaces to manage multiple packages. Configuration is in:
 
 - `package.json` - Root workspace configuration
-- `packages/diamonds-monitor/package.json` - Package-specific configuration
+- `packages/hardhat-diamonds/package.json` - Package-specific configuration
 - `tsconfig.json` - TypeScript configuration with project references
 - `.yarnrc.yml` - Yarn configuration
 
@@ -184,15 +184,15 @@ yarn workspace:test
 yarn monitor:test
 
 # Run with coverage
-yarn workspace diamonds-monitor run test:coverage
+yarn workspace hardhat-diamonds run test:coverage
 
 # Run tests in watch mode
-yarn workspace diamonds-monitor run test:watch
+yarn workspace hardhat-diamonds run test:watch
 ```
 
 ### Test Structure
 
-- Unit tests: `packages/diamonds-monitor/src/__tests__/`
+- Unit tests: `packages/hardhat-diamonds/src/__tests__/`
 - Integration tests: `test/integration/`
 - Contract tests: `test/`
 
@@ -238,7 +238,7 @@ GitHub Actions workflows are configured for:
 
 ### Diamonds Monitor Package
 
-The `diamonds-monitor` package provides comprehensive tools for monitoring ERC-2535 Diamond Proxy contracts. See the [package README](./packages/diamonds-monitor/README.md) for detailed API documentation.
+The `hardhat-diamonds` package provides comprehensive tools for monitoring ERC-2535 Diamond Proxy contracts. See the [package README](./packages/hardhat-diamonds/README.md) for detailed API documentation.
 
 Key classes:
 
@@ -278,10 +278,10 @@ Key classes:
 
 | Script               | Description                           |
 | -------------------- | ------------------------------------- |
-| `yarn monitor:build` | Build diamonds-monitor package        |
-| `yarn monitor:test`  | Test diamonds-monitor package         |
-| `yarn monitor:lint`  | Lint diamonds-monitor package         |
-| `yarn monitor:dev`   | Development mode for diamonds-monitor |
+| `yarn monitor:build` | Build hardhat-diamonds package        |
+| `yarn monitor:test`  | Test hardhat-diamonds package         |
+| `yarn monitor:lint`  | Lint hardhat-diamonds package         |
+| `yarn monitor:dev`   | Development mode for hardhat-diamonds |
 
 ### Contract Scripts
 
@@ -297,9 +297,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 Support
 
-- 📫 **Issues**: [GitHub Issues](https://github.com/GeniusVentures/diamonds-monitor/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/GeniusVentures/diamonds-monitor/discussions)
-- 📖 **Documentation**: [Package Documentation](./packages/diamonds-monitor/README.md)
+- 📫 **Issues**: [GitHub Issues](https://github.com/GeniusVentures/hardhat-diamonds/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/GeniusVentures/hardhat-diamonds/discussions)
+- 📖 **Documentation**: [Package Documentation](./packages/hardhat-diamonds/README.md)
 
 ---
 
@@ -321,8 +321,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ```bash
 # Clone the repository
-git clone https://github.com/GeniusVentures/diamonds-monitor-dev.git
-cd diamonds-monitor-dev
+git clone https://github.com/GeniusVentures/hardhat-diamonds-dev.git
+cd hardhat-diamonds-dev
 
 # Install dependencies
 yarn install
@@ -483,7 +483,7 @@ yarn test test/integration/defender/DefenderDeployment.test.ts
 ## 📁 Project Structure
 
 ```bash
-diamonds-monitor-dev/
+hardhat-diamonds-dev/
 ├── contracts/                    # Solidity smart contracts
 │   └── examplediamond/           # Diamond facet contracts
 │       ├── facets/               # Individual facet implementations

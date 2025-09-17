@@ -1,3 +1,10 @@
+// <reference path="./packages/hardhat-diamonds/src/type-extensions.ts" />
+
+// Import hardhat-diamonds plugin first to ensure type extensions are loaded
+import 'hardhat-diamonds';
+// Import the types directly
+import type { DiamondsPathsConfig } from 'hardhat-diamonds/src/type-extensions';
+
 import * as dotenv from 'dotenv';
 
 import { HardhatUserConfig, task } from 'hardhat/config';
@@ -9,6 +16,8 @@ import 'solidity-coverage';
 import '@nomicfoundation/hardhat-web3-v4';
 import 'hardhat-multichain';
 import 'hardhat-diamonds';
+// Explicitly import types to ensure they're available
+import 'hardhat-diamonds/src/type-extensions';
 
 dotenv.config();
 
@@ -108,7 +117,7 @@ function genSignature(name: string, inputs: Array<unknown>, type: string): strin
 const MOCK_CHAIN_ID = HH_CHAIN_ID ? parseInt(HH_CHAIN_ID) : 31337;
 // console.log(`Using chain ID: ${MOCK_CHAIN_ID}`);
 
-const config: HardhatUserConfig = {
+const config: any = {
 	typechain: {
 		outDir: 'typechain-types', // Ensure this matches your expected output folder
 		target: 'ethers-v6', // Match the version of Ethers.js you're using

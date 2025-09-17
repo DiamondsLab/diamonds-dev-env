@@ -36,7 +36,8 @@
     "packages/*/node_modules",
     "packages/*/dist",
     "**/docs/**",
-    "packages/*/docs/**"
+    "packages/*/docs/**",
+    "diamond-typechain-types/**/*"
   ],
   "references": [
     {

@@ -356,6 +356,21 @@ const _abi = [
     _diamondSelector: "0x7a0ed627",
   },
   {
+    inputs: [],
+    name: "getMonitorData",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+    _diamondFacet: "ExampleUpgradeFacet",
+    _diamondSelector: "0xd3ce6863",
+  },
+  {
     inputs: [
       {
         internalType: "bytes32",
@@ -424,6 +439,21 @@ const _abi = [
     _diamondSelector: "0xca15c873",
   },
   {
+    inputs: [],
+    name: "getSelector",
+    outputs: [
+      {
+        internalType: "bytes4",
+        name: "",
+        type: "bytes4",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+    _diamondFacet: "ExampleUpgradeFacet",
+    _diamondSelector: "0x034899bc",
+  },
+  {
     inputs: [
       {
         internalType: "bytes32",
@@ -468,6 +498,21 @@ const _abi = [
     type: "function",
     _diamondFacet: "ExampleOwnershipFacet",
     _diamondSelector: "0x91d14854",
+  },
+  {
+    inputs: [],
+    name: "isDeployed",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+    _diamondFacet: "ExampleUpgradeFacet",
+    _diamondSelector: "0xc52046de",
   },
   {
     inputs: [],
