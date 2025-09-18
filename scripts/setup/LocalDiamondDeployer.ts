@@ -17,8 +17,7 @@ import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import { join } from 'path';
 import 'hardhat-diamonds';
 
-import { generateDiamondAbiWithTypechain } from '../generate-diamond-abi-with-typechain';
-import { DiamondAbiGenerationOptions } from '../diamond-abi-generator';
+// Hardhat task system used for Diamond ABI generation
 
 export interface LocalDiamondDeployerConfig extends DiamondConfig {
 	provider?: JsonRpcProvider | HardhatEthersProvider;
@@ -166,28 +165,14 @@ export class LocalDiamondDeployer {
 			const instance = new LocalDiamondDeployer(config, repository);
 			this.instances.set(key, instance);
 
-			const options: DiamondAbiGenerationOptions = {
+			// Generate Diamond ABI with Typechain using hardhat task
+			await hre.run('diamond:generate-abi-typechain', {
 				diamondName: config.diamondName,
-				/** Network to use */
-				networkName: config.networkName,
-				/** Chain ID */
-				chainId:
-					typeof config.chainId === 'bigint'
-						? Number(config.chainId)
-						: config.chainId || 31337,
-				/** Output directory for generated ABI files */
-				outputDir: config.diamondAbiPath,
-				/** Whether to include source information in ABI */
-				// includeSourceInfo?: boolean;
-				/** Whether to validate function selector uniqueness */
-				// validateSelectors?: boolean;
-				/** Whether to log verbose output */
-				// verbose?: boolean;
-				/** Path to diamond configurations */
-				// diamondsPath?: string;
-			};
-
-			await generateDiamondAbiWithTypechain(options);
+				outputDir: config.diamondAbiPath || 'diamond-abi',
+				typechainOutDir: 'diamond-typechain-types',
+				enableVerbose: false,
+				targetNetwork: config.networkName,
+			});
 		}
 		return this.instances.get(key)!;
 	}

@@ -20,8 +20,7 @@ import 'hardhat-multichain';
 import * as dotenv from 'dotenv';
 import chalk from 'chalk';
 
-import { generateDiamondAbiWithTypechain } from '../generate-diamond-abi-with-typechain';
-import { DiamondAbiGenerationOptions } from '../diamond-abi-generator';
+// Hardhat task system used for Diamond ABI generation
 
 dotenv.config();
 
@@ -387,15 +386,14 @@ export class RPCDiamondDeployer {
 			const instance = new RPCDiamondDeployer(config, repository);
 			this.instances.set(key, instance);
 
-			// Generate Diamond ABI with Typechain
-			const options: DiamondAbiGenerationOptions = {
+			// Generate Diamond ABI with Typechain using hardhat task
+			await hre.run('diamond:generate-abi-typechain', {
 				diamondName: config.diamondName,
-				networkName: config.networkName,
-				chainId: config.chainId,
-				outputDir: config.diamondAbiPath,
-			};
-
-			await generateDiamondAbiWithTypechain(options);
+				outputDir: config.diamondAbiPath || 'diamond-abi',
+				typechainOutDir: 'diamond-typechain-types',
+				enableVerbose: config.verbose,
+				targetNetwork: config.networkName,
+			});
 
 			if (config.verbose) {
 				console.log(

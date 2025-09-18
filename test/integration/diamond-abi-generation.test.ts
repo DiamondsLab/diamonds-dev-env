@@ -1,8 +1,7 @@
 import { expect } from 'chai';
 import { rmSync, existsSync, readFileSync } from 'fs';
-import { generateDiamondAbiWithTypechain } from '../../scripts/generate-diamond-abi-with-typechain';
 import { Interface } from 'ethers';
-import { DiamondAbiGenerationOptions } from '../../scripts/diamond-abi-generator';
+import hre from 'hardhat';
 
 describe('Diamond ABI Integration Tests', () => {
 	const testOutputDir = './test-assets/test-output/diamond-abi';
@@ -26,29 +25,33 @@ describe('Diamond ABI Integration Tests', () => {
 		it('should generate complete diamond ABI and TypeChain types', async function () {
 			this.timeout(60000); // Increase timeout for full compilation
 
-			const options: DiamondAbiGenerationOptions = {
-				diamondName: diamondName,
-				verbose: true,
-				diamondsPath: './diamonds',
-			};
-
 			try {
-				const result = await generateDiamondAbiWithTypechain(options);
-
-				// Verify the basic result structure
-				expect(result).to.have.property('abi');
-				expect(result).to.have.property('stats');
-				expect(result).to.have.property('outputPath');
-
-				// Verify we have functions in the ABI
-				expect(result.stats.totalFunctions).to.be.greaterThan(0);
+				// Use hardhat task instead of direct function call
+				await hre.run('diamond:generate-abi-typechain', {
+					diamondName: diamondName,
+					outputDir: 'diamond-abi',
+					typechainOutDir: 'diamond-typechain-types',
+					enableVerbose: true,
+				});
 
 				// Verify the output file exists
-				expect(existsSync(result.outputPath!)).to.be.true;
+				const outputPath = 'diamond-abi/ExampleDiamond.json';
+				expect(existsSync(outputPath)).to.be.true;
 
-				console.log(
-					`Generated diamond ABI with ${result.stats.totalFunctions} functions from ${result.stats.facetCount} facets`,
-				);
+				// Read and verify the generated ABI
+				const abiContent = readFileSync(outputPath, 'utf8');
+				const abiArtifact = JSON.parse(abiContent);
+
+				// Extract the ABI array from the Hardhat artifact
+				expect(abiArtifact).to.have.property('abi');
+				expect(abiArtifact.abi).to.be.an('array');
+				expect(abiArtifact.abi.length).to.be.greaterThan(0);
+
+				// Count functions in the ABI
+				const functions = abiArtifact.abi.filter((item: any) => item.type === 'function');
+				expect(functions.length).to.be.greaterThan(0);
+
+				console.log(`Generated diamond ABI with ${functions.length} functions`);
 			} catch (error) {
 				console.error('Integration test failed:', error);
 				throw error;
@@ -58,33 +61,48 @@ describe('Diamond ABI Integration Tests', () => {
 		it('should generate valid Ethereum ABI that can be parsed by ethers', async function () {
 			this.timeout(60000);
 
-			const options: DiamondAbiGenerationOptions = {
+			// Use hardhat task to generate ABI
+			await hre.run('diamond:generate-abi-typechain', {
 				diamondName: diamondName,
-				verbose: true,
-				diamondsPath: './diamonds',
-			};
+				outputDir: 'diamond-abi',
+				typechainOutDir: 'diamond-typechain-types',
+				enableVerbose: true,
+			});
 
-			const result = await generateDiamondAbiWithTypechain(options);
+			// Read the generated ABI file
+			const outputPath = 'diamond-abi/ExampleDiamond.json';
+			expect(existsSync(outputPath)).to.be.true;
 
-			// Try to create an Interface from the generated ABI
+			const abiContent = readFileSync(outputPath, 'utf8');
+			const abiArtifact = JSON.parse(abiContent);
+
+			// Extract ABI from artifact and try to create an Interface
+			expect(abiArtifact).to.have.property('abi');
 			expect(() => {
-				const iface = new Interface(result.abi);
+				const iface = new Interface(abiArtifact.abi);
 				expect(iface.fragments.length).to.be.greaterThan(0);
 			}).to.not.throw();
 		});
 
 		it('should include key diamond functionality in generated ABI', async function () {
 			this.timeout(60000);
-			const options: DiamondAbiGenerationOptions = {
+
+			// Use hardhat task to generate ABI
+			await hre.run('diamond:generate-abi-typechain', {
 				diamondName: diamondName,
-				verbose: true,
-				diamondsPath: './diamonds',
-			};
+				outputDir: 'diamond-abi',
+				typechainOutDir: 'diamond-typechain-types',
+				enableVerbose: true,
+			});
 
-			const result = await generateDiamondAbiWithTypechain(options);
+			// Read the generated ABI file
+			const outputPath = 'diamond-abi/ExampleDiamond.json';
+			const abiContent = readFileSync(outputPath, 'utf8');
+			const abiArtifact = JSON.parse(abiContent);
 
-			// Create interface to check for functions
-			const iface = new Interface(result.abi);
+			// Extract ABI from artifact and create interface to check for functions
+			expect(abiArtifact).to.have.property('abi');
+			const iface = new Interface(abiArtifact.abi);
 
 			// Check for some essential functions that should be in ExampleDiamond
 			const expectedFunctions = [
@@ -107,13 +125,13 @@ describe('Diamond ABI Integration Tests', () => {
 		it('should generate TypeChain types that can be imported', async function () {
 			this.timeout(60000);
 
-			const options: DiamondAbiGenerationOptions = {
+			// Use hardhat task to generate ABI and TypeChain types
+			await hre.run('diamond:generate-abi-typechain', {
 				diamondName: diamondName,
-				verbose: true,
-				diamondsPath: './diamonds',
-			};
-
-			const result = await generateDiamondAbiWithTypechain(options);
+				outputDir: 'diamond-abi',
+				typechainOutDir: 'diamond-typechain-types',
+				enableVerbose: true,
+			});
 
 			// Check if TypeChain generated the diamond types
 			const expectedTypeFiles = [
@@ -143,45 +161,77 @@ describe('Diamond ABI Integration Tests', () => {
 
 			const startTime = Date.now();
 
-			const options: DiamondAbiGenerationOptions = {
+			// Use hardhat task to generate ABI
+			await hre.run('diamond:generate-abi-typechain', {
 				diamondName: diamondName,
-				verbose: true,
-				diamondsPath: './diamonds',
-			};
-
-			const result = await generateDiamondAbiWithTypechain(options);
+				outputDir: 'diamond-abi',
+				typechainOutDir: 'diamond-typechain-types',
+				enableVerbose: true,
+			});
 
 			const endTime = Date.now();
 			const duration = endTime - startTime;
 
-			console.log(`Generation took ${duration}ms for ${result.stats.facetCount} facets`);
+			// Read the generated ABI to get stats
+			const outputPath = 'diamond-abi/ExampleDiamond.json';
+			const abiContent = readFileSync(outputPath, 'utf8');
+			const abiArtifact = JSON.parse(abiContent);
+
+			// Extract ABI and count functions
+			expect(abiArtifact).to.have.property('abi');
+			const functions = abiArtifact.abi.filter((item: any) => item.type === 'function');
+			const facetCount = 5; // Expected number of facets for ExampleDiamond
+
+			console.log(`Generation took ${duration}ms for ${facetCount} facets`);
 
 			// Should complete within reasonable time (adjust based on your hardware)
 			expect(duration).to.be.lessThan(60000); // 60 seconds max
 
 			// Should have reasonable number of functions
-			expect(result.stats.totalFunctions).to.be.greaterThan(5);
+			expect(functions.length).to.be.greaterThan(5);
 		});
 
 		it('should generate consistent output on multiple runs', async function () {
 			this.timeout(90000);
-			const options: DiamondAbiGenerationOptions = {
+
+			// Generate ABI twice using hardhat task
+			await hre.run('diamond:generate-abi-typechain', {
 				diamondName: diamondName,
-				verbose: false,
-				diamondsPath: './diamonds',
-			};
+				outputDir: 'diamond-abi',
+				typechainOutDir: 'diamond-typechain-types',
+				enableVerbose: false,
+			});
 
-			// Generate ABI twice
-			const result1 = await generateDiamondAbiWithTypechain(options);
-			const result2 = await generateDiamondAbiWithTypechain(options);
+			// Read first result
+			const outputPath = 'diamond-abi/ExampleDiamond.json';
+			const abiContent1 = readFileSync(outputPath, 'utf8');
+			const abiArtifact1 = JSON.parse(abiContent1);
 
-			// Results should be identical
-			expect(result1.stats.totalFunctions).to.equal(result2.stats.totalFunctions);
-			expect(result1.stats.totalEvents).to.equal(result2.stats.totalEvents);
-			expect(result1.stats.facetCount).to.equal(result2.stats.facetCount);
+			await hre.run('diamond:generate-abi-typechain', {
+				diamondName: diamondName,
+				outputDir: 'diamond-abi',
+				typechainOutDir: 'diamond-typechain-types',
+				enableVerbose: false,
+			});
+
+			// Read second result
+			const abiContent2 = readFileSync(outputPath, 'utf8');
+			const abiArtifact2 = JSON.parse(abiContent2);
+
+			// Results should be identical - extract ABIs
+			expect(abiArtifact1).to.have.property('abi');
+			expect(abiArtifact2).to.have.property('abi');
+
+			const functions1 = abiArtifact1.abi.filter((item: any) => item.type === 'function');
+			const functions2 = abiArtifact2.abi.filter((item: any) => item.type === 'function');
+			const events1 = abiArtifact1.abi.filter((item: any) => item.type === 'event');
+			const events2 = abiArtifact2.abi.filter((item: any) => item.type === 'event');
+
+			expect(functions1.length).to.equal(functions2.length);
+			expect(events1.length).to.equal(events2.length);
 
 			// ABI arrays should have same length
-			expect(result1.abi.length).to.equal(result2.abi.length);
+			expect(abiArtifact1.abi.length).to.equal(abiArtifact2.abi.length);
 		});
 	});
 
@@ -210,16 +260,25 @@ describe('Diamond ABI Integration Tests', () => {
 		it('should validate generated ABI structure', async function () {
 			this.timeout(60000);
 
-			const options: DiamondAbiGenerationOptions = {
+			// Use hardhat task to generate ABI
+			await hre.run('diamond:generate-abi-typechain', {
 				diamondName: diamondName,
-				verbose: false,
-				diamondsPath: './diamonds',
-			};
+				outputDir: 'diamond-abi',
+				typechainOutDir: 'diamond-typechain-types',
+				enableVerbose: false,
+			});
 
-			const result = await generateDiamondAbiWithTypechain(options);
+			// Read the generated ABI
+			const outputPath = 'diamond-abi/ExampleDiamond.json';
+			const abiContent = readFileSync(outputPath, 'utf8');
+			const abiArtifact = JSON.parse(abiContent);
+
+			// Extract ABI from artifact and validate structure
+			expect(abiArtifact).to.have.property('abi');
+			const abi = abiArtifact.abi;
 
 			// Validate ABI structure
-			for (const abiItem of result.abi) {
+			for (const abiItem of abi) {
 				expect(abiItem).to.have.property('type');
 				expect(['function', 'event', 'error', 'constructor']).to.include(abiItem.type);
 

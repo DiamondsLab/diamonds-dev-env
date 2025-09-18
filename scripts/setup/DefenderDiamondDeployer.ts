@@ -16,8 +16,7 @@ import { readFileSync, existsSync } from 'fs';
 import 'hardhat-diamonds';
 import * as dotenv from 'dotenv';
 
-import { generateDiamondAbiWithTypechain } from '../generate-diamond-abi-with-typechain';
-import { DiamondAbiGenerationOptions } from '../diamond-abi-generator';
+// Hardhat task system used for Diamond ABI generation
 
 dotenv.config();
 
@@ -330,15 +329,14 @@ export class DefenderDiamondDeployer {
 				console.log('📝 Generating Diamond ABI with TypeChain...');
 			}
 
-			const options: DiamondAbiGenerationOptions = {
+			// Use hardhat task instead of direct script call
+			await hre.run('diamond:generate-abi-typechain', {
 				diamondName: this.config.diamondName,
-				networkName: this.config.networkName,
-				chainId: this.config.chainId,
-				outputDir: join(process.cwd(), 'diamond-abi'),
-				verbose: this.verbose,
-			};
-
-			await generateDiamondAbiWithTypechain(options);
+				outputDir: 'diamond-abi',
+				typechainOutDir: 'diamond-typechain-types',
+				enableVerbose: this.verbose,
+				targetNetwork: this.config.networkName,
+			});
 
 			if (this.verbose) {
 				console.log('✅ Diamond ABI generation completed');
