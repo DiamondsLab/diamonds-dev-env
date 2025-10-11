@@ -1,26 +1,18 @@
-import { debug } from 'debug';
-import { expect } from 'chai';
-import { ethers } from 'hardhat';
-import hre from 'hardhat';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
+import { expect } from 'chai';
+import { debug } from 'debug';
+import { Diamond } from 'diamonds';
 import { JsonRpcProvider } from 'ethers';
+import hre, { ethers } from 'hardhat';
 import { multichain } from 'hardhat-multichain';
-
-// Type alias for provider compatibility
-type ProviderType = JsonRpcProvider | any;
-import { getInterfaceID } from '../../scripts/utils/helpers';
+import { ExampleDiamond } from '../../diamond-typechain-types';
 import {
 	LocalDiamondDeployer,
 	LocalDiamondDeployerConfig,
 } from '../../scripts/setup/LocalDiamondDeployer';
-import { Diamond, deleteDeployInfo } from 'diamonds';
-import {
-	IERC20Upgradeable__factory,
-	IDiamondCut__factory,
-	IDiamondLoupe__factory,
-} from '../../typechain-types';
-import { ExampleDiamond } from '../../diamond-typechain-types';
+import { getInterfaceID } from '../../scripts/utils/helpers';
 import { loadDiamondContract } from '../../scripts/utils/loadDiamondArtifact';
+import { IDiamondCut__factory, IDiamondLoupe__factory } from '../../typechain-types';
 
 describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () {
 	const diamondName = 'ExampleDiamond';
@@ -32,9 +24,11 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 	if (process.argv.includes('test-multichain')) {
 		const networkNames = process.argv[process.argv.indexOf('--chains') + 1].split(',');
 		if (networkNames.includes('hardhat')) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			networkProviders.set('hardhat', ethers.provider as any);
 		}
 	} else if (process.argv.includes('test') || process.argv.includes('coverage')) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		networkProviders.set('hardhat', ethers.provider as any);
 	}
 
@@ -75,11 +69,12 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 				// Load the Diamond contract using the utility function
 				const exampleDiamondContract = await loadDiamondContract<ExampleDiamond>(
 					diamond,
-					deployedDiamondData.DiamondAddress!,
+					deployedDiamondData.DiamondAddress ?? '',
 				);
 				exampleDiamond = exampleDiamondContract;
 
 				ethersMultichain = ethers;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				ethersMultichain.provider = provider as any;
 
 				// Retrieve the signers for the chain
@@ -93,7 +88,7 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 
 				// get the signer for the owner
 
-				owner = diamond.getDeployedDiamondData().DeployerAddress!;
+				owner = diamond.getDeployedDiamondData().DeployerAddress ?? '';
 				if (!owner) {
 					diamond.setSigner(signers[0]);
 					owner = signer0;
@@ -143,8 +138,11 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 				if (networkName !== 'hardhat') {
 					expect(blockNumber).to.be.greaterThan(0);
 				}
-				const configBlockNumber =
-					hre.config.chainManager?.chains?.[networkName]?.blockNumber ?? 0;
+				// Safely access chain configuration without triggering object injection warnings
+				const chains = hre.config.chainManager?.chains ?? {};
+				const chainEntries = Object.entries(chains);
+				const networkEntry = chainEntries.find(([key]) => key === networkName);
+				const configBlockNumber = networkEntry?.[1]?.blockNumber ?? 0;
 				expect(blockNumber).to.be.gte(configBlockNumber);
 
 				expect(blockNumber).to.be.lte(configBlockNumber + 500);
@@ -191,7 +189,7 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 				const iDiamondCutInterface = IDiamondCut__factory.createInterface();
 				// Generate the IDiamondCut interface ID by XORing with the base interface ID.
 				const iDiamondCutInterfaceID = getInterfaceID(iDiamondCutInterface);
-				// const supportsIDiamondCut = await proxyDiamond.supportsInterface('0x1f931c1c');
+				// const supportsIDiamondCut = await exampleDiamond.supportsInterface('0x1f931c1c');
 				const supportsERC165 = await ownerDiamond.supportsInterface(
 					'0x' + iDiamondCutInterfaceID.toString(16).padStart(8, '0'),
 				);
@@ -205,7 +203,7 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 				const iDiamondLoupeInterface = IDiamondLoupe__factory.createInterface();
 				// Generate the IDiamondLoupe interface ID by XORing with the base interface ID.
 				const iDiamondLoupeInterfaceID = getInterfaceID(iDiamondLoupeInterface);
-				// const supportsIDiamondLoupe = await proxyDiamond.supportsInterface('0x48e3885f');
+				// const supportsIDiamondLoupe = await exampleDiamond.supportsInterface('0x48e3885f');
 				const supportsERC165 = await ownerDiamond.supportsInterface(
 					'0x' + iDiamondLoupeInterfaceID.toString(16).padStart(8, '0'),
 				);
@@ -220,13 +218,13 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 			// 	const IERC20InterfaceID = getInterfaceID(IERC20UpgradeableInterface);
 			// 	// Assert that the `diamond` contract supports the ERC20 interface.
 			// 	// assert(
-			// 	//   await proxyDiamond?.supportsInterface(IERC20InterfaceID.toString(16).padStart(8, '0')),
+			// 	//   await exampleDiamond?.supportsInterface(IERC20InterfaceID.toString(16).padStart(8, '0')),
 			// 	//   "Doesn't support IERC20Upgradeable",
 			// 	// );
 
 			// 	// Test ERC165 interface compatibility for ERC20 '0x37c8e2a0'
 			// 	// Test ERC165 interface compatibility for ERC20Upgradeable '0x36372b07'
-			// 	// const supportsERC20 = await proxyDiamond?.supportsInterface(IERC20InterfaceID.toString(16).padStart(8, '0'));
+			// 	// const supportsERC20 = await exampleDiamond?.supportsInterface(IERC20InterfaceID.toString(16).padStart(8, '0'));
 
 			// 	const supportsERC20 = await ownerDiamond?.supportsInterface('0x36372b07');
 

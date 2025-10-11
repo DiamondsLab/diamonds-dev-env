@@ -3,21 +3,18 @@
 // Import hardhat-diamonds plugin first to ensure type extensions are loaded
 import 'hardhat-diamonds';
 // Import the types directly
-import type { DiamondsPathsConfig } from 'hardhat-diamonds/src/type-extensions';
 
 import * as dotenv from 'dotenv';
 
-import { HardhatUserConfig, task } from 'hardhat/config';
 import '@nomicfoundation/hardhat-toolbox';
-import 'hardhat-abi-exporter';
-import '@typechain/hardhat';
-import 'hardhat-gas-reporter';
-import 'solidity-coverage';
 import '@nomicfoundation/hardhat-web3-v4';
-import 'hardhat-multichain';
+import '@typechain/hardhat';
+import { HardhatUserConfig } from 'hardhat/config';
+import 'hardhat-abi-exporter';
 import 'hardhat-diamonds';
-// Explicitly import types to ensure they're available
-import 'hardhat-diamonds/src/type-extensions';
+import 'hardhat-gas-reporter';
+import 'hardhat-multichain';
+import 'solidity-coverage';
 
 dotenv.config();
 
@@ -62,26 +59,26 @@ const {
 
 // default blank RPC URLs will return an error. Must be configured in the .env file.
 // default block values as well so missing environment variables set default to latest block.
-export const mainnetUrl: string = MAINNET_RPC || ''; // Ethereum RPC URL
-export const polygonUrl: string = POLYGON_RPC || ''; // Polygon RPC URL
-export const polygonAmoyUrl: string = POLYGON_AMOY_RPC || ''; // Amoy RPC URL
-export const sepoliaUrl: string = SEPOLIA_RPC || ''; // Sepolia RPC URL
-export const sepoliaBlock: number = parseInt(SEPOLIA_BLOCK || '0'); // Sepolia block number
-export const arbitrumUrl: string = ARBITRUM_RPC || ''; // Arbitrum RPC URL
-export const arbitrumBlock: number = parseInt(ARBITRUM_BLOCK || '0'); // Arbitrum block number
-export const arbitrumSepoliaUrl: string = ARBITRUM_SEPOLIA_RPC || ''; // Arbitrum Sepolia RPC URL
-export const arbitrumSepoliaBlock: number = parseInt(ARBITRUM_SEPOLIA_BLOCK || '0'); // Arbitrum Sepolia block number
-export const baseUrl: string = BASE_RPC || ''; // Base RPC URL
-export const mainnetBlock: number = parseInt(MAINNET_BLOCK || '0'); // Ethereum block number
-export const polygonBlock: number = parseInt(POLYGON_BLOCK || '0'); // Polygon block number
-export const amoyBlock: number = parseInt(POLYGON_AMOY_BLOCK || '0'); // Amoy block number
-export const baseBlock: number = parseInt(BASE_BLOCK || '0'); // Base block number
-export const baseSepoliaUrl: string = BASE_SEPOLIA_RPC || ''; // Base Sepolia RPC URL
-export const baseSepoliaBlock: number = parseInt(BASE_SEPOLIA_BLOCK || '0'); // Base Sepolia block number
-export const bscUrl: string = BSC_RPC || ''; // BSC RPC URL
-export const bscBlock: number = parseInt(BSC_BLOCK || '0'); // BSC block number
-export const bscTestnetUrl: string = BSC_TESTNET_RPC || ''; // BSC Testnet RPC URL
-export const bscTestnetBlock: number = parseInt(BSC_TESTNET_BLOCK || '0'); // BSC Testnet block number
+export const mainnetUrl: string = MAINNET_RPC ?? ''; // Ethereum RPC URL
+export const polygonUrl: string = POLYGON_RPC ?? ''; // Polygon RPC URL
+export const polygonAmoyUrl: string = POLYGON_AMOY_RPC ?? ''; // Amoy RPC URL
+export const sepoliaUrl: string = SEPOLIA_RPC ?? ''; // Sepolia RPC URL
+export const sepoliaBlock: number = parseInt(SEPOLIA_BLOCK ?? '0'); // Sepolia block number
+export const arbitrumUrl: string = ARBITRUM_RPC ?? ''; // Arbitrum RPC URL
+export const arbitrumBlock: number = parseInt(ARBITRUM_BLOCK ?? '0'); // Arbitrum block number
+export const arbitrumSepoliaUrl: string = ARBITRUM_SEPOLIA_RPC ?? ''; // Arbitrum Sepolia RPC URL
+export const arbitrumSepoliaBlock: number = parseInt(ARBITRUM_SEPOLIA_BLOCK ?? '0'); // Arbitrum Sepolia block number
+export const baseUrl: string = BASE_RPC ?? ''; // Base RPC URL
+export const mainnetBlock: number = parseInt(MAINNET_BLOCK ?? '0'); // Ethereum block number
+export const polygonBlock: number = parseInt(POLYGON_BLOCK ?? '0'); // Polygon block number
+export const amoyBlock: number = parseInt(POLYGON_AMOY_BLOCK ?? '0'); // Amoy block number
+export const baseBlock: number = parseInt(BASE_BLOCK ?? '0'); // Base block number
+export const baseSepoliaUrl: string = BASE_SEPOLIA_RPC ?? ''; // Base Sepolia RPC URL
+export const baseSepoliaBlock: number = parseInt(BASE_SEPOLIA_BLOCK ?? '0'); // Base Sepolia block number
+export const bscUrl: string = BSC_RPC ?? ''; // BSC RPC URL
+export const bscBlock: number = parseInt(BSC_BLOCK ?? '0'); // BSC block number
+export const bscTestnetUrl: string = BSC_TESTNET_RPC ?? ''; // BSC Testnet RPC URL
+export const bscTestnetBlock: number = parseInt(BSC_TESTNET_BLOCK ?? '0'); // BSC Testnet block number
 
 let multichainTestHardhat = '';
 // If this is a test-multichain task then we need to parse the --chains argument to get the chain names
@@ -96,28 +93,10 @@ if (process.argv.includes('coverage')) {
 }
 export const multichainHardhat = multichainTestHardhat;
 
-// Task to print the list of accounts
-task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
-	// Retrieve the list of accounts
-	const accounts = await hre.ethers.getSigners();
-	for (const account of accounts) {
-		console.log(account.address);
-	}
-});
-
-const elementSeenSet = new Set<string>();
-// filter out duplicate function signatures
-function genSignature(name: string, inputs: Array<unknown>, type: string): string {
-	return `${type} ${name}(${inputs.reduce((previous: string, key) => {
-		const comma = previous.length ? ',' : '';
-		return previous + comma + (key as { internalType: string }).internalType;
-	}, '')})`;
-}
-
 const MOCK_CHAIN_ID = HH_CHAIN_ID ? parseInt(HH_CHAIN_ID) : 31337;
 // console.log(`Using chain ID: ${MOCK_CHAIN_ID}`);
 
-const config: any = {
+const config: HardhatUserConfig = {
 	typechain: {
 		outDir: 'typechain-types', // Ensure this matches your expected output folder
 		target: 'ethers-v6', // Match the version of Ethers.js you're using
@@ -292,25 +271,16 @@ const config: any = {
 	},
 	etherscan: {
 		apiKey: {
-			polygonMumbai:
-				process.env.POLYGONSCAN_API_KEY !== undefined
-					? process.env.POLYGONSCAN_API_KEY
-					: '',
-			polygon:
-				process.env.POLYGONSCAN_API_KEY !== undefined
-					? process.env.POLYGONSCAN_API_KEY
-					: '',
-			polygon_amoy:
-				process.env.POLYGONSCAN_API_KEY !== undefined
-					? process.env.POLYGONSCAN_API_KEY
-					: '',
-			sepolia: process.env.ETHERSCAN_API_KEY || '',
-			mainnet: process.env.ETHERSCAN_API_KEY || '',
-			bsc: process.env.BSCSCAN_API_KEY || '',
-			bsc_testnet: process.env.BSCSCAN_API_KEY || '',
-			arbitrum_sepolia: process.env.ARBITRUM_API_KEY || '',
-			base_sepolia: process.env.BASESCAN_API_KEY || '',
-			base: process.env.BASESCAN_API_KEY || '',
+			polygonMumbai: process.env.POLYGONSCAN_API_KEY ?? '',
+			polygon: process.env.POLYGONSCAN_API_KEY ?? '',
+			polygon_amoy: process.env.POLYGONSCAN_API_KEY ?? '',
+			sepolia: process.env.ETHERSCAN_API_KEY ?? '',
+			mainnet: process.env.ETHERSCAN_API_KEY ?? '',
+			bsc: process.env.BSCSCAN_API_KEY ?? '',
+			bsc_testnet: process.env.BSCSCAN_API_KEY ?? '',
+			arbitrum_sepolia: process.env.ARBITRUM_API_KEY ?? '',
+			base_sepolia: process.env.BASESCAN_API_KEY ?? '',
+			base: process.env.BASESCAN_API_KEY ?? '',
 		},
 		customChains: [
 			// additional etherscan config

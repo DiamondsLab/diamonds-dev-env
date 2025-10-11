@@ -1,113 +1,111 @@
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import globals from "globals";
 import tsParser from "@typescript-eslint/parser";
+import prettierConfig from "eslint-config-prettier";
+import prettier from "eslint-plugin-prettier";
+import security from "eslint-plugin-security";
+import globals from "globals";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import diamondRules from "./eslint-diamond-rules.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
 
 export default [
+  // Global ignores
   {
     ignores: [
-      "**/node_modules",
-      "**/artifacts",
-      "**/cache",
-      "**/coverage",
+      "**/node_modules/**",
+      "**/artifacts/**",
+      "**/cache/**",
+      "**/coverage/**",
+      "**/test-assets/**",
+      "**/scripts/devops/**",
       "**/dist/**",
-      "**/docs/**",
-      "**/*.d.ts",
-      // Project-specific directories to skip
-      "**/typechain-types/**",
-      // "**/diamond-typechain-types/**",
-      // Skip docs examples and package-specific configs
-      "**/docs/**",
-      "**/packages/**/hardhat.config.ts",
-      "**/packages/**/test/**",
-      // Skip config files
-      "**/*.config.js",
-      "**/*.config.mjs",
-      "**/.eslintrc.js",
-      "**/jest.config.js",
+      "eslint-diamond-rules.js", // Plugin config file, not to be linted
+      "eslint.config.mjs", // ESLint config itself, not to be linted
     ],
   },
-  ...compat.extends(
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-  ),
-  {
-    plugins: {
-      "@typescript-eslint": typescriptEslint,
-    },
 
+  // Base config for JavaScript files (no TypeScript parsing)
+  {
+    files: ["**/*.js", "**/*.mjs"],
     languageOptions: {
       globals: {
-        ...Object.fromEntries(
-          Object.entries(globals.browser).map(([key]) => [key, "off"]),
-        ),
+        ...globals.node,
+      },
+      ecmaVersion: 2021,
+      sourceType: "module",
+    },
+    plugins: {
+      prettier: prettier,
+    },
+    rules: {
+      ...prettierConfig.rules,
+      "no-console": "warn",
+      "no-debugger": "error",
+    },
+  },
+
+  // TypeScript files configuration
+  {
+    files: ["**/*.ts"],
+    languageOptions: {
+      globals: {
         ...globals.mocha,
         ...globals.node,
       },
-
       parser: tsParser,
       ecmaVersion: 2021,
       sourceType: "module",
-
       parserOptions: {
-        // Use projectService instead of project for better workspace support
-        projectService: true,
+        project: "./tsconfig.json",
+        tsconfigRootDir: __dirname,
       },
     },
-
+    plugins: {
+      "@typescript-eslint": typescriptEslint,
+      security: security,
+      "diamond-rules": diamondRules,
+      prettier: prettier,
+    },
     rules: {
+      // Prettier
+      ...prettierConfig.rules,
+      "prettier/prettier": "error",
+
+      // TypeScript recommended overrides
       "@typescript-eslint/no-namespace": "off",
       "@typescript-eslint/no-var-requires": "off",
       "@typescript-eslint/no-unused-expressions": "off",
-      "@typescript-eslint/no-require-imports": "off",
-      // Configure unused vars to allow underscore prefix
-      "@typescript-eslint/no-unused-vars": "off", 
-      // ["error", { 
-      //   argsIgnorePattern: "^_",
-      //   varsIgnorePattern: "^_",
-      //   ignoreRestSiblings: true
-      // }],
-      "@typescript-eslint/no-explicit-any": "off",
-      // Disable Prettier integration in ESLint to avoid formatting errors
-      "prettier/prettier": "off",
-    },
-  },
-  // Disable no-explicit-any in scripts folder where heavier typing is not required
-  {
-    files: ["scripts/**/*.ts", "scripts/**/*.mts"],
-    rules: {
-      "@typescript-eslint/no-explicit-any": "off",
-      // Disable Prettier errors for scripts where formatting may intentionally differ
-      "prettier/prettier": "off",
-      // Allow unused variables/assignments in scripts (often used for CLI side-effects)
-      "@typescript-eslint/no-unused-vars": "off",
-    },
-  },
-  // Disable no-unused-vars in test files to allow test helpers and fixtures that may be unused
-  {
-    files: ["test/**/*.ts", "test/**/*.mts", "**/__tests__/**/*.ts"],
-    rules: {
-      "@typescript-eslint/no-unused-vars": "off",
-      // Allow use of `any` in tests
-      "@typescript-eslint/no-explicit-any": "off",
-    },
-  },
-  // Disable no-unused-vars for repository root configuration files (hardhat, other .config.ts)
-  {
-    files: ["hardhat.config.ts", "*.config.ts", "setup/**/*.ts"],
-    rules: {
-      "@typescript-eslint/no-unused-vars": "off",
+
+      // Security rules
+      "security/detect-eval-with-expression": "error",
+      "security/detect-no-csrf-before-method-override": "error",
+      "security/detect-possible-timing-attacks": "error",
+      "security/detect-new-buffer": "error",
+      "security/detect-non-literal-regexp": "warn",
+      "security/detect-non-literal-require": "error",
+      "security/detect-object-injection": "warn",
+      "security/detect-unsafe-regex": "error",
+
+      // Diamond proxy specific security rules
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/explicit-function-return-type": "warn",
+
+      // General code quality
+      "no-console": "warn",
+      "no-debugger": "error",
+
+      // Security-focused rules for smart contract interactions
+      "@typescript-eslint/no-non-null-assertion": "warn",
+      "@typescript-eslint/prefer-nullish-coalescing": "warn",
+      "@typescript-eslint/prefer-optional-chain": "warn",
+
+      // Custom Diamond rules
+      "diamond-rules/diamond-storage-pattern": "error",
+      "diamond-rules/diamond-selector-validation": "error",
+      "diamond-rules/secure-external-calls": "warn",
     },
   },
 ];
