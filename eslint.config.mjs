@@ -42,7 +42,7 @@ export default [
     },
     rules: {
       ...prettierConfig.rules,
-      "no-console": "warn",
+      "no-console": "off",
       "no-debugger": "error",
     },
   },
@@ -94,7 +94,7 @@ export default [
       "@typescript-eslint/explicit-function-return-type": "warn",
 
       // General code quality
-      "no-console": "warn",
+      "no-console": "off",
       "no-debugger": "error",
 
       // Security-focused rules for smart contract interactions

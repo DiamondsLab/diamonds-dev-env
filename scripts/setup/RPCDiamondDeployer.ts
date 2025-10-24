@@ -1,24 +1,23 @@
+import type { HardhatEthersProvider } from '@nomicfoundation/hardhat-ethers/internal/hardhat-ethers-provider';
+import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
+import chalk from 'chalk';
 import {
-	Diamond,
-	DiamondDeployer,
-	FileDeploymentRepository,
 	DeploymentRepository,
+	Diamond,
 	DiamondConfig,
+	DiamondDeployer,
 	DiamondPathsConfig,
+	FileDeploymentRepository,
 	RPCDeploymentStrategy,
 	cutKey,
 } from 'diamonds';
+import * as dotenv from 'dotenv';
 import { JsonRpcProvider } from 'ethers';
-import { ethers } from 'hardhat';
-import hre from 'hardhat';
-import type { HardhatEthersProvider } from '@nomicfoundation/hardhat-ethers/internal/hardhat-ethers-provider';
-import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
-import { join } from 'path';
 import { existsSync } from 'fs';
+import hre, { ethers } from 'hardhat';
 import 'hardhat-diamonds';
 import 'hardhat-multichain';
-import * as dotenv from 'dotenv';
-import chalk from 'chalk';
+import { join } from 'path';
 
 // Hardhat task system used for Diamond ABI generation
 
@@ -162,7 +161,7 @@ export class RPCDiamondDeployer {
 		this.diamondName = config.diamondName;
 		this.networkName = config.networkName;
 		this.chainId = config.chainId;
-		this.verbose = config.verbose || false;
+		this.verbose = config.verbose ?? false;
 		this.repository = repository;
 
 		// Initialize provider and signer
@@ -173,9 +172,9 @@ export class RPCDiamondDeployer {
 		this.strategy = new RPCDeploymentStrategy(
 			config.rpcUrl,
 			config.privateKey,
-			config.gasLimitMultiplier || 1.2,
-			config.maxRetries || 3,
-			config.retryDelayMs || 2000,
+			config.gasLimitMultiplier ?? 1.2,
+			config.maxRetries ?? 3,
+			config.retryDelayMs ?? 2000,
 			this.verbose,
 		);
 
@@ -229,7 +228,7 @@ export class RPCDiamondDeployer {
 	public static getNetworkConfigFromHardhat(networkName: string): HardhatNetworkConfig {
 		try {
 			const chainManager = (hre.config as any).chainManager;
-			if (!chainManager || !chainManager.chains || !chainManager.chains[networkName]) {
+			if (!chainManager?.chains?.[networkName]) {
 				throw new Error(
 					`Network "${networkName}" not found in hardhat chainManager configuration`,
 				);
@@ -238,8 +237,8 @@ export class RPCDiamondDeployer {
 			const networkConfig = chainManager.chains[networkName];
 			return {
 				name: networkName,
-				chainId: networkConfig.chainId || 0,
-				rpcUrl: networkConfig.rpcUrl || '',
+				chainId: networkConfig.chainId ?? 0,
+				rpcUrl: networkConfig.rpcUrl ?? '',
 				blockNumber: networkConfig.blockNumber,
 				nativeCurrency: networkConfig.nativeCurrency,
 				defaultGasLimit: networkConfig.defaultGasLimit,
@@ -289,7 +288,7 @@ export class RPCDiamondDeployer {
 			deploymentsPath: diamondConfig.deploymentsPath,
 			contractsPath: diamondConfig.contractsPath,
 			configFilePath: join(
-				diamondConfig.deploymentsPath || 'diamonds',
+				diamondConfig.deploymentsPath ?? 'diamonds',
 				diamondName,
 				`${diamondName.toLowerCase()}.config.json`,
 			),
@@ -324,12 +323,12 @@ export class RPCDiamondDeployer {
 
 		if (!config.networkName) {
 			const network = await config.provider.getNetwork();
-			config.networkName = network.name || 'unknown';
+			config.networkName = network.name ?? 'unknown';
 		}
 
 		// Create unique key for this deployer instance
 		const key =
-			config.rpcDiamondDeployerKey ||
+			config.rpcDiamondDeployerKey ??
 			(await cutKey(config.diamondName, config.networkName, config.chainId.toString()));
 
 		// Return existing instance or create new one
@@ -355,30 +354,30 @@ export class RPCDiamondDeployer {
 
 			// Configure paths with fallbacks
 			config.deploymentsPath =
-				config.deploymentsPath || hardhatDiamonds?.deploymentsPath || 'diamonds';
-			config.contractsPath = hardhatDiamonds?.contractsPath || 'contracts';
+				config.deploymentsPath ?? hardhatDiamonds?.deploymentsPath ?? 'diamonds';
+			config.contractsPath = hardhatDiamonds?.contractsPath ?? 'contracts';
 			config.callbacksPath =
-				hardhatDiamonds?.callbacksPath || join('diamonds', config.diamondName, 'callbacks');
+				hardhatDiamonds?.callbacksPath ?? join('diamonds', config.diamondName, 'callbacks');
 			config.deployedDiamondDataFilePath =
-				config.deployedDiamondDataFilePath ||
-				hardhatDiamonds?.deployedDiamondDataFilePath ||
+				config.deployedDiamondDataFilePath ??
+				hardhatDiamonds?.deployedDiamondDataFilePath ??
 				defaultDeployedDiamondDataFilePath;
 			config.configFilePath =
-				config.configFilePath || hardhatDiamonds?.configFilePath || defaultConfigFilePath;
+				config.configFilePath ?? hardhatDiamonds?.configFilePath ?? defaultConfigFilePath;
 
 			// Configure Diamond ABI path and filename
 			config.diamondAbiPath =
-				config.diamondAbiPath || (hardhatDiamonds as any)?.diamondAbiPath || 'diamond-abi';
+				config.diamondAbiPath ?? (hardhatDiamonds as any)?.diamondAbiPath ?? 'diamond-abi';
 			config.diamondAbiFileName =
-				config.diamondAbiFileName ||
-				(hardhatDiamonds as any)?.diamondAbiFileName ||
+				config.diamondAbiFileName ??
+				(hardhatDiamonds as any)?.diamondAbiFileName ??
 				config.diamondName;
 
 			// Create repository
 			const repository = new FileDeploymentRepository(config);
 			repository.setWriteDeployedDiamondData(
-				config.writeDeployedDiamondData ||
-					hardhatDiamonds?.writeDeployedDiamondData ||
+				config.writeDeployedDiamondData ??
+					hardhatDiamonds?.writeDeployedDiamondData ??
 					false,
 			);
 
@@ -389,7 +388,7 @@ export class RPCDiamondDeployer {
 			// Generate Diamond ABI with Typechain using hardhat task
 			await hre.run('diamond:generate-abi-typechain', {
 				diamondName: config.diamondName,
-				outputDir: config.diamondAbiPath || 'diamond-abi',
+				outputDir: config.diamondAbiPath ?? 'diamond-abi',
 				typechainOutDir: 'diamond-typechain-types',
 				enableVerbose: config.verbose,
 				targetNetwork: config.networkName,
@@ -433,10 +432,10 @@ export class RPCDiamondDeployer {
 		}
 
 		const config: RPCDiamondDeployerConfig = {
-			diamondName: process.env.DIAMOND_NAME || 'ExampleDiamond',
+			diamondName: process.env.DIAMOND_NAME ?? 'ExampleDiamond',
 			rpcUrl: process.env.RPC_URL!,
 			privateKey: process.env.PRIVATE_KEY!,
-			networkName: process.env.NETWORK_NAME || 'unknown',
+			networkName: process.env.NETWORK_NAME ?? 'unknown',
 			chainId: process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : 0, // Will be auto-detected
 			gasLimitMultiplier: process.env.GAS_LIMIT_MULTIPLIER
 				? parseFloat(process.env.GAS_LIMIT_MULTIPLIER)
@@ -650,7 +649,7 @@ export class RPCDiamondDeployer {
 	 */
 	public isDiamondDeployed(): boolean {
 		const deployedData = this.diamond?.getDeployedDiamondData();
-		return !!(deployedData && deployedData.DiamondAddress);
+		return !!deployedData?.DiamondAddress;
 	}
 
 	/**
@@ -701,7 +700,7 @@ export class RPCDiamondDeployer {
 					errors.push('Diamond configuration not found');
 				} else {
 					// Validate facets configuration
-					const facets = deployConfig.facets || {};
+					const facets = deployConfig.facets ?? {};
 					if (Object.keys(facets).length === 0) {
 						errors.push('No facets configured for deployment');
 					}
@@ -731,7 +730,7 @@ export class RPCDiamondDeployer {
 		const network = await this.provider.getNetwork();
 		const signerAddress = await this.signer.getAddress();
 		const balance = await this.provider.getBalance(signerAddress);
-		const gasPrice = (await this.provider.getFeeData()).gasPrice || 0n;
+		const gasPrice = (await this.provider.getFeeData()).gasPrice ?? 0n;
 		const blockNumber = await this.provider.getBlockNumber();
 
 		return {
@@ -775,7 +774,7 @@ export class RPCDiamondDeployer {
 		console.log(chalk.green('='.repeat(50)));
 		console.log(chalk.blue(`💎 Diamond Name: ${this.diamondName}`));
 		console.log(chalk.blue(`🌐 Network: ${this.networkName} (Chain ID: ${this.chainId})`));
-		console.log(chalk.blue(`📍 Diamond Address: ${deployedData?.DiamondAddress || 'N/A'}`));
+		console.log(chalk.blue(`📍 Diamond Address: ${deployedData?.DiamondAddress ?? 'N/A'}`));
 		console.log(chalk.blue(`👤 Deployer: ${networkInfo.signerAddress}`));
 
 		if (deployedData?.protocolVersion) {

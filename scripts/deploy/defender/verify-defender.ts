@@ -68,10 +68,13 @@ async function main(): Promise<void> {
 		}
 
 		// Get diamond instance
-		const diamond = await deployer.getDiamondDeployed()!;
+		const diamond = await deployer.getDiamondDeployed();
+		if (!diamond) {
+			throw new Error('Diamond not found. Please ensure the diamond is deployed.');
+		}
 		const deployedDiamondData = diamond.getDeployedDiamondData();
 
-		const targetAddress = options.contractAddress || deployedDiamondData.DiamondAddress;
+		const targetAddress = options.contractAddress ?? deployedDiamondData.DiamondAddress;
 
 		if (!targetAddress) {
 			throw new Error(
@@ -138,7 +141,15 @@ async function main(): Promise<void> {
 		console.log(`Verification Time: ${verificationTime}s`);
 
 		// Show verification links
-		const networkConfig = DefenderDiamondDeployer.loadNetworkConfig(networkName);
+		// Prevent path traversal by allowing only alphanumeric characters, dashes and underscores in network names.
+		// This rejects inputs like "../secrets" or absolute/relative paths.
+		const sanitizedNetworkName = String(networkName).trim();
+		if (!/^[a-zA-Z0-9_-]+$/.test(sanitizedNetworkName)) {
+			throw new Error(
+				`Invalid network name: "${networkName}". Only letters, numbers, '-' and '_' are allowed.`,
+			);
+		}
+		const networkConfig = DefenderDiamondDeployer.loadNetworkConfig(sanitizedNetworkName);
 		console.log(`Block Explorer: ${networkConfig.blockExplorer}/address/${targetAddress}`);
 
 		console.log('');

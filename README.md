@@ -1,6 +1,6 @@
-# Diamonds Monitor Development Environment
+# Diamonds Development Environment
 
-Professional development environment for the `hardhat-diamonds` node module and ERC-2535 Diamond Proxy Standard projects.
+Professional development environment for the `Diamonds` node modules, associated hardhat node modules, and the DevContainer.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Hardhat](https://img.shields.io/badge/Built%20with-Hardhat-FFDB1C.svg)](https://hardhat.org/)
@@ -10,12 +10,17 @@ Professional development environment for the `hardhat-diamonds` node module and 
 
 ## �️ Project Structure
 
-This repository serves as a professional development environment for building, testing, and deploying the `hardhat-diamonds` npm package alongside ERC-2535 Diamond Proxy contracts.
+This repository serves as a professional development environment for building, testing, and deploying the `Diamonds` node modules, associated hardhat node modules, and the DevContainer.
 
 ```bash
-hardhat-diamonds-devenv/
+diamonds-dev-env/
+├── .devcontainer/                 # DevContainer configuration
+├── .husky/                 # DevContainer configuration
+├── .vscode/                       # VSCode workspace settings
 ├── packages/
-│   └── hardhat-diamonds/          # Main NPM package
+|   └── diamonds/                  # Diamonds Main NPM package
+|   └── hardhat-diamonds-monitor/  # Diamonds monitoring NPM package
+│   └── hardhat-diamonds/          # Hardhat Diamonds NPM package
 │       ├── src/                   # TypeScript source code
 │       ├── dist/                  # Compiled output
 │       ├── coverage/              # Test coverage reports
@@ -24,18 +29,9 @@ hardhat-diamonds-devenv/
 ├── test/                          # Contract tests
 ├── scripts/                       # Development scripts
 ├── deployments/                   # Deployment artifacts
-└── .github/workflows/             # CI/CD pipelines
 ```
 
 ## 🌟 Features
-
-### Diamonds Monitor Package
-
-- **� Diamond Contract Monitoring**: Real-time monitoring of ERC-2535 diamond proxies
-- **🔍 Facet Management**: Comprehensive tools for managing facets and function selectors
-- **📊 Health Checks**: Automated health monitoring and diagnostics
-- **🚨 Event Monitoring**: Track diamond cut events and contract changes
-- **🛠️ Developer Tools**: Utilities for diamond development and debugging
 
 ### Development Environment
 
@@ -59,7 +55,7 @@ hardhat-diamonds-devenv/
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd hardhat-diamonds-devenv
+cd diamonds-dev-env
 
 # Install all dependencies
 yarn install
@@ -75,10 +71,10 @@ yarn workspace:build
 yarn dev
 
 # Build the hardhat-diamonds package
-yarn monitor:build
+yarn hardhat-diamonds:build
 
 # Run hardhat-diamonds tests
-yarn monitor:test
+yarn hardhat-diamonds:test
 
 # Run hardhat-diamonds with coverage
 yarn workspace hardhat-diamonds run test:coverage
@@ -93,7 +89,7 @@ yarn format
 yarn workspace:clean
 ```
 
-### Contract Development
+### Contract Compilation, Diamond-ABI and Typechain Generation
 
 ```bash
 # Compile contracts
@@ -102,16 +98,16 @@ yarn compile
 # Run contract tests
 yarn test
 
-# Deploy contracts (configure networks in hardhat.config.ts)
-npx hardhat run scripts/deploy/rpc/deploy.ts --network <network>
-
 # Generate diamond ABI
 yarn generate-diamond-abi
+
+# Generate diamond ABI with TypeChain types
+yarn generate-diamond-abi-typechain
 ```
 
 ## 📦 Package Management
 
-### Working with the Diamonds Monitor Package
+### Working with the Hardhat Diamonds Package
 
 ```bash
 # Install package dependencies
@@ -143,7 +139,7 @@ npm publish
 npm publish --tag beta
 ```
 
-## � Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -155,8 +151,8 @@ MAINNET_RPC_URL=your_mainnet_rpc_url
 GOERLI_RPC_URL=your_goerli_rpc_url
 SEPOLIA_RPC_URL=your_sepolia_rpc_url
 
-# Private keys (for deployment)
-PRIVATE_KEY=your_private_key
+# Hardhat Private key for Account 0
+TEST_PRIVATE_KEY=your_private_key
 
 # API keys
 ETHERSCAN_API_KEY=your_etherscan_api_key
@@ -371,9 +367,6 @@ yarn test
 
 # Run tests with coverage
 yarn coverage
-
-# Run specific test file
-yarn test test/unit/diamond-abi-generator.test.ts
 ```
 
 ## 📦 Deployment
@@ -389,10 +382,6 @@ yarn compile            # Compile contracts and generate Diamond ABI
 yarn build              # Build TypeScript, compile contracts, and generate ABI (⚠️ currently has TypeScript errors)
 yarn test               # Run all tests
 yarn coverage           # Run tests with coverage report
-
-# ABI Generation Scripts
-yarn generate-diamond-abi           # Generate Diamond ABI
-yarn generate-diamond-abi-typechain # Generate Diamond ABI with TypeChain types
 ```
 
 > **Note**: The `yarn build` command currently has TypeScript compilation errors that need to be resolved. For development, use `yarn compile` which works correctly.
