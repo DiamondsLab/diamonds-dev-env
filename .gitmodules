@@ -1,3 +1,7 @@
 [submodule "packages/hardhat-diamonds"]
 	path = packages/hardhat-diamonds
 	url = git@github.com:GeniusVentures/hardhat-diamonds.git
+[submodule "packages/diamonds"]
+	path = packages/diamonds
+	url = https://github.com/GeniusVentures/diamonds.git
+	branch = develop
