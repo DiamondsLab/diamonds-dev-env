@@ -20,6 +20,7 @@ tmp
 notes/
 
 diamond-abi/
+diamond-typechain-types/
 ./deployments/
 test-mocks
 flat/

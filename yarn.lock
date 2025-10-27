@@ -4968,7 +4968,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diamonds@https://github.com/GeniusVentures/diamonds.git#develop":
+"diamonds@https://github.com/GeniusVentures/diamonds.git, diamonds@https://github.com/GeniusVentures/diamonds.git#develop":
   version: 1.0.0
   resolution: "diamonds@https://github.com/GeniusVentures/diamonds.git#commit=be5e0b86f657d56e9f8e3edc514e4312adb05c34"
   dependencies:
@@ -6680,7 +6680,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^8.8.0"
     "@typescript-eslint/types": "npm:^8.8.0"
     chai: "npm:^4.5.0"
-    diamonds: "https://github.com/GeniusVentures/diamonds.git#develop"
+    diamonds: "https://github.com/GeniusVentures/diamonds.git"
     eslint: "npm:^8.57.1"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.2.1"
