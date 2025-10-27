@@ -9,3 +9,6 @@
         path = .devcontainer
         url = https://github.com/GeniusVentures/diamonds-devcontainer.git
         branch = feature/docker-compose-hashicorp-vault
+[submodule "hardhat-multichain-sub"]
+	path = packages/hardhat-multichain
+	url = https://github.com/DiamondsLab/hardhat-multichain.git

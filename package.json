@@ -124,7 +124,6 @@
     "hardhat-abi-exporter": "^2.8.0",
     "hardhat-diamonds": "https://github.com/GeniusVentures/hardhat-diamonds.git#develop",
     "hardhat-gas-reporter": "^1.0.8",
-    "hardhat-multichain": "https://github.com/GeniusVentures/hardhat-multichain#main",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.0",
     "prettier": "^3.4.2",
