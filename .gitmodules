@@ -5,3 +5,7 @@
 	path = packages/diamonds
 	url = https://github.com/GeniusVentures/diamonds.git
 	branch = develop
+[submodule ".devcontainer"]
+        path = .devcontainer
+        url = https://github.com/GeniusVentures/diamonds-devcontainer.git
+        branch = feature/docker-compose-hashicorp-vault

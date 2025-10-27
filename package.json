@@ -4,6 +4,7 @@
   "description": "Professional development environment for hardhat-diamonds and ERC-2535 Diamond Proxy projects",
   "private": true,
   "workspaces": [
+    ".devcontainer",
     "packages/*"
   ],
   "main": "index.ts",
