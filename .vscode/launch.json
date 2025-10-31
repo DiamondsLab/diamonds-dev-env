@@ -111,7 +111,12 @@
       "request": "launch",
       // "preLaunchTask": "tsc: build - tsconfig.json",
       "runtimeExecutable": "npx",
-      "args": ["hardhat", "test", "test/unit/defender/ErrorHandling.test.ts"],
+      "args": [
+        "hardhat",
+        "test",
+        "test/unit/rpc/RPCDiamondDeployer.hardhat.test.ts"
+        // "test/unit/defender/ErrorHandling.test.ts"
+      ],
       "runtimeArgs": ["--preserve-symlinks"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "skipFiles": [
@@ -176,7 +181,7 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "Multichain Plugin Sepolia,Amoy Test",
+      "name": "Multichain Deployment Tests",
       "type": "node",
       "request": "launch",
       "preLaunchTask": "tsc: build - tsconfig.json",
@@ -184,11 +189,7 @@
       "program": "${workspaceFolder}/node_modules/hardhat/internal/cli/cli.js",
       "args": [
         "test-multichain",
-        "${workspaceFolder}/test/deployment/GeniusDiamondDeployment.test.ts",
-        // "${workspaceFolder}/test/integration/multichain/tests/NFTFactoryTests.ts",
-        // "${workspaceFolder}/test/integration/multichain/tests/GNUSBridgeTests.ts",
-        // "${workspaceFolder}/multichain/tests/GNUSERC20Tests.ts",
-        // "${workspaceFolder}/test/integration/multichain/tests/Erc20BatchTests.ts",
+        "${workspaceFolder}/test/unit/rpc/RPCDiamondDeployer.test.ts",
         "--chains",
         "sepolia",
         // "polygon_amoy,sepolia",

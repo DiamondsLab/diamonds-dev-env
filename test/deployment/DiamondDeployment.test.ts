@@ -1,9 +1,9 @@
+import { Diamond } from '@diamondslab/diamonds';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { debug } from 'debug';
-import { Diamond } from 'diamonds';
 import { JsonRpcProvider } from 'ethers';
-import hre, { ethers } from 'hardhat';
+import hre from 'hardhat';
 import { multichain } from 'hardhat-multichain';
 import { ExampleDiamond } from '../../diamond-typechain-types';
 import {
@@ -19,17 +19,17 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 	const log: debug.Debugger = debug(`Deploy:log:${diamondName}`);
 	this.timeout(0);
 
-	const networkProviders = multichain.getProviders() || new Map<string, JsonRpcProvider>();
+	const networkProviders = multichain.getProviders() ?? new Map<string, JsonRpcProvider>();
 
 	if (process.argv.includes('test-multichain')) {
 		const networkNames = process.argv[process.argv.indexOf('--chains') + 1].split(',');
 		if (networkNames.includes('hardhat')) {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			networkProviders.set('hardhat', ethers.provider as any);
+			networkProviders.set('hardhat', hre.ethers.provider as any);
 		}
-	} else if (process.argv.includes('test') || process.argv.includes('coverage')) {
+	} else if (process.argv.includes('test') ?? process.argv.includes('coverage')) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		networkProviders.set('hardhat', ethers.provider as any);
+		networkProviders.set('hardhat', hre.ethers.provider as any);
 	}
 
 	for (const [networkName, provider] of networkProviders.entries()) {
@@ -47,7 +47,7 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 			// let signer2Diamond: ExampleDiamond;
 			let ownerDiamond: ExampleDiamond;
 
-			let ethersMultichain: typeof ethers;
+			let ethersMultichain: typeof hre.ethers;
 			let snapshotId: string;
 
 			before(async function () {
@@ -73,7 +73,7 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 				);
 				exampleDiamond = exampleDiamondContract;
 
-				ethersMultichain = ethers;
+				ethersMultichain = hre.ethers;
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				ethersMultichain.provider = provider as any;
 

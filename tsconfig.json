@@ -38,6 +38,8 @@
     "./artifacts",
     "./coverage",
     "./cache",
-    "./types"
+    "./types",
+    "**/examples/**",
+    "./packages/*/examples/**"
   ]
 }

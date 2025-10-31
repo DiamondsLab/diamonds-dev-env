@@ -1,8 +1,5 @@
-// <reference path="./packages/hardhat-diamonds/src/type-extensions.ts" />
-
-// Import hardhat-diamonds plugin first to ensure type extensions are loaded
-import 'hardhat-diamonds';
-// Import the types directly
+import '@diamondslab/hardhat-diamonds';
+import 'hardhat-multichain';
 
 import * as dotenv from 'dotenv';
 
@@ -11,9 +8,7 @@ import '@nomicfoundation/hardhat-web3-v4';
 import '@typechain/hardhat';
 import { HardhatUserConfig } from 'hardhat/config';
 import 'hardhat-abi-exporter';
-import 'hardhat-diamonds';
 import 'hardhat-gas-reporter';
-import 'hardhat-multichain';
 import 'solidity-coverage';
 
 dotenv.config();
@@ -110,6 +105,7 @@ const config: HardhatUserConfig = {
 			},
 		},
 	},
+	// @ts-ignore - chainManager is added by hardhat-multichain plugin
 	chainManager: {
 		// Multichain configuration
 		chains: {

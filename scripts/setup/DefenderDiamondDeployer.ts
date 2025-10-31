@@ -1,20 +1,19 @@
 import {
+	DeploymentRepository,
 	Diamond,
+	DiamondConfig,
 	DiamondDeployer,
 	FileDeploymentRepository,
-	DeploymentRepository,
-	DiamondConfig,
 	OZDefenderDeploymentStrategy,
-} from 'diamonds';
+} from '@diamondslab/diamonds';
+import '@diamondslab/hardhat-diamonds';
 import type { JsonRpcProvider } from '@ethersproject/providers';
-import { ethers } from 'hardhat';
-import hre from 'hardhat';
 import type { HardhatEthersProvider } from '@nomicfoundation/hardhat-ethers/internal/hardhat-ethers-provider';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
-import { join } from 'path';
-import { readFileSync, existsSync } from 'fs';
-import 'hardhat-diamonds';
 import * as dotenv from 'dotenv';
+import { existsSync, readFileSync } from 'fs';
+import hre, { ethers } from 'hardhat';
+import { join } from 'path';
 
 // Hardhat task system used for Diamond ABI generation
 
@@ -143,11 +142,13 @@ export class DefenderDiamondDeployer {
 		config: DefenderDiamondDeployerConfig,
 	): Promise<DefenderDiamondDeployer> {
 		const key =
-			config.defenderDiamondDeployerKey ||
+			config.defenderDiamondDeployerKey ??
 			`${config.diamondName}-${config.networkName}-${config.chainId}`;
 
 		if (DefenderDiamondDeployer.instances.has(key)) {
-			const existingInstance = DefenderDiamondDeployer.instances.get(key)!;
+			const existingInstance = DefenderDiamondDeployer.instances.get(
+				key,
+			) as DefenderDiamondDeployer;
 			// Update configuration if provided
 			existingInstance.updateConfig(config);
 			return existingInstance;
@@ -176,21 +177,19 @@ export class DefenderDiamondDeployer {
 
 			// Set provider and signer on diamond
 			if (this.provider) {
-				this.diamond.setProvider(this.provider as any);
+				this.diamond.setProvider(this.provider);
 			}
 			if (this.signer) {
 				this.diamond.setSigner(this.signer);
-			}
-
-			// Create OZDefenderDeploymentStrategy
+			} // Create OZDefenderDeploymentStrategy
 			this.strategy = new OZDefenderDeploymentStrategy(
 				this.config.apiKey,
 				this.config.apiSecret,
 				this.config.relayerAddress,
-				this.config.autoApprove || false,
+				this.config.autoApprove ?? false,
 				this.config.via,
 				this.config.viaType,
-				this.config.verbose || false,
+				this.config.verbose ?? false,
 			);
 
 			// Create DiamondDeployer with strategy
@@ -213,7 +212,7 @@ export class DefenderDiamondDeployer {
 	 */
 	private async setupProviderAndSigner(): Promise<void> {
 		// Use provided provider or default to ethers provider
-		this.provider = this.config.provider || (ethers.provider as any);
+		this.provider = this.config.provider ?? (ethers.provider as HardhatEthersProvider);
 
 		// Use provided signer or get from ethers
 		if (this.config.signer) {
@@ -261,7 +260,7 @@ export class DefenderDiamondDeployer {
 				console.log(`✅ Diamond deployment completed!`);
 				console.log(`💎 Diamond Address: ${deployedData.DiamondAddress}`);
 				console.log(`👤 Deployer: ${deployedData.DeployerAddress}`);
-				console.log(`🎯 Facets: ${Object.keys(deployedData.DeployedFacets || {}).length}`);
+				console.log(`🎯 Facets: ${Object.keys(deployedData.DeployedFacets ?? {}).length}`);
 			}
 
 			return this.diamond;
@@ -394,8 +393,8 @@ export class DefenderDiamondDeployer {
 			autoApprove: config.autoApprove ?? false,
 			verbose: config.verbose ?? false,
 			deploymentsPath:
-				config.deploymentsPath || join(process.cwd(), 'test-assets/deployments-test'),
-			configFilePath: config.configFilePath || `diamonds/${config.diamondName}`,
+				config.deploymentsPath ?? join(process.cwd(), 'test-assets/deployments-test'),
+			configFilePath: config.configFilePath ?? `diamonds/${config.diamondName}`,
 		};
 
 		return normalizedConfig;
@@ -427,9 +426,9 @@ export class DefenderDiamondDeployer {
 	public static createConfigFromEnv(
 		overrides: Partial<DefenderDiamondDeployerConfig> = {},
 	): DefenderDiamondDeployerConfig {
-		const networkName = overrides.networkName || process.env.NETWORK || 'sepolia';
+		const networkName = overrides.networkName ?? process.env.NETWORK ?? 'sepolia';
 		const diamondName =
-			overrides.diamondName || process.env.DIAMOND_NAME || 'ExampleDiamond';
+			overrides.diamondName ?? process.env.DIAMOND_NAME ?? 'ExampleDiamond';
 
 		// Load network configuration
 		let networkConfig: NetworkConfig;
@@ -440,7 +439,7 @@ export class DefenderDiamondDeployer {
 			networkConfig = {
 				name: networkName,
 				chainId: 11155111, // Sepolia default
-				rpcUrl: process.env[`${networkName.toUpperCase()}_RPC_URL`] || '',
+				rpcUrl: process.env[`${networkName.toUpperCase()}_RPC_URL`] ?? '',
 				blockExplorer: 'https://sepolia.etherscan.io',
 				nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
 				defaultGasLimit: 500000,
@@ -448,44 +447,46 @@ export class DefenderDiamondDeployer {
 			};
 		}
 
-		const viaType = (process.env.DEFENDER_VIA_TYPE as 'Safe' | 'EOA') || 'Safe';
+		const viaType = (process.env.DEFENDER_VIA_TYPE as 'Safe' | 'EOA') ?? 'Safe';
 
 		// Determine the 'via' address based on viaType
 		let viaAddress: string;
 		if (viaType === 'EOA') {
 			viaAddress =
-				process.env.DEFENDER_EOA_ADDRESS || process.env.DEFENDER_RELAYER_ADDRESS || '';
+				process.env.DEFENDER_EOA_ADDRESS ?? process.env.DEFENDER_RELAYER_ADDRESS ?? '';
 		} else {
-			viaAddress = process.env.DEFENDER_SAFE_ADDRESS || '';
+			viaAddress = process.env.DEFENDER_SAFE_ADDRESS ?? '';
 		}
 
-		let hardhatDiamondConfig: any;
+		let hardhatDiamondConfig: DiamondConfig;
 		try {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			hardhatDiamondConfig = (hre as any).diamonds.getDiamondConfig(diamondName);
 		} catch (error) {
 			// Fallback when diamond config doesn't exist
 			hardhatDiamondConfig = {
+				diamondName: diamondName,
 				deploymentsPath: 'diamonds',
 				contractsPath: 'contracts',
 			};
 		}
-		const deploymentsPath: string = hardhatDiamondConfig.deploymentsPath || 'diamonds';
+		const deploymentsPath: string = hardhatDiamondConfig.deploymentsPath ?? 'diamonds';
 		const configFilePath: string = `${deploymentsPath}/${diamondName}/${diamondName.toLowerCase()}.config.json`;
 
 		const config: DefenderDiamondDeployerConfig = {
 			diamondName,
 			networkName,
 			chainId: networkConfig.chainId,
-			apiKey: process.env.DEFENDER_API_KEY || '',
-			apiSecret: process.env.DEFENDER_API_SECRET || '',
-			relayerAddress: process.env.DEFENDER_RELAYER_ADDRESS || '',
+			apiKey: process.env.DEFENDER_API_KEY ?? '',
+			apiSecret: process.env.DEFENDER_API_SECRET ?? '',
+			relayerAddress: process.env.DEFENDER_RELAYER_ADDRESS ?? '',
 			via: viaAddress,
 			viaType: viaType,
 			autoApprove: process.env.AUTO_APPROVE_DEFENDER_PROPOSALS === 'true',
 			verbose: process.env.VERBOSE_DEPLOYMENT === 'true',
 			deploymentsPath: deploymentsPath,
 			configFilePath: configFilePath,
-			contractsPath: hardhatDiamondConfig.contractsPath || 'contracts',
+			contractsPath: hardhatDiamondConfig.contractsPath ?? 'contracts',
 			...overrides,
 		};
 

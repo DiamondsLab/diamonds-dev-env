@@ -1,7 +1,9 @@
-import { ethers } from 'hardhat';
+import { Diamond } from '@diamondslab/diamonds';
+import type { HardhatEthersProvider } from '@nomicfoundation/hardhat-ethers/internal/hardhat-ethers-provider';
+import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import * as fs from 'fs';
+import { ethers } from 'hardhat';
 import * as path from 'path';
-import { Diamond } from 'diamonds';
 
 /**
  * Loads a Diamond contract instance using the generated Diamond ABI.
@@ -41,10 +43,10 @@ export async function loadDiamondContract<T>(
 		contractName: diamond.diamondName,
 		sourceName: `diamond-abi/${diamond.diamondName}.sol`,
 		abi: diamondAbiArtifact.abi,
-		bytecode: diamondAbiArtifact.bytecode || '0x',
-		deployedBytecode: diamondAbiArtifact.deployedBytecode || '0x',
-		linkReferences: diamondAbiArtifact.linkReferences || {},
-		deployedLinkReferences: diamondAbiArtifact.deployedLinkReferences || {},
+		bytecode: diamondAbiArtifact.bytecode ?? '0x',
+		deployedBytecode: diamondAbiArtifact.deployedBytecode ?? '0x',
+		linkReferences: diamondAbiArtifact.linkReferences ?? {},
+		deployedLinkReferences: diamondAbiArtifact.deployedLinkReferences ?? {},
 	};
 
 	// Write the artifact to the artifacts directory
@@ -78,7 +80,7 @@ export async function loadDiamondContract<T>(
 export async function createDiamondContract<T>(
 	diamond: Diamond,
 	contractAddress: string,
-	signerOrProvider?: any,
+	signerOrProvider?: SignerWithAddress | HardhatEthersProvider,
 ): Promise<T> {
 	const diamondAbiFilePath = diamond.getDiamondAbiFilePath();
 
@@ -95,7 +97,7 @@ export async function createDiamondContract<T>(
 	}
 
 	// Create contract instance directly with ethers
-	const provider = signerOrProvider || ethers.provider;
+	const provider = signerOrProvider ?? ethers.provider;
 
 	return new ethers.Contract(contractAddress, diamondAbiArtifact.abi, provider) as T;
 }

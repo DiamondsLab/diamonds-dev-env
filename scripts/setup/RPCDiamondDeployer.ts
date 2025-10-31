@@ -10,12 +10,13 @@ import {
 	FileDeploymentRepository,
 	RPCDeploymentStrategy,
 	cutKey,
-} from 'diamonds';
+} from '@diamondslab/diamonds';
+import type { JsonRpcProvider as EthersV5JsonRpcProvider } from '@ethersproject/providers';
 import * as dotenv from 'dotenv';
 import { JsonRpcProvider } from 'ethers';
 import { existsSync } from 'fs';
 import hre, { ethers } from 'hardhat';
-import 'hardhat-diamonds';
+import '@diamondslab/hardhat-diamonds';
 import 'hardhat-multichain';
 import { join } from 'path';
 
@@ -166,7 +167,10 @@ export class RPCDiamondDeployer {
 
 		// Initialize provider and signer
 		this.provider = new JsonRpcProvider(config.rpcUrl);
-		this.signer = new ethers.Wallet(config.privateKey, this.provider) as any;
+		this.signer = new ethers.Wallet(
+			config.privateKey,
+			this.provider,
+		) as unknown as SignerWithAddress;
 
 		// Create RPC deployment strategy
 		this.strategy = new RPCDeploymentStrategy(
@@ -180,7 +184,7 @@ export class RPCDiamondDeployer {
 
 		// Initialize diamond with strategy
 		this.diamond = new Diamond(this.config, repository);
-		this.diamond.setProvider(this.provider as any);
+		this.diamond.setProvider(this.provider as unknown as EthersV5JsonRpcProvider);
 		this.diamond.setSigner(this.signer);
 
 		if (this.verbose) {
@@ -211,7 +215,13 @@ export class RPCDiamondDeployer {
 	 */
 	public static getDiamondConfigFromHardhat(diamondName: string): DiamondPathsConfig {
 		try {
-			return (hre as any).diamonds.getDiamondConfig(diamondName);
+			const hreWithDiamonds = hre as unknown as {
+				diamonds?: { getDiamondConfig: (name: string) => DiamondPathsConfig };
+			};
+			if (!hreWithDiamonds.diamonds) {
+				throw new Error('hardhat-diamonds plugin not loaded');
+			}
+			return hreWithDiamonds.diamonds.getDiamondConfig(diamondName);
 		} catch (error) {
 			throw new Error(
 				`Failed to load diamond configuration for "${diamondName}": ${(error as Error).message}`,
@@ -227,14 +237,35 @@ export class RPCDiamondDeployer {
 	 */
 	public static getNetworkConfigFromHardhat(networkName: string): HardhatNetworkConfig {
 		try {
-			const chainManager = (hre.config as any).chainManager;
-			if (!chainManager?.chains?.[networkName]) {
+			const hreConfig = hre.config as unknown as {
+				chainManager?: {
+					chains?: Record<
+						string,
+						{
+							chainId?: number;
+							rpcUrl?: string;
+							blockNumber?: number;
+							nativeCurrency?: { name: string; symbol: string; decimals: number };
+							defaultGasLimit?: number;
+							defaultMaxGasPrice?: string;
+						}
+					>;
+				};
+			};
+
+			const chainManager = hreConfig.chainManager;
+			if (!chainManager?.chains) {
+				throw new Error('chainManager configuration not found in hardhat config');
+			}
+
+			const chains = chainManager.chains;
+			const networkConfig = chains[networkName as keyof typeof chains];
+			if (!networkConfig) {
 				throw new Error(
 					`Network "${networkName}" not found in hardhat chainManager configuration`,
 				);
 			}
 
-			const networkConfig = chainManager.chains[networkName];
 			return {
 				name: networkName,
 				chainId: networkConfig.chainId ?? 0,
@@ -312,9 +343,7 @@ export class RPCDiamondDeployer {
 		this.validateConfig(config);
 
 		// Initialize provider and get network info if needed
-		if (!config.provider) {
-			config.provider = new JsonRpcProvider(config.rpcUrl);
-		}
+		config.provider ??= new JsonRpcProvider(config.rpcUrl);
 
 		if (!config.chainId) {
 			const network = await config.provider.getNetwork();
@@ -334,9 +363,11 @@ export class RPCDiamondDeployer {
 		// Return existing instance or create new one
 		if (!this.instances.has(key)) {
 			// Get Hardhat diamonds configuration if available
-			const hardhatDiamonds: DiamondPathsConfig = (hre as any).diamonds?.getDiamondConfig(
-				config.diamondName,
-			);
+			const hreWithDiamonds = hre as unknown as {
+				diamonds?: { getDiamondConfig: (name: string) => DiamondPathsConfig };
+			};
+			const hardhatDiamonds: DiamondPathsConfig | undefined =
+				hreWithDiamonds.diamonds?.getDiamondConfig(config.diamondName);
 
 			// Set up file paths with defaults
 			const deployedDiamondDataFileName = `${config.diamondName.toLowerCase()}-${config.networkName.toLowerCase()}-${config.chainId.toString()}.json`;
@@ -367,10 +398,14 @@ export class RPCDiamondDeployer {
 
 			// Configure Diamond ABI path and filename
 			config.diamondAbiPath =
-				config.diamondAbiPath ?? (hardhatDiamonds as any)?.diamondAbiPath ?? 'diamond-abi';
+				config.diamondAbiPath ??
+				(hardhatDiamonds as DiamondPathsConfig & { diamondAbiPath?: string })
+					?.diamondAbiPath ??
+				'diamond-abi';
 			config.diamondAbiFileName =
 				config.diamondAbiFileName ??
-				(hardhatDiamonds as any)?.diamondAbiFileName ??
+				(hardhatDiamonds as DiamondPathsConfig & { diamondAbiFileName?: string })
+					?.diamondAbiFileName ??
 				config.diamondName;
 
 			// Create repository
@@ -405,7 +440,11 @@ export class RPCDiamondDeployer {
 			);
 		}
 
-		return this.instances.get(key)!;
+		const instance = this.instances.get(key);
+		if (!instance) {
+			throw new Error(`Failed to retrieve RPCDiamondDeployer instance with key: ${key}`);
+		}
+		return instance;
 	}
 
 	/**
@@ -417,12 +456,13 @@ export class RPCDiamondDeployer {
 	public static createConfigFromEnv(
 		overrides?: Partial<RPCDiamondDeployerConfig>,
 	): RPCDiamondDeployerConfig {
-		const requiredEnvVars = ['RPC_URL', 'PRIVATE_KEY', 'DIAMOND_NAME'];
+		const requiredEnvVars = ['RPC_URL', 'PRIVATE_KEY', 'DIAMOND_NAME'] as const;
 
 		// Check required environment variables
 		for (const envVar of requiredEnvVars) {
+			const envValue = process.env[envVar as string];
 			if (
-				!process.env[envVar] &&
+				!envValue &&
 				!overrides?.[
 					envVar.toLowerCase().replace('_', '') as keyof RPCDiamondDeployerConfig
 				]
@@ -433,8 +473,18 @@ export class RPCDiamondDeployer {
 
 		const config: RPCDiamondDeployerConfig = {
 			diamondName: process.env.DIAMOND_NAME ?? 'ExampleDiamond',
-			rpcUrl: process.env.RPC_URL!,
-			privateKey: process.env.PRIVATE_KEY!,
+			rpcUrl:
+				process.env.RPC_URL ??
+				overrides?.rpcUrl ??
+				((): string => {
+					throw new Error('RPC_URL is required');
+				})(),
+			privateKey:
+				process.env.PRIVATE_KEY ??
+				overrides?.privateKey ??
+				((): string => {
+					throw new Error('PRIVATE_KEY is required');
+				})(),
 			networkName: process.env.NETWORK_NAME ?? 'unknown',
 			chainId: process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : 0, // Will be auto-detected
 			gasLimitMultiplier: process.env.GAS_LIMIT_MULTIPLIER
@@ -513,7 +563,12 @@ export class RPCDiamondDeployer {
 					),
 				);
 			}
-			return Promise.resolve(this.diamond!);
+			if (!this.diamond) {
+				throw new Error(
+					`Diamond instance not found despite deployComplete being true for ${this.diamondName}`,
+				);
+			}
+			return Promise.resolve(this.diamond);
 		}
 
 		if (this.deployInProgress) {
@@ -534,9 +589,13 @@ export class RPCDiamondDeployer {
 				}
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 			}
-			return Promise.resolve(this.diamond!);
+			if (!this.diamond) {
+				throw new Error(
+					`Diamond instance not found after deployment completion for ${this.diamondName}`,
+				);
+			}
+			return Promise.resolve(this.diamond);
 		}
-
 		this.deployInProgress = true;
 
 		try {
@@ -555,9 +614,12 @@ export class RPCDiamondDeployer {
 			await this.validateConnection();
 
 			// Create deployer with RPC strategy
-			const deployer = new DiamondDeployer(this.diamond!, this.strategy);
-
-			// Execute deployment
+			if (!this.diamond) {
+				throw new Error(
+					`Diamond instance not initialized for ${this.diamondName}. This should never happen.`,
+				);
+			}
+			const deployer = new DiamondDeployer(this.diamond, this.strategy); // Execute deployment
 			await deployer.deployDiamond();
 
 			this.deployComplete = true;
@@ -591,7 +653,12 @@ export class RPCDiamondDeployer {
 		if (!this.deployComplete) {
 			return await this.deployDiamond();
 		}
-		return this.diamond!;
+		if (!this.diamond) {
+			throw new Error(
+				`Diamond instance not found despite deployComplete being true for ${this.diamondName}`,
+			);
+		}
+		return this.diamond;
 	}
 
 	/**
@@ -600,7 +667,10 @@ export class RPCDiamondDeployer {
 	 * @returns Diamond instance
 	 */
 	public async getDiamond(): Promise<Diamond> {
-		return this.diamond!;
+		if (!this.diamond) {
+			throw new Error(`Diamond instance not initialized for ${this.diamondName}`);
+		}
+		return this.diamond;
 	}
 
 	/**
@@ -786,7 +856,8 @@ export class RPCDiamondDeployer {
 			console.log(chalk.blue(`🔧 Deployed Facets: ${facetCount}`));
 
 			Object.entries(deployedData.DeployedFacets).forEach(([name, facet]) => {
-				console.log(chalk.gray(`   ${name}: ${facet.address}`));
+				const facetData = facet as { address?: string };
+				console.log(chalk.gray(`   ${name}: ${facetData.address ?? 'N/A'}`));
 			});
 		}
 

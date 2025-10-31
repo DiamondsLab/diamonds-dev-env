@@ -1,13 +1,17 @@
+import '@diamondslab/hardhat-diamonds';
 import { expect } from 'chai';
 import { RPCDiamondDeployer } from '../../../scripts/setup/RPCDiamondDeployer';
-import 'hardhat-diamonds';
 
 describe('RPCDiamondDeployer - Hardhat Integration', function () {
 	this.timeout(60000);
 
 	beforeEach(function () {
 		// Clear singleton instances before each test
-		(RPCDiamondDeployer as any).instances.clear();
+		(
+			RPCDiamondDeployer as unknown as {
+				instances: Map<string, RPCDiamondDeployer>;
+			}
+		).instances.clear();
 	});
 
 	describe('Hardhat Configuration Loading', function () {
@@ -123,7 +127,7 @@ describe('RPCDiamondDeployer - Hardhat Integration', function () {
 	});
 
 	describe('Integration with getInstance', function () {
-		it('should create deployer instance using hardhat configuration', async function () {
+		it('should create deployer instance using hardhat configuration', async function (): Promise<void> {
 			const testPrivateKey =
 				'0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
 
@@ -136,9 +140,12 @@ describe('RPCDiamondDeployer - Hardhat Integration', function () {
 
 				// Mock the provider to avoid network calls
 				const mockProvider = {
-					getNetwork: () => Promise.resolve({ name: 'sepolia', chainId: 11155111n }),
+					getNetwork: (): Promise<{ name: string; chainId: bigint }> =>
+						Promise.resolve({ name: 'sepolia', chainId: 11155111n }),
 				};
-				config.provider = mockProvider as any;
+				config.provider = mockProvider as unknown as
+					| import('ethers').JsonRpcProvider
+					| import('@nomicfoundation/hardhat-ethers/internal/hardhat-ethers-provider').HardhatEthersProvider;
 
 				const deployer = await RPCDiamondDeployer.getInstance(config);
 
@@ -153,7 +160,7 @@ describe('RPCDiamondDeployer - Hardhat Integration', function () {
 	});
 
 	describe('Deployment Repository Path Resolution', function () {
-		it('should create deployment repository with correct paths', async function () {
+		it('should create deployment repository with correct paths', async function (): Promise<void> {
 			const testPrivateKey =
 				'0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
 
@@ -166,9 +173,12 @@ describe('RPCDiamondDeployer - Hardhat Integration', function () {
 
 				// Mock the provider to avoid network calls
 				const mockProvider = {
-					getNetwork: () => Promise.resolve({ name: 'sepolia', chainId: 11155111n }),
+					getNetwork: (): Promise<{ name: string; chainId: bigint }> =>
+						Promise.resolve({ name: 'sepolia', chainId: 11155111n }),
 				};
-				config.provider = mockProvider as any;
+				config.provider = mockProvider as unknown as
+					| import('ethers').JsonRpcProvider
+					| import('@nomicfoundation/hardhat-ethers/internal/hardhat-ethers-provider').HardhatEthersProvider;
 
 				const deployer = await RPCDiamondDeployer.getInstance(config);
 				const repository = deployer.getRepository();

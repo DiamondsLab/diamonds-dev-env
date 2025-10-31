@@ -1,21 +1,20 @@
 import {
-	Diamond,
-	DiamondDeployer,
-	LocalDeploymentStrategy,
-	FileDeploymentRepository,
 	DeploymentRepository,
+	Diamond,
 	DiamondConfig,
+	DiamondDeployer,
 	DiamondPathsConfig,
+	FileDeploymentRepository,
+	LocalDeploymentStrategy,
 	cutKey,
 	impersonateAndFundSigner,
-} from 'diamonds';
+} from '@diamondslab/diamonds';
+import '@diamondslab/hardhat-diamonds';
 import type { JsonRpcProvider } from '@ethersproject/providers';
-import { ethers } from 'hardhat';
-import hre from 'hardhat';
 import type { HardhatEthersProvider } from '@nomicfoundation/hardhat-ethers/internal/hardhat-ethers-provider';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
+import hre, { ethers } from 'hardhat';
 import { join } from 'path';
-import 'hardhat-diamonds';
 
 // Hardhat task system used for Diamond ABI generation
 
@@ -45,7 +44,7 @@ export class LocalDiamondDeployer {
 	) {
 		this.config = config as DiamondConfig;
 		this.diamondName = config.diamondName;
-		this.provider = config.provider || ethers.provider;
+		this.provider = config.provider ?? ethers.provider;
 		if (!config.networkName) {
 			// TODO account for "unknown" as hardhat
 			if ('_network' in this.provider) {
@@ -65,13 +64,20 @@ export class LocalDiamondDeployer {
 		} else {
 			this.chainId = config.chainId;
 		}
-		this.signer = config.signer!;
-		// this.config.signer = this.signer;
-		this.repository = repository!;
+
+		if (!config.signer) {
+			throw new Error('Signer is required for LocalDiamondDeployer');
+		}
+		this.signer = config.signer;
+
+		if (!repository) {
+			throw new Error('Repository is required for LocalDiamondDeployer');
+		}
+		this.repository = repository;
 
 		// TODO make provider signer and repository optional (this may be handled in diamond constructor already)
 		this.diamond = new Diamond(this.config, repository);
-		this.diamond.setProvider(this.provider as any);
+		this.diamond.setProvider(this.provider);
 		this.diamond.setSigner(this.signer);
 	}
 
@@ -87,30 +93,37 @@ export class LocalDiamondDeployer {
 	public static async getInstance(
 		config: LocalDiamondDeployerConfig,
 	): Promise<LocalDiamondDeployer> {
-		if (!config.provider) {
-			config.provider = ethers.provider; // Default to ethers provider
-		}
+		config.provider ??= ethers.provider; // Default to ethers provider
 		if (!config.networkName) {
 			const network = await config.provider.getNetwork();
-			const networkName = network.name || 'hardhat';
+			const networkName = network.name ?? 'hardhat';
 			config.networkName = networkName === 'unknown' ? 'hardhat' : networkName;
 		}
 		if (!config.chainId) {
 			const network = await config.provider.getNetwork();
-			config.chainId = Number(network.chainId) || 31337;
+			config.chainId = Number(network.chainId) ?? 31337;
 		}
 
-		hre.ethers.provider = config.provider as any as HardhatEthersProvider;
+		hre.ethers.provider = config.provider as unknown as HardhatEthersProvider;
 
 		const key =
-			config.localDiamondDeployerKey ||
-			(await cutKey(config.diamondName, config.networkName!, config.chainId!.toString()));
-
-		if (!this.instances.has(key)) {
-			const hardhatDiamonds: DiamondPathsConfig = (hre as any).diamonds?.getDiamondConfig(
+			config.localDiamondDeployerKey ??
+			(await cutKey(
 				config.diamondName,
-			);
-			const deployedDiamondDataFileName = `${config.diamondName.toLowerCase()}-${config.networkName!.toLowerCase()}-${config.chainId!.toString()}.json`;
+				config.networkName as string,
+				(config.chainId as number).toString(),
+			));
+
+		const existingInstance = this.instances.get(key);
+		if (existingInstance) {
+			return existingInstance;
+		} else {
+			const hardhatDiamonds: DiamondPathsConfig | undefined = (
+				hre as unknown as {
+					diamonds?: { getDiamondConfig: (name: string) => DiamondPathsConfig };
+				}
+			).diamonds?.getDiamondConfig(config.diamondName);
+			const deployedDiamondDataFileName = `${config.diamondName.toLowerCase()}-${config.networkName?.toLowerCase()}-${config.chainId?.toString()}.json`;
 			const defaultDeployedDiamondDataFilePath = join(
 				'diamonds',
 				config.diamondName,
@@ -124,29 +137,33 @@ export class LocalDiamondDeployer {
 			);
 
 			config.deploymentsPath =
-				config.deploymentsPath || hardhatDiamonds?.deploymentsPath || 'diamonds';
-			config.contractsPath = hardhatDiamonds?.contractsPath || 'contracts';
+				config.deploymentsPath ?? hardhatDiamonds?.deploymentsPath ?? 'diamonds';
+			config.contractsPath = hardhatDiamonds?.contractsPath ?? 'contracts';
 			config.callbacksPath =
-				hardhatDiamonds?.callbacksPath || join('diamonds', config.diamondName, 'callbacks');
+				hardhatDiamonds?.callbacksPath ?? join('diamonds', config.diamondName, 'callbacks');
 			config.deployedDiamondDataFilePath =
-				config.deployedDiamondDataFilePath ||
-				hardhatDiamonds?.deployedDiamondDataFilePath ||
+				config.deployedDiamondDataFilePath ??
+				hardhatDiamonds?.deployedDiamondDataFilePath ??
 				defaultDeployedDiamondDataFilePath;
 			config.configFilePath =
-				config.configFilePath || hardhatDiamonds?.configFilePath || defaultConfigFilePath;
+				config.configFilePath ?? hardhatDiamonds?.configFilePath ?? defaultConfigFilePath;
 
 			// Configure Diamond ABI path and filename to avoid hardhat conflicts
 			config.diamondAbiPath =
-				config.diamondAbiPath || (hardhatDiamonds as any)?.diamondAbiPath || 'diamond-abi';
+				config.diamondAbiPath ??
+				(hardhatDiamonds as DiamondPathsConfig & { diamondAbiPath?: string })
+					?.diamondAbiPath ??
+				'diamond-abi';
 			config.diamondAbiFileName =
-				config.diamondAbiFileName ||
-				(hardhatDiamonds as any)?.diamondAbiFileName ||
+				config.diamondAbiFileName ??
+				(hardhatDiamonds as DiamondPathsConfig & { diamondAbiFileName?: string })
+					?.diamondAbiFileName ??
 				config.diamondName;
 
 			const repository = new FileDeploymentRepository(config);
 			repository.setWriteDeployedDiamondData(
-				config.writeDeployedDiamondData ||
-					hardhatDiamonds?.writeDeployedDiamondData ||
+				config.writeDeployedDiamondData ??
+					hardhatDiamonds?.writeDeployedDiamondData ??
 					false,
 			);
 			const deployedDiamondData = repository.loadDeployedDiamondData();
@@ -158,7 +175,7 @@ export class LocalDiamondDeployer {
 				config.signer = await hre.ethers.getSigner(deployedDiamondData.DeployerAddress);
 				await impersonateAndFundSigner(
 					deployedDiamondData.DeployerAddress,
-					config.provider as any,
+					config.provider as unknown as HardhatEthersProvider,
 				);
 			}
 
@@ -168,24 +185,27 @@ export class LocalDiamondDeployer {
 			// Generate Diamond ABI with Typechain using hardhat task
 			await hre.run('diamond:generate-abi-typechain', {
 				diamondName: config.diamondName,
-				outputDir: config.diamondAbiPath || 'diamond-abi',
+				outputDir: config.diamondAbiPath ?? 'diamond-abi',
 				typechainOutDir: 'diamond-typechain-types',
 				enableVerbose: false,
 				targetNetwork: config.networkName,
 			});
+			return instance;
 		}
-		return this.instances.get(key)!;
 	}
 
 	public async deployDiamond(): Promise<Diamond> {
 		const network = await this.provider.getNetwork();
-		const chainId = Number(network.chainId) || 31337;
+		const chainId = Number(network.chainId) ?? 31337;
 		const key = cutKey(this.diamondName, this.networkName, chainId.toString());
 		if (this.deployComplete) {
 			console.log(
 				`Deployment already completed for ${this.diamondName} on ${this.networkName}-${chainId.toString()}`,
 			);
-			return Promise.resolve(this.diamond!);
+			if (!this.diamond) {
+				throw new Error('Diamond instance not found after deployment');
+			}
+			return Promise.resolve(this.diamond);
 		} else if (this.deployInProgress) {
 			console.log(`Deployment already in progress for ${this.networkName}`);
 			console.log('chainId', chainId);
@@ -195,14 +215,20 @@ export class LocalDiamondDeployer {
 				console.log(`Waiting for deployment to complete for ${this.networkName}`);
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 			}
-			return Promise.resolve(this.diamond!);
+			if (!this.diamond) {
+				throw new Error('Diamond instance not found after deployment');
+			}
+			return Promise.resolve(this.diamond);
 		}
 
 		this.deployInProgress = true;
 
 		// Make Deployment Strategy configurable.
 		const strategy = new LocalDeploymentStrategy(this.verbose);
-		const deployer = new DiamondDeployer(this.diamond!, strategy);
+		if (!this.diamond) {
+			throw new Error('Diamond instance not initialized before deployment');
+		}
+		const deployer = new DiamondDeployer(this.diamond, strategy);
 
 		await deployer.deployDiamond();
 
@@ -221,7 +247,10 @@ export class LocalDiamondDeployer {
 	}
 
 	public async getDiamond(): Promise<Diamond> {
-		return this.diamond!;
+		if (!this.diamond) {
+			throw new Error(`Diamond instance not initialized for ${this.diamondName}`);
+		}
+		return this.diamond;
 	}
 
 	public async setVerbose(useVerboseLogging: boolean): Promise<void> {
