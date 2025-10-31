@@ -139,12 +139,30 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 					expect(blockNumber).to.be.greaterThan(0);
 				}
 				// Safely access chain configuration without triggering object injection warnings
-				const chains = hre.config.chainManager?.chains ?? {};
+				const hreConfig = hre.config as unknown as {
+					chainManager?: {
+						chains?: Record<
+							string,
+							{
+								chainId?: number;
+								rpcUrl?: string;
+								blockNumber?: number;
+								nativeCurrency?: {
+									name?: string;
+									symbol?: string;
+									decimals?: number;
+								};
+								defaultGasLimit?: string;
+								defaultMaxGasPrice?: string;
+							}
+						>;
+					};
+				};
+				const chains = hreConfig.chainManager?.chains ?? {};
 				const chainEntries = Object.entries(chains);
 				const networkEntry = chainEntries.find(([key]) => key === networkName);
 				const configBlockNumber = networkEntry?.[1]?.blockNumber ?? 0;
 				expect(blockNumber).to.be.gte(configBlockNumber);
-
 				expect(blockNumber).to.be.lte(configBlockNumber + 500);
 			});
 
