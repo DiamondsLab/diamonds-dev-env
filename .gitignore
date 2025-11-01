@@ -31,3 +31,5 @@ archive/.env.vault-migrated.20251023_135129
 /workspaces/diamonds_dev_env/.env.vault-migrated.20251023_135446
 /workspaces/diamonds_dev_env/.env.vault-migrated.20251024_130529
 .env.vault.migrated*
+
+.yarn/
