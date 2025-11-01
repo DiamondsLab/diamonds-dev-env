@@ -33,3 +33,5 @@ archive/.env.vault-migrated.20251023_135129
 .env.vault.migrated*
 
 .yarn/
+dist/
+diamonds/ExampleDiamonds/deployments/examplediamonds*
