@@ -5,6 +5,30 @@ import { RPCDiamondDeployer } from '../../../scripts/setup/RPCDiamondDeployer';
 describe('RPCDiamondDeployer - Hardhat Integration', function () {
 	this.timeout(60000);
 
+	before(function () {
+		// Mock the hardhat chainManager configuration for testing
+		const mockChainManager = {
+			chains: {
+				sepolia: {
+					rpcUrl: 'http://127.0.0.1:8545',
+					chainId: 11155111,
+				},
+			},
+		};
+
+		// Mock hre.config.chainManager
+		const hre = require('hardhat');
+		if (!hre.config.chainManager) {
+			hre.config.chainManager = mockChainManager;
+		} else {
+			// Merge with existing chains
+			hre.config.chainManager.chains = {
+				...hre.config.chainManager.chains,
+				...mockChainManager.chains,
+			};
+		}
+	});
+
 	beforeEach(function () {
 		// Clear singleton instances before each test
 		(
