@@ -1,6 +1,3 @@
-import type { HardhatEthersProvider } from '@nomicfoundation/hardhat-ethers/internal/hardhat-ethers-provider';
-import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
-import chalk from 'chalk';
 import {
 	DeploymentRepository,
 	Diamond,
@@ -9,14 +6,16 @@ import {
 	DiamondPathsConfig,
 	FileDeploymentRepository,
 	RPCDeploymentStrategy,
+	SupportedProvider,
 	cutKey,
 } from '@diamondslab/diamonds';
-import type { JsonRpcProvider as EthersV5JsonRpcProvider } from '@ethersproject/providers';
+import '@diamondslab/hardhat-diamonds';
+import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
+import chalk from 'chalk';
 import * as dotenv from 'dotenv';
 import { JsonRpcProvider } from 'ethers';
 import { existsSync } from 'fs';
 import hre, { ethers } from 'hardhat';
-import '@diamondslab/hardhat-diamonds';
 import 'hardhat-multichain';
 import { join } from 'path';
 
@@ -66,7 +65,7 @@ export interface RPCDiamondDeployerConfig extends DiamondConfig {
 	/** Chain ID for the target network */
 	chainId: number;
 	/** Provider instance */
-	provider?: JsonRpcProvider | HardhatEthersProvider;
+	provider?: SupportedProvider;
 	/** Signer instance */
 	signer?: SignerWithAddress;
 	/** Gas limit multiplier (1.0-2.0) */
@@ -146,7 +145,7 @@ export class RPCDiamondDeployer {
 	private diamond: Diamond | undefined;
 	private verbose: boolean = false;
 	private config: RPCDiamondDeployerConfig;
-	private provider: JsonRpcProvider;
+	private provider: SupportedProvider;
 	private signer: SignerWithAddress;
 	private diamondName: string;
 	private networkName: string;
@@ -184,7 +183,7 @@ export class RPCDiamondDeployer {
 
 		// Initialize diamond with strategy
 		this.diamond = new Diamond(this.config, repository);
-		this.diamond.setProvider(this.provider as unknown as EthersV5JsonRpcProvider);
+		this.diamond.setProvider(this.provider as SupportedProvider);
 		this.diamond.setSigner(this.signer);
 
 		if (this.verbose) {

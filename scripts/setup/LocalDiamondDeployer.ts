@@ -6,20 +6,20 @@ import {
 	DiamondPathsConfig,
 	FileDeploymentRepository,
 	LocalDeploymentStrategy,
+	SupportedProvider,
 	cutKey,
 	impersonateAndFundSigner,
 } from '@diamondslab/diamonds';
 import '@diamondslab/hardhat-diamonds';
-import type { JsonRpcProvider } from '@ethersproject/providers';
-import type { HardhatEthersProvider } from '@nomicfoundation/hardhat-ethers/internal/hardhat-ethers-provider';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
+import { JsonRpcProvider } from 'ethers';
 import hre, { ethers } from 'hardhat';
 import { join } from 'path';
 
 // Hardhat task system used for Diamond ABI generation
 
 export interface LocalDiamondDeployerConfig extends DiamondConfig {
-	provider?: JsonRpcProvider | HardhatEthersProvider;
+	provider?: SupportedProvider;
 	signer?: SignerWithAddress;
 	localDiamondDeployerKey?: string;
 }
@@ -31,7 +31,7 @@ export class LocalDiamondDeployer {
 	private diamond: Diamond | undefined;
 	private verbose: boolean = true;
 	private config: LocalDiamondDeployerConfig;
-	private provider: JsonRpcProvider | HardhatEthersProvider;
+	private provider: SupportedProvider;
 	private signer: SignerWithAddress;
 	private diamondName: string;
 	private networkName: string = 'hardhat';
@@ -104,7 +104,7 @@ export class LocalDiamondDeployer {
 			config.chainId = Number(network.chainId) ?? 31337;
 		}
 
-		hre.ethers.provider = config.provider as unknown as HardhatEthersProvider;
+		hre.ethers.provider = config.provider;
 
 		const key =
 			config.localDiamondDeployerKey ??
@@ -175,10 +175,9 @@ export class LocalDiamondDeployer {
 				config.signer = await hre.ethers.getSigner(deployedDiamondData.DeployerAddress);
 				await impersonateAndFundSigner(
 					deployedDiamondData.DeployerAddress,
-					config.provider as unknown as HardhatEthersProvider,
+					config.provider,
 				);
 			}
-
 			const instance = new LocalDiamondDeployer(config, repository);
 			this.instances.set(key, instance);
 

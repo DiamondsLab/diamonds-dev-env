@@ -5,17 +5,14 @@ import {
 	DiamondDeployer,
 	FileDeploymentRepository,
 	OZDefenderDeploymentStrategy,
+	SupportedProvider,
 } from '@diamondslab/diamonds';
 import '@diamondslab/hardhat-diamonds';
-import type { JsonRpcProvider } from '@ethersproject/providers';
-import type { HardhatEthersProvider } from '@nomicfoundation/hardhat-ethers/internal/hardhat-ethers-provider';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import * as dotenv from 'dotenv';
 import { existsSync, readFileSync } from 'fs';
 import hre, { ethers } from 'hardhat';
 import { join } from 'path';
-
-// Hardhat task system used for Diamond ABI generation
 
 dotenv.config();
 
@@ -52,7 +49,7 @@ export interface DefenderDiamondDeployerConfig extends DiamondConfig {
 	/** Chain ID for the target network */
 	chainId: number;
 	/** Provider instance */
-	provider?: JsonRpcProvider | HardhatEthersProvider;
+	provider?: SupportedProvider;
 	/** Signer instance */
 	signer?: SignerWithAddress;
 	/** Enable verbose logging */
@@ -120,7 +117,7 @@ export class DefenderDiamondDeployer {
 	private strategy!: OZDefenderDeploymentStrategy;
 	private deployer!: DiamondDeployer;
 	private repository!: DeploymentRepository;
-	private provider?: JsonRpcProvider | HardhatEthersProvider;
+	private provider?: SupportedProvider;
 	private signer?: SignerWithAddress;
 	private verbose: boolean = false;
 	private deploymentStatus: DeploymentStatus = DeploymentStatus.NOT_STARTED;
@@ -212,7 +209,7 @@ export class DefenderDiamondDeployer {
 	 */
 	private async setupProviderAndSigner(): Promise<void> {
 		// Use provided provider or default to ethers provider
-		this.provider = this.config.provider ?? (ethers.provider as HardhatEthersProvider);
+		this.provider = this.config.provider ?? ethers.provider;
 
 		// Use provided signer or get from ethers
 		if (this.config.signer) {
