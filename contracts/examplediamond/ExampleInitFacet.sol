@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.2;
 
-import 'hardhat/console.sol';
+import "hardhat/console.sol";
 import "@gnus.ai/contracts-upgradeable-diamond/utils/ContextUpgradeable.sol";
 import "@gnus.ai/contracts-upgradeable-diamond/access/AccessControlEnumerableUpgradeable.sol";
 import "@gnus.ai/contracts-upgradeable-diamond/proxy/utils/Initializable.sol";
@@ -22,12 +22,16 @@ contract ExampleInitFacet is ContextUpgradeable, AccessControlEnumerableUpgradea
     /// @notice Emitted when initialization functions are called
     /// @param sender Address that triggered the initialization
     /// @param initializer Name of the initialization function called
+    // nosemgrep: diamond-selector-clash
     event InitLog(address indexed sender, string initializer);
 
     /// @notice Restricts function access to the contract owner
     /// @dev Uses LibDiamond storage to verify ownership
-    modifier onlySuperAdminRole {
-        require(LibDiamond.diamondStorage().contractOwner == _msgSender(), "Only SuperAdmin allowed");
+    modifier onlySuperAdminRole() {
+        require(
+            LibDiamond.diamondStorage().contractOwner == _msgSender(),
+            "Only SuperAdmin allowed"
+        );
         _;
     }
 
@@ -41,7 +45,7 @@ contract ExampleInitFacet is ContextUpgradeable, AccessControlEnumerableUpgradea
         // Set up roles and permissions
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _setupRole(UPGRADER_ROLE, _msgSender());
-        
+
         // Enable ERC20 interface support as example
         LibDiamond.diamondStorage().supportedInterfaces[type(IERC20Upgradeable).interfaceId] = true;
     }
@@ -59,7 +63,6 @@ contract ExampleInitFacet is ContextUpgradeable, AccessControlEnumerableUpgradea
         LibDiamond.diamondStorage().supportedInterfaces[type(IERC20Upgradeable).interfaceId] = true;
     }
 
-
     /// @notice Initializes the diamond with version 1.0.0
     /// @dev This function is called during the deployment of the diamond contract
     /// @custom:security Ensure that the contract is not already initialized
@@ -70,7 +73,7 @@ contract ExampleInitFacet is ContextUpgradeable, AccessControlEnumerableUpgradea
         // run the diamondInitialize000 function as part of diamondInitialize
         diamondInitialize000();
         diamondInitUpgrade100();
-        
+
         // Enable ERC20 interface support
         LibDiamond.diamondStorage().supportedInterfaces[type(IERC20Upgradeable).interfaceId] = true;
     }

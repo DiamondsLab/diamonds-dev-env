@@ -5,34 +5,35 @@
  * Verifies contract deployment and validates integrity
  */
 
+import { DeployedFacet, Diamond } from '@diamondslab/diamonds';
 import chalk from 'chalk';
-import { ethers } from 'ethers';
+import { AddressLike, ethers } from 'ethers';
 import { RPCDiamondDeployer } from '../../setup/RPCDiamondDeployer';
 import {
-	VerifyOptions,
-	setupProgram,
-	addVerifyOptions,
-	createRPCConfig,
-	showPreOperationInfo,
-	showOperationSummary,
-	createMainCommand,
-	createLegacyCommand,
-	createQuickCommand,
+  VerifyOptions,
+  addVerifyOptions,
+  createLegacyCommand,
+  createMainCommand,
+  createQuickCommand,
+  createRPCConfig,
+  setupProgram,
+  showOperationSummary,
+  showPreOperationInfo,
 } from './common';
 
 /**
  * Validates contract ABIs against deployed contracts
  */
-async function validateABIs(diamond: any, provider: ethers.JsonRpcProvider): Promise<void> {
+async function validateABIs(diamond: Diamond, provider: ethers.JsonRpcProvider): Promise<void> {
 	console.log(chalk.blue('\n🔍 Validating contract ABIs...'));
 
 	const deployedData = diamond.getDeployedDiamondData();
-	const facets = deployedData.DeployedFacets || {};
+	const facets = deployedData.DeployedFacets ?? {};
 	let validCount = 0;
 
-	for (const [facetName, facetData] of Object.entries(facets) as [string, any][]) {
+	for (const [facetName, facetData] of Object.entries(facets) as [string, DeployedFacet][]) {
 		try {
-			const code = await provider.getCode(facetData.address);
+			const code = await provider.getCode(facetData.address as AddressLike);
 			if (code === '0x') {
 				console.log(chalk.red(`   ❌ ${facetName}: No contract code found`));
 				continue;
@@ -60,7 +61,7 @@ async function validateABIs(diamond: any, provider: ethers.JsonRpcProvider): Pro
  * Validates function selectors against on-chain data
  */
 async function validateSelectors(
-	diamond: any,
+	diamond: Diamond,
 	provider: ethers.JsonRpcProvider,
 ): Promise<void> {
 	console.log(chalk.blue('\n🔍 Validating function selectors...'));
@@ -82,7 +83,7 @@ async function validateSelectors(
 
 	try {
 		const onChainFacets = await diamondContract.facets();
-		const deployedFacets = deployedData.DeployedFacets || {};
+		const deployedFacets = deployedData.DeployedFacets ?? {};
 
 		console.log(chalk.blue(`📦 Deployed facets: ${Object.keys(deployedFacets).length}`));
 		console.log(chalk.blue(`🔗 On-chain facets: ${onChainFacets.length}`));
@@ -92,15 +93,15 @@ async function validateSelectors(
 
 		for (const onChainFacet of onChainFacets) {
 			totalSelectors += onChainFacet.functionSelectors.length;
-
+      
 			const matchingFacet = Object.entries(deployedFacets).find(
-				([, facetData]: [string, any]) =>
-					facetData.address.toLowerCase() === onChainFacet.facetAddress.toLowerCase(),
+				([, facetData]: [string, DeployedFacet]) =>
+					facetData.address!.toLowerCase() === onChainFacet.facetAddress.toLowerCase(),
 			);
 
 			if (matchingFacet) {
-				const [facetName, facetData] = matchingFacet as [string, any];
-				const deployedSelectors = facetData.funcSelectors || [];
+				const [facetName, facetData] = matchingFacet as [string, DeployedFacet];
+				const deployedSelectors = facetData.funcSelectors ?? [];
 
 				if (deployedSelectors.length === onChainFacet.functionSelectors.length) {
 					console.log(
@@ -136,7 +137,7 @@ async function validateSelectors(
  * Compares stored deployment data with on-chain state
  */
 async function compareOnChainState(
-	diamond: any,
+	diamond: Diamond,
 	provider: ethers.JsonRpcProvider,
 ): Promise<void> {
 	console.log(chalk.blue('\n🔍 Comparing on-chain state with deployment data...'));
@@ -185,7 +186,7 @@ async function verifyDeployment(options: VerifyOptions): Promise<void> {
 		'🔍 Validate Selectors': options.validateSelectors ? 'Yes' : 'No',
 		'🔗 On-chain Validation': options.onChainValidation ? 'Yes' : 'No',
 		'🔑 Etherscan API': options.etherscanApiKey ? 'Configured' : 'Not configured',
-		'💎 Diamond Address': options.diamondAddress || 'From deployment data',
+		'💎 Diamond Address': options.diamondAddress ?? 'From deployment data',
 	});
 
 	const deployer = await RPCDiamondDeployer.getInstance(config);
@@ -217,9 +218,9 @@ async function verifyDeployment(options: VerifyOptions): Promise<void> {
 	const duration = (Date.now() - startTime) / 1000;
 
 	showOperationSummary('Diamond Verification', duration, {
-		'💎 Diamond Address': deployedData.DiamondAddress || 'Not deployed',
-		'📋 Protocol Version': deployedData.protocolVersion || 'Unknown',
-		'📦 Total Facets': Object.keys(deployedData.DeployedFacets || {}).length,
+		'💎 Diamond Address': deployedData.DiamondAddress ?? 'Not deployed',
+		'📋 Protocol Version': deployedData.protocolVersion ?? 'Unknown',
+		'📦 Total Facets': Object.keys(deployedData.DeployedFacets ?? {}).length,
 		'🎯 Network': config.networkName,
 	});
 }
@@ -272,8 +273,8 @@ createQuickCommand(
 		const deployedData = diamond.getDeployedDiamondData();
 
 		showOperationSummary('Quick Diamond Verification', duration, {
-			'💎 Diamond Address': deployedData.DiamondAddress || 'Not deployed',
-			'📦 Total Facets': Object.keys(deployedData.DeployedFacets || {}).length,
+			'💎 Diamond Address': deployedData.DiamondAddress ?? 'Not deployed',
+			'📦 Total Facets': Object.keys(deployedData.DeployedFacets ?? {}).length,
 		});
 	},
 	addVerifyOptions,

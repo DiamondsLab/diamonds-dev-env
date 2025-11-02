@@ -5,34 +5,35 @@
  * Shows deployment status and configuration information
  */
 
+import { DeployedFacet, Diamond } from '@diamondslab/diamonds';
 import chalk from 'chalk';
 import { ethers } from 'ethers';
-import { RPCDiamondDeployer } from '../../setup/RPCDiamondDeployer';
+import { RPCDiamondDeployer, RPCDiamondDeployerConfig } from '../../setup/RPCDiamondDeployer';
 import {
-	StatusOptions,
-	setupProgram,
-	addStatusOptions,
-	createRPCConfig,
-	showPreOperationInfo,
-	showOperationSummary,
-	createMainCommand,
-	createLegacyCommand,
-	createQuickCommand,
+  StatusOptions,
+  addStatusOptions,
+  createLegacyCommand,
+  createMainCommand,
+  createQuickCommand,
+  createRPCConfig,
+  setupProgram,
+  showOperationSummary,
+  showPreOperationInfo,
 } from './common';
 
 /**
  * Shows deployment configuration details
  */
-async function showConfigDetails(config: any): Promise<void> {
+async function showConfigDetails(config: RPCDiamondDeployerConfig): Promise<void> {
 	console.log(chalk.blue('\n📋 Configuration Details'));
 	console.log(chalk.blue('========================'));
 
 	console.log(`💎 Diamond Name: ${chalk.white(config.diamondName)}`);
 	console.log(`🌐 Network: ${chalk.white(config.networkName)}`);
 	console.log(`🔗 RPC URL: ${chalk.white(config.rpcUrl)}`);
-	console.log(`⛽ Gas Multiplier: ${chalk.white(config.gasLimitMultiplier || '1.2')}`);
-	console.log(`🔄 Max Retries: ${chalk.white(config.maxRetries || '3')}`);
-	console.log(`⏱️  Retry Delay: ${chalk.white(config.retryDelayMs || '2000')}ms`);
+	console.log(`⛽ Gas Multiplier: ${chalk.white(config.gasLimitMultiplier ?? '1.2')}`);
+	console.log(`🔄 Max Retries: ${chalk.white(config.maxRetries ?? '3')}`);
+	console.log(`⏱️  Retry Delay: ${chalk.white(config.retryDelayMs ?? '2000')}ms`);
 
 	if (config.configFilePath) {
 		console.log(`📄 Config File: ${chalk.white(config.configFilePath)}`);
@@ -46,12 +47,12 @@ async function showConfigDetails(config: any): Promise<void> {
 /**
  * Shows detailed facet information
  */
-async function showFacetDetails(diamond: any): Promise<void> {
+async function showFacetDetails(diamond: Diamond): Promise<void> {
 	console.log(chalk.blue('\n🔧 Deployed Facets'));
 	console.log(chalk.blue('=================='));
 
 	const deployedData = diamond.getDeployedDiamondData();
-	const facets = deployedData.DeployedFacets || {};
+	const facets = deployedData.DeployedFacets ?? {};
 	const facetCount = Object.keys(facets).length;
 
 	if (facetCount === 0) {
@@ -62,11 +63,11 @@ async function showFacetDetails(diamond: any): Promise<void> {
 	console.log(`📦 Total Facets: ${chalk.white(facetCount)}\n`);
 
 	let facetIndex = 1;
-	for (const [facetName, facetData] of Object.entries(facets) as [string, any][]) {
+	for (const [facetName, facetData] of Object.entries(facets) as [string, DeployedFacet][]) {
 		console.log(`${facetIndex}. ${chalk.green(facetName)}`);
 		console.log(`   📍 Address: ${chalk.white(facetData.address)}`);
-		console.log(`   🔗 TX Hash: ${chalk.white(facetData.tx_hash || 'N/A')}`);
-		console.log(`   📋 Version: ${chalk.white(facetData.version || 'N/A')}`);
+		console.log(`   🔗 TX Hash: ${chalk.white(facetData.tx_hash ?? 'N/A')}`);
+		console.log(`   📋 Version: ${chalk.white(facetData.version ?? 'N/A')}`);
 
 		if (facetData.funcSelectors && facetData.funcSelectors.length > 0) {
 			console.log(`   🎯 Selectors: ${chalk.white(facetData.funcSelectors.length)}`);
@@ -80,16 +81,16 @@ async function showFacetDetails(diamond: any): Promise<void> {
 /**
  * Shows function selector details
  */
-async function showSelectorDetails(diamond: any): Promise<void> {
+async function showSelectorDetails(diamond: Diamond): Promise<void> {
 	console.log(chalk.blue('\n🎯 Function Selectors'));
 	console.log(chalk.blue('====================='));
 
 	const deployedData = diamond.getDeployedDiamondData();
-	const facets = deployedData.DeployedFacets || {};
+	const facets = deployedData.DeployedFacets ?? {};
 	let totalSelectors = 0;
 
-	for (const [facetName, facetData] of Object.entries(facets) as [string, any][]) {
-		const selectors = facetData.funcSelectors || [];
+	for (const [facetName, facetData] of Object.entries(facets) as [string, DeployedFacet][]) {
+		const selectors = facetData.funcSelectors ?? [];
 		totalSelectors += selectors.length;
 
 		if (selectors.length > 0) {
@@ -107,7 +108,7 @@ async function showSelectorDetails(diamond: any): Promise<void> {
  * Performs on-chain validation of deployment status
  */
 async function performOnChainValidation(
-	diamond: any,
+	diamond: Diamond,
 	provider: ethers.JsonRpcProvider,
 ): Promise<void> {
 	console.log(chalk.blue('\n🔗 On-Chain Validation'));
@@ -173,7 +174,7 @@ async function checkStatus(options: StatusOptions): Promise<void> {
 		'🔧 Show Facets': options.showFacets ? 'Yes' : 'No',
 		'🎯 Show Selectors': options.showSelectors ? 'Yes' : 'No',
 		'🔗 On-chain Validation': options.onChainValidation ? 'Yes' : 'No',
-		'💎 Diamond Address': options.diamondAddress || 'From deployment data',
+		'💎 Diamond Address': options.diamondAddress ?? 'From deployment data',
 	});
 
 	const deployer = await RPCDiamondDeployer.getInstance(config);
@@ -188,7 +189,7 @@ async function checkStatus(options: StatusOptions): Promise<void> {
 
 	console.log(chalk.blue('\n📈 Deployment Status'));
 	console.log(chalk.blue('===================='));
-	console.log(`💎 Diamond Address: ${chalk.white(diamondAddress || 'Not deployed')}`);
+	console.log(`💎 Diamond Address: ${chalk.white(diamondAddress ?? 'Not deployed')}`);
 	console.log(`📈 Status: ${chalk.white(deploymentStatus)}`);
 
 	// Show optional details
@@ -210,10 +211,10 @@ async function checkStatus(options: StatusOptions): Promise<void> {
 	}
 
 	const duration = (Date.now() - startTime) / 1000;
-	const facetCount = Object.keys(deployedData.DeployedFacets || {}).length;
+	const facetCount = Object.keys(deployedData.DeployedFacets ?? {}).length;
 
 	showOperationSummary('Diamond Status Check', duration, {
-		'💎 Diamond Address': diamondAddress || 'Not deployed',
+		'💎 Diamond Address': diamondAddress ?? 'Not deployed',
 		'📈 Status': deploymentStatus,
 		'📦 Total Facets': facetCount,
 		'🎯 Network': config.networkName,
@@ -268,9 +269,9 @@ createQuickCommand(
 		const deployedData = diamond.getDeployedDiamondData();
 
 		showOperationSummary('Quick Diamond Status Check', duration, {
-			'💎 Diamond Address': deployedData.DiamondAddress || 'Not deployed',
+			'💎 Diamond Address': deployedData.DiamondAddress ?? 'Not deployed',
 			'📈 Status': deployer.getDeploymentStatus(),
-			'📦 Total Facets': Object.keys(deployedData.DeployedFacets || {}).length,
+			'📦 Total Facets': Object.keys(deployedData.DeployedFacets ?? {}).length,
 		});
 	},
 	addStatusOptions,

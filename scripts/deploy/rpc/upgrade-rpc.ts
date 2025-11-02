@@ -5,34 +5,35 @@
  * Upgrades example Diamond contracts using RPCDiamondDeployer
  */
 
+import { Diamond } from '@diamondslab/diamonds';
 import chalk from 'chalk';
 import { RPCDiamondDeployer } from '../../setup/RPCDiamondDeployer';
 import {
-	UpgradeOptions,
-	setupProgram,
-	addUpgradeOptions,
-	createRPCConfig,
-	showPreOperationInfo,
-	showOperationSummary,
-	createMainCommand,
-	createLegacyCommand,
-	createQuickCommand,
+  UpgradeOptions,
+  addUpgradeOptions,
+  createLegacyCommand,
+  createMainCommand,
+  createQuickCommand,
+  createRPCConfig,
+  setupProgram,
+  showOperationSummary,
+  showPreOperationInfo,
 } from './common';
 
 /**
  * Analyzes what will be upgraded
  */
-async function analyzeUpgrade(diamond: any): Promise<void> {
+async function analyzeUpgrade(diamond: Diamond): Promise<void> {
 	console.log(chalk.blue('\n📊 Analyzing upgrade requirements...'));
 
 	try {
 		const deployedData = diamond.getDeployedDiamondData();
-		const currentVersion = deployedData.protocolVersion || 0;
+		const currentVersion = deployedData.protocolVersion ?? 0;
 		const config = diamond.getDeployConfig();
-		const targetVersion = config.protocolVersion || 0;
+		const targetVersion = config.protocolVersion ?? 0;
 
 		console.log(
-			`💎 Diamond Address: ${chalk.white(deployedData.DiamondAddress || 'Not deployed')}`,
+			`💎 Diamond Address: ${chalk.white(deployedData.DiamondAddress ?? 'Not deployed')}`,
 		);
 		console.log(`📋 Current Protocol Version: ${chalk.white(currentVersion)}`);
 		console.log(`🎯 Target Protocol Version: ${chalk.white(targetVersion)}`);
@@ -42,8 +43,8 @@ async function analyzeUpgrade(diamond: any): Promise<void> {
 			return;
 		}
 
-		const facetsConfig = config.facets || {};
-		const deployedFacets = deployedData.DeployedFacets || {};
+		const facetsConfig = config.facets ?? {};
+		const deployedFacets = deployedData.DeployedFacets ?? {};
 
 		let newFacets = 0;
 		let updatedFacets = 0;
@@ -54,8 +55,8 @@ async function analyzeUpgrade(diamond: any): Promise<void> {
 			if (!deployedFacets[facetName]) {
 				newFacets++;
 			} else {
-				const deployedVersion = deployedFacets[facetName].version || 0;
-				const availableVersions = Object.keys(facetsConfig[facetName].versions || {}).map(
+				const deployedVersion = deployedFacets[facetName].version ?? 0;
+				const availableVersions = Object.keys(facetsConfig[facetName].versions ?? {}).map(
 					Number,
 				);
 				const targetFacetVersion = Math.max(...availableVersions, 0);
@@ -94,7 +95,7 @@ async function upgradeDiamond(options: UpgradeOptions): Promise<void> {
 	await showPreOperationInfo(config, 'Diamond Upgrade', {
 		'🧪 Dry Run': options.dryRun ? 'Yes' : 'No',
 		'🔧 Force Upgrade': options.force ? 'Yes' : 'No',
-		'🎯 Target Version': options.targetVersion || 'Latest',
+		'🎯 Target Version': options.targetVersion ?? 'Latest',
 		'📊 Skip Analysis': options.skipAnalysis ? 'Yes' : 'No',
 	});
 
@@ -122,7 +123,7 @@ async function upgradeDiamond(options: UpgradeOptions): Promise<void> {
 
 	showOperationSummary('Diamond Upgrade', duration, {
 		'💎 Diamond Address': deployedData.DiamondAddress,
-		'📋 Protocol Version': deployedData.protocolVersion || 'Unknown',
+		'📋 Protocol Version': deployedData.protocolVersion ?? 'Unknown',
 		'🎯 Network': config.networkName,
 		'⛽ Chain ID': config.chainId,
 	});
@@ -179,7 +180,7 @@ createQuickCommand(
 
 		showOperationSummary('Quick Diamond Upgrade', duration, {
 			'💎 Diamond Address': deployedData.DiamondAddress,
-			'📋 Protocol Version': deployedData.protocolVersion || 'Unknown',
+			'📋 Protocol Version': deployedData.protocolVersion ?? 'Unknown',
 		});
 	},
 	addUpgradeOptions,

@@ -5,7 +5,9 @@ pragma solidity ^0.8.2;
  *  @dev This facet creates some simple functions that can be called to prove that the
  *  facet was deployed, the selector registered with the diamond and the monitor works for
  *  the Example Diamond.
+ *  @custom:security No storage variables used - all functions are pure/view
  */
+// nosemgrep: diamond-storage-violation-2
 contract ExampleUpgradeFacet {
     // Function to demonstrate that the facet is deployed
     function isDeployed() external pure returns (bool) {

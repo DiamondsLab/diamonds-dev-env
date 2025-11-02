@@ -1,27 +1,16 @@
-import { BaseContract } from 'ethers';
-import { parseEther, Interface } from 'ethers';
-import { debug } from 'debug';
 import * as chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import { BaseContract, Interface, parseEther } from 'ethers';
 
 export const assert = chai.assert;
 export const expect = chai.expect;
-import chaiAsPromised from 'chai-as-promised';
 
+import { JsonRpcProvider } from '@ethersproject/providers';
+import { CreateProposalRequest } from "@openzeppelin/defender-sdk-proposal-client";
 import fs from 'fs';
 import util from 'util';
-// import { ExternalApiCreateProposalRequest } from "@openzeppelin/defender-admin-client/lib/models/proposal";
-import { JsonRpcProvider } from '@ethersproject/providers';
 
 chai.use(chaiAsPromised);
-
-declare global {
-	var debuglog: debug.Debugger | undefined;
-}
-
-(global as any).debuglog = debug('UnitTest:log');
-(global as any).debuglog.color = '158';
-
-export const debuglog = (global as any).debuglog;
 
 export interface IFacetDeployedInfo {
 	address?: string;
@@ -50,7 +39,8 @@ export interface INetworkDeployInfo {
 	DiamondAddress: string;
 	DeployerAddress: string;
 	FacetDeployedInfo: FacetDeployedInfo;
-	ExternalLibraries?: any;
+	// nosemgrep: typescript-any-usage
+	ExternalLibraries?: any;  // These are external Solidity libraries that the Diamond depends on
 	protocolVersion?: number;
 	provider?: JsonRpcProvider | undefined;
 }
@@ -139,8 +129,8 @@ export const diamondCutFuncAbi = {
 };
 
 export interface IDefenderViaInfo {
-	via: any;
-	viaType: any;
+	via: CreateProposalRequest;
+	viaType: CreateProposalRequest;
 }
 
 export function createPreviousVersionRecordWithMap(
