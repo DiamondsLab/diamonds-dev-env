@@ -20,18 +20,19 @@ The workflow is defined in `.github/workflows/create-branch-from-issue.yml` and 
 ### Method 2: GitHub UI "Create a branch" Feature
 You can also create branches directly from the GitHub issue page using the "Create a branch" button.
 
-**To configure this feature:**
+**To configure the GitHub UI branch creation:**
 
 1. Go to Repository Settings → General
-2. Scroll to "Pull Requests" section
-3. Under "Development", configure the branch name pattern
+2. Scroll to "Pull Requests" section  
+3. Look for "Development" or "Automatically create branches" settings
 
-**Recommended pattern:**
-```
-{label}/{issue-number}-{issue-title}
-```
+**For the branch naming pattern:**
+- If using GitHub Actions (recommended): The workflow automatically creates branches with the correct naming
+- If using GitHub UI manual configuration: The exact configuration options depend on your GitHub plan
+  - GitHub Free/Pro: Limited configuration options
+  - GitHub Enterprise: More granular control over branch naming patterns
 
-**Note:** The `.github/development.yml` file in this repository provides a configuration template, though GitHub's native UI settings take precedence.
+**Note:** The `.github/development.yml` file in this repository provides a configuration template that documents the desired branch naming pattern. However, GitHub's native UI settings must be configured manually in the repository settings, as GitHub does not currently support automated configuration of the "Create a branch" feature via a YAML file. The template serves as documentation and a reference for manual configuration.
 
 ## Issue Type Labels
 

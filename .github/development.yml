@@ -1,27 +1,36 @@
-# Development Branch Configuration
+# Development Branch Configuration Template
 #
-# This file configures how GitHub creates branches from the issue page
-# when using the "Create a branch" feature.
+# This file documents the desired branch naming convention for branches
+# created from GitHub issues.
+#
+# IMPORTANT: GitHub's native "Create a branch" feature is configured through
+# repository settings in the UI (Settings → General → Development), not via
+# this YAML file. This file serves as:
+# 1. Documentation of the desired branch naming pattern
+# 2. A reference for manual configuration in GitHub's UI
+# 3. A template for tools that may support YAML-based configuration
 #
 # Branch naming pattern: <issue-type>/<issue-number>-<issue-name>
 # Example: feature/123-add-user-authentication
 #
-# Reference: This configuration works with GitHub's issue-to-branch feature
-# and helps maintain consistent branch naming conventions.
+# The GitHub Actions workflow at .github/workflows/create-branch-from-issue.yml
+# implements this naming convention automatically when issues are created or labeled.
 
-# Branch name template configuration
-# The pattern uses the following variables:
-# - issue-number: The number of the issue
-# - issue-title: A URL-safe slug of the issue title
-# - label: A branch prefix derived from issue labels
+# Desired branch name template
+# GitHub UI pattern should be configured as: {label}/{issue-number}-{issue-title}
+# Variables:
+# - {issue-number}: The number of the issue
+# - {issue-title}: A URL-safe slug of the issue title
+# - {label}: A branch prefix derived from issue labels (via GitHub Actions)
 
 branch-name-template: "{label}/{issue-number}-{issue-title}"
 
-# Default branch prefix when no matching label is found
-default-branch-prefix: task
-
 # Label to branch prefix mapping
-# When an issue has one of these labels, use the corresponding prefix
+# This mapping is implemented in the GitHub Actions workflow at:
+# .github/workflows/create-branch-from-issue.yml
+#
+# When an issue has one of these labels, the corresponding prefix is used:
+
 label-prefixes:
   bug: bug
   feature: feature
@@ -32,3 +41,5 @@ label-prefixes:
   task: task
   hotfix: hotfix
   refactor: refactor
+
+# Default branch prefix when no matching label is found: task
