@@ -22,10 +22,30 @@ jobs:
 
             // Choose type from labels (customize this list)
             const labelNames = (issue.labels || []).map(l => l.name.toLowerCase());
-            const allowedTypes = ['bug', 'feature', 'chore', 'docs', 'task'];
+            const allowedTypes = [
+              'bug', 'feature', 'enhancement', 'hotfix',
+              'chore', 'docs', 'documentation', 'task', 'refactor'
+            ];
+
+            // Label to prefix mapping
+            const labelMapping = {
+              'bug': 'bug',
+              'feature': 'feature',
+              'enhancement': 'feature',
+              'hotfix': 'hotfix',
+              'chore': 'chore',
+              'docs': 'docs',
+              'documentation': 'docs',
+              'task': 'task',
+              'refactor': 'refactor'
+            };
+
             let issueType = 'task';
             for (const t of allowedTypes) {
-              if (labelNames.includes(t)) { issueType = t; break; }
+              if (labelNames.includes(t)) {
+                issueType = labelMapping[t];
+                break;
+              }
             }
 
             // Build a URL-safe slug from title
