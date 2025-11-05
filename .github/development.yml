@@ -1,0 +1,34 @@
+# Development Branch Configuration
+#
+# This file configures how GitHub creates branches from the issue page
+# when using the "Create a branch" feature.
+#
+# Branch naming pattern: <issue-type>/<issue-number>-<issue-name>
+# Example: feature/123-add-user-authentication
+#
+# Reference: This configuration works with GitHub's issue-to-branch feature
+# and helps maintain consistent branch naming conventions.
+
+# Branch name template configuration
+# The pattern uses the following variables:
+# - issue-number: The number of the issue
+# - issue-title: A URL-safe slug of the issue title
+# - label: A branch prefix derived from issue labels
+
+branch-name-template: "{label}/{issue-number}-{issue-title}"
+
+# Default branch prefix when no matching label is found
+default-branch-prefix: task
+
+# Label to branch prefix mapping
+# When an issue has one of these labels, use the corresponding prefix
+label-prefixes:
+  bug: bug
+  feature: feature
+  enhancement: feature
+  chore: chore
+  documentation: docs
+  docs: docs
+  task: task
+  hotfix: hotfix
+  refactor: refactor
