@@ -1,0 +1,268 @@
+name: Create Branch from Issue
+
+on:
+  issues:
+    types: [opened, labeled, reopened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to create branch for (optional - uses triggering issue if not provided)'
+        required: false
+        type: number
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+
+env:
+  # Configuration - customize these for your project
+  DEFAULT_ISSUE_TYPE: 'feature'
+  ALLOWED_ISSUE_TYPES: '["bug", "feature", "enhancement", "task", "chore", "docs", "refactor", "fix", "perf", "security"]'
+  MAX_BRANCH_NAME_LENGTH: 255
+  MAX_TITLE_LENGTH: 50
+
+jobs:
+  create-branch:
+    # Skip if this is triggered by a pull request (issue has PR)
+    if: github.event_name == 'workflow_dispatch' || (github.event.issue.pull_request == null && github.event.action != 'unlabeled')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Create branch from issue
+        uses: actions/github-script@v7
+        id: create-branch
+        with:
+          script: |
+            const core = require('@actions/core');
+            const github = require('@actions/github');
+
+            try {
+              // Determine issue number
+              let issueNumber;
+              if (context.eventName === 'workflow_dispatch') {
+                issueNumber = context.payload.inputs?.issue_number;
+                if (!issueNumber) {
+                  throw new Error('Issue number is required for manual workflow dispatch');
+                }
+              } else {
+                issueNumber = context.payload.issue?.number;
+              }
+
+              if (!issueNumber) {
+                throw new Error('Unable to determine issue number');
+              }
+
+              core.info(`Processing issue #${issueNumber}`);
+
+              // Get issue details
+              const { data: issue } = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber
+              });
+
+              // Determine issue type
+              const issueType = determineIssueType(issue);
+              core.info(`Determined issue type: ${issueType}`);
+
+              // Generate branch name
+              const branchName = generateBranchName(issueType, issueNumber, issue.title);
+              core.info(`Generated branch name: ${branchName}`);
+
+              // Validate branch name
+              validateBranchName(branchName);
+
+              // Check if branch already exists
+              const branchExists = await checkBranchExists(branchName);
+              if (branchExists) {
+                core.info(`Branch '${branchName}' already exists - skipping creation`);
+                core.setOutput('branch-created', 'false');
+                core.setOutput('branch-name', branchName);
+                return;
+              }
+
+              // Create the branch
+              await createBranch(branchName);
+              core.info(`Successfully created branch: ${branchName}`);
+
+              // Add comment to issue
+              await addIssueComment(issueNumber, branchName);
+
+              core.setOutput('branch-created', 'true');
+              core.setOutput('branch-name', branchName);
+
+            } catch (error) {
+              core.error(`Failed to create branch: ${error.message}`);
+              core.setFailed(error.message);
+              throw error;
+            }
+
+            /**
+             * Determine issue type from labels or title
+             */
+            function determineIssueType(issue) {
+              const allowedTypes = JSON.parse(process.env.ALLOWED_ISSUE_TYPES);
+              const defaultType = process.env.DEFAULT_ISSUE_TYPE;
+
+              // Check labels first
+              const labels = (issue.labels || []).map(label =>
+                typeof label === 'string' ? label : label.name
+              ).map(label => label.toLowerCase());
+
+              for (const type of allowedTypes) {
+                if (labels.includes(type)) {
+                  return type;
+                }
+              }
+
+              // Check title for conventional commit prefixes
+              const title = issue.title.toLowerCase();
+              for (const type of allowedTypes) {
+                if (title.startsWith(`${type}:`) || title.startsWith(`${type} `)) {
+                  return type;
+                }
+              }
+
+              // Check for common aliases
+              const typeAliases = {
+                'bug': ['bugfix', 'bug-fix', 'hotfix'],
+                'feature': ['feat', 'enhancement', 'improvement'],
+                'docs': ['documentation', 'doc'],
+                'refactor': ['refactoring'],
+                'perf': ['performance', 'optimization'],
+                'security': ['sec']
+              };
+
+              for (const [type, aliases] of Object.entries(typeAliases)) {
+                if (allowedTypes.includes(type)) {
+                  for (const alias of aliases) {
+                    if (labels.includes(alias) || title.includes(alias)) {
+                      return type;
+                    }
+                  }
+                }
+              }
+
+              return defaultType;
+            }
+
+            /**
+             * Generate a standardized branch name
+             */
+            function generateBranchName(issueType, issueNumber, title) {
+              // Sanitize and format title
+              const sanitizedTitle = title
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, '') // Remove special characters except spaces and hyphens
+                .replace(/\s+/g, '-') // Replace spaces with hyphens
+                .replace(/-+/g, '-') // Collapse multiple hyphens
+                .replace(/(^-|-$)/g, '') // Trim leading/trailing hyphens
+                .slice(0, parseInt(process.env.MAX_TITLE_LENGTH)); // Limit length
+
+              // Ensure we have at least some content
+              const finalTitle = sanitizedTitle || `issue-${issueNumber}`;
+
+              return `${issueType}/${issueNumber}-${finalTitle}`;
+            }
+
+            /**
+             * Validate branch name according to GitHub rules
+             */
+            function validateBranchName(branchName) {
+              const maxLength = parseInt(process.env.MAX_BRANCH_NAME_LENGTH);
+
+              if (branchName.length > maxLength) {
+                throw new Error(`Branch name too long: ${branchName.length} characters (max: ${maxLength})`);
+              }
+
+              if (!/^[a-zA-Z0-9][a-zA-Z0-9._/-]*$/.test(branchName)) {
+                throw new Error(`Invalid branch name format: ${branchName}`);
+              }
+
+              if (branchName.includes('..') || branchName.startsWith('-') || branchName.endsWith('-')) {
+                throw new Error(`Invalid branch name: cannot contain '..' or start/end with '-': ${branchName}`);
+              }
+
+              // Reserved names
+              const reserved = ['HEAD', 'ORIG_HEAD', 'FETCH_HEAD', 'MERGE_HEAD', 'CHERRY_PICK_HEAD'];
+              if (reserved.includes(branchName.toUpperCase())) {
+                throw new Error(`Branch name '${branchName}' is reserved`);
+              }
+            }
+
+            /**
+             * Check if branch already exists
+             */
+            async function checkBranchExists(branchName) {
+              try {
+                await github.rest.repos.getBranch({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  branch: branchName
+                });
+                return true;
+              } catch (error) {
+                if (error.status === 404) {
+                  return false;
+                }
+                throw error;
+              }
+            }
+
+            /**
+             * Create the branch from default branch
+             */
+            async function createBranch(branchName) {
+              // Get default branch
+              const { data: repo } = await github.rest.repos.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo
+              });
+
+              const defaultBranch = repo.default_branch;
+
+              // Get SHA of default branch
+              const { data: ref } = await github.rest.git.getRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `heads/${defaultBranch}`
+              });
+
+              // Create new branch
+              await github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `refs/heads/${branchName}`,
+                sha: ref.object.sha
+              });
+            }
+
+            /**
+             * Add a comment to the issue with branch information
+             */
+            async function addIssueComment(issueNumber, branchName) {
+              const comment = `🤖 **Branch Created**\n\nA branch has been automatically created for this issue:\n\n**Branch:** \`${branchName}\`\n\nYou can now:\n- Checkout the branch: \`git checkout ${branchName}\`\n- Push your changes: \`git push origin ${branchName}\`\n\nWhen ready, create a pull request targeting the \`${branchName}\` branch.`;
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: comment
+              });
+            }
+
+      - name: Workflow completed
+        if: always()
+        run: |
+          echo "Branch creation workflow completed. Check the logs above for details."
