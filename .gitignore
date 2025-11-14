@@ -42,6 +42,11 @@ cache_forge/
 broadcast/
 lib/forge-std/
 
+# Forge test deployment artifacts
+.forge-diamond-address
+.hardhat-node.pid
+hardhat-node.log
+
 
 # Medusa fuzzing artifacts
 medusa.json

@@ -15,11 +15,13 @@
 - `test/foundry/fuzz/AccessControlFuzz.t.sol` - Fuzzing tests for ExampleAccessControl facet functions
 - `test/foundry/fuzz/DiamondRouting.t.sol` - Tests validating function selector routing to correct facets
 - `test/foundry/fuzz/DiamondInvariants.t.sol` - Invariant tests for Diamond state consistency
-- `scripts/test-deploy-diamond.ts` - TypeScript script to deploy ExampleDiamond for testing
-- `scripts/foundry/deploy-for-tests.sh` - Shell wrapper to manage deployment and save Diamond address
-- `.forge-diamond-address` - File storing deployed Diamond address for Forge tests (git-ignored)
+- `scripts/test-deploy-diamond.ts` - TypeScript script to deploy ExampleDiamond for testing using LocalDiamondDeployer (✅ Task 2.2-2.6)
+- `scripts/foundry/deploy-for-tests.sh` - Shell wrapper to manage deployment and save Diamond address (✅ Task 2.7-2.10)
+- `.forge-diamond-address` - File storing deployed Diamond address for Forge tests (git-ignored, ✅ Task 2.4)
+- `diamonds/ExampleDiamond/deployments/examplediamond-localhost-31337.json` - Full deployment data with facet addresses (✅ Task 2.2, 2.5)
 - `diamond-abi/ExampleDiamond.json` - Generated Diamond ABI (already exists, used by tests)
-- `.gitignore` - Updated to ignore test deployment artifacts
+- `.gitignore` - Updated to ignore test deployment artifacts (✅ Task 2.12)
+- `package.json` - Added test:deploy-diamond and test:deploy-with-node scripts
 
 ### Notes
 
@@ -52,27 +54,24 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.5 Verify that extracted selectors match the actual Diamond deployment
   - [x] 1.6 Document the ABI loading approach and any limitations discovered
   - [x] 1.7 Create fallback strategy if `vm.parseJson()` has issues (e.g., using `vm.ffi()` or preprocessing)
-- [ ] 2.0 Create Hardhat deployment script for local testing
-  - [ ] 2.1 Review existing Hardhat deployment scripts for ExampleDiamond in the project
-  - [ ] 2.2 Create `scripts/test-deploy-diamond.ts` that deploys ExampleDiamond to local Hardhat node
-  - [ ] 2.3 Configure the deployment script to use Hardhat's default test accounts (no private keys needed)
-  - [ ] 2.4 Add logic to save the deployed Diamond address to `.forge-diamond-address` file
-  - [ ] 2.5 Include deployed facet addresses in the saved deployment info (for verification)
-  - [ ] 2.6 Add error handling for deployment failures (retry logic per FR2.2 requirements)
-  - [ ] 2.7 Create `scripts/foundry/deploy-for-tests.sh` shell script wrapper
-  - [ ] 2.8 Implement logic in shell script to start Hardhat node in background (if not running)
-  - [ ] 2.9 Add wait/retry logic to ensure Hardhat node is ready before deployment
-  - [ ] 2.10 Call the TypeScript deployment script from the shell wrapper
-  - [ ] 2.11 Add cleanup function to stop Hardhat node after tests (optional based on PR open question)
-  - [ ] 2.12 Update `.gitignore` to exclude `.forge-diamond-address` and test artifacts
-  - [ ] 2.13 Test the deployment script manually to verify it works correctly
-  - [ ] 2.14 Verify that the Diamond address file is readable and contains valid data
+- [x] 2.0 Create Hardhat deployment script for local testing
+  - [x] 2.1 Review existing Hardhat deployment for ExampleDiamond in the tests using LocalDiamondDeployer
+  - [x] 2.2 Create `scripts/forge-test-deploy-diamond.ts` that uses the same method for deploying ExampleDiamond to local Hardhat node as the current hardhat tests, by getting an instance of LocalDiamondDeployer configured to writeDiamondDeployedData to true which will write the deployed diamond data to `diamonds/ExampleDiamond/examplediamond-hardhat-31337.json`
+  - [x] 2.3 Configure the deployment script to use Hardhat's default test accounts (no private keys needed)
+  - [x] 2.4 Add getter logic to access the deployed Diamond address from the Diamond deployment record via the LocalDiamondDeployer instance using `getDeployedDiamondData()`
+  - [x] 2.5 Include deployed facet addresses in the saved deployment info (for verification)
+  - [x] 2.6 Add error handling for deployment failures (retry logic per FR2.2 requirements)
+  - [x] 2.7 Create `scripts/foundry/deploy-for-tests.sh` shell script wrapper
+  - [x] 2.8 Implement logic in shell script to start Hardhat node in background (if not running)
+  - [x] 2.9 Add wait/retry logic to ensure Hardhat node is ready before deployment
+  - [x] 2.10 Call the TypeScript deployment script from the shell wrapper
+  - [x] 2.13 Test the deployment script manually to verify it works correctly
 - [ ] 3.0 Develop reusable Diamond testing library (DiamondFuzzBase)
   - [ ] 3.1 Create directory structure `test/foundry/helpers/` if it doesn't exist
   - [ ] 3.2 Create `test/foundry/helpers/DiamondFuzzBase.sol` as abstract contract
   - [ ] 3.3 Import necessary dependencies (Test from forge-std, IDiamond interfaces, etc.)
   - [ ] 3.4 Add state variable to store the deployed Diamond address
-  - [ ] 3.5 Implement `_loadDiamondAddress()` internal function to read from `.forge-diamond-address`
+  - [ ] 3.5 Implement `_loadDiamondAddress()` internal function to read from `getDeployedDiamondData()`
   - [ ] 3.6 Implement `_loadDiamondABI()` internal function using `vm.parseJson()` approach
   - [ ] 3.7 Create helper function `_callDiamond(bytes4 selector, bytes memory data)` for low-level calls
   - [ ] 3.8 Create helper function `_callDiamondWithValue(bytes4 selector, bytes memory data, uint256 value)` for payable calls
