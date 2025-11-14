@@ -19,6 +19,13 @@ via_ir = false
 verbosity = 2
 fuzz = { runs = 256, max_test_rejects = 65536 }
 
+# File access permissions for vm.readFile()
+fs_permissions = [
+    { access = "read", path = "./diamond-abi" },
+    { access = "read", path = "./artifacts" },
+    { access = "write", path = "./test-assets/test-output" }
+]
+
 # Gas reporting
 gas_reports = ["*"]
 gas_reports_ignore = []
