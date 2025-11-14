@@ -111,7 +111,7 @@ abstract contract DiamondFuzzBase is Test {
         uint256 value
     ) internal returns (bool success, bytes memory returnData) {
         bytes memory callData = abi.encodePacked(selector, data);
-        (success, returnData) = diamond.call{ value: value }(callData);
+        (success, returnData) = diamond.call{value: value}(callData);
     }
 
     /// @notice Expect a Diamond call to revert with specific error
@@ -119,7 +119,11 @@ abstract contract DiamondFuzzBase is Test {
     /// @param selector The function selector to call
     /// @param data The encoded function arguments
     /// @param expectedError The expected error data (can be empty to expect any revert)
-    function _expectDiamondRevert(bytes4 selector, bytes memory data, bytes memory expectedError) internal {
+    function _expectDiamondRevert(
+        bytes4 selector,
+        bytes memory data,
+        bytes memory expectedError
+    ) internal {
         (bool success, bytes memory returnData) = _callDiamond(selector, data);
 
         if (success) {
@@ -163,7 +167,10 @@ abstract contract DiamondFuzzBase is Test {
     /// @param selector The function selector to call
     /// @param data The encoded function arguments
     /// @return gasUsed The gas consumed by the call
-    function _measureDiamondGas(bytes4 selector, bytes memory data) internal returns (uint256 gasUsed) {
+    function _measureDiamondGas(
+        bytes4 selector,
+        bytes memory data
+    ) internal returns (uint256 gasUsed) {
         uint256 gasBefore = gasleft();
         (bool success, bytes memory returnData) = _callDiamond(selector, data);
         uint256 gasAfter = gasleft();

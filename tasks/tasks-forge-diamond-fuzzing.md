@@ -12,9 +12,9 @@
 - `test/foundry/helpers/DiamondFuzzBase.sol` - Abstract base contract for Diamond fuzzing tests with helper functions (✅ Task 3.2-3.14)
 - `test/foundry/helpers/DiamondFuzzBase.t.sol` - Unit tests for DiamondFuzzBase helper library (✅ Task 3.15-3.18, 8/8 passing)
 - `foundry.toml` - Updated with file access permissions for Diamond deployment files
-- `test/foundry/fuzz/AccessControlFuzz.t.sol` - Fuzzing tests for ExampleAccessControl facet functions
-- `test/foundry/fuzz/DiamondRouting.t.sol` - Tests validating function selector routing to correct facets
-- `test/foundry/fuzz/DiamondInvariants.t.sol` - Invariant tests for Diamond state consistency
+- `test/foundry/fuzz/AccessControlFuzz.t.sol` - Fuzzing tests for ExampleAccessControl facet functions (✅ Task 4.2-4.15, 14 tests)
+- `test/foundry/fuzz/DiamondRouting.t.sol` - Tests validating function selector routing to correct facets (✅ Task 4.16-4.20, 13 tests)
+- `test/foundry/fuzz/DiamondInvariants.t.sol` - Invariant tests for Diamond state consistency (✅ Task 4.21-4.29, 14 tests)
 - `scripts/test-deploy-diamond.ts` - TypeScript script to deploy ExampleDiamond for testing using LocalDiamondDeployer (✅ Task 2.2-2.6)
 - `scripts/foundry/deploy-for-tests.sh` - Shell wrapper to manage deployment and save Diamond address (✅ Task 2.7-2.10)
 - `.forge-diamond-address` - File storing deployed Diamond address for Forge tests (git-ignored, ✅ Task 2.4)
@@ -85,39 +85,39 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 3.16 Write unit tests verifying each helper function works correctly
   - [x] 3.17 Test that the base contract properly loads Diamond address and ABI
   - [x] 3.18 Ensure all tests pass before moving to next task
-- [ ] 4.0 Implement comprehensive fuzzing tests
-  - [ ] 4.1 Create directory `test/foundry/fuzz/` if it doesn't exist
-  - [ ] 4.2 Create `test/foundry/fuzz/AccessControlFuzz.t.sol` inheriting from DiamondFuzzBase
-  - [ ] 4.3 Add test preamble with SPDX, pragma, and imports
-  - [ ] 4.4 Define role constants from ExampleAccessControl (e.g., DEFAULT_ADMIN_ROLE, MINTER_ROLE)
-  - [ ] 4.5 Implement `testFuzz_GrantRole` - fuzz with random addresses and role values
-  - [ ] 4.6 Use `vm.assume()` to constrain role parameter to valid role values (FR4.5)
-  - [ ] 4.7 Add assertions to verify role was granted correctly using `hasRole()`
-  - [ ] 4.8 Implement `testFuzz_RevokeRole` - fuzz role revocation with random inputs
-  - [ ] 4.9 Verify that revoked addresses no longer have the role
-  - [ ] 4.10 Implement `testFuzz_RenounceRole` - test role renunciation from random addresses
-  - [ ] 4.11 Add test for unauthorized access attempts (should revert) using `vm.expectRevert()`
-  - [ ] 4.12 Implement `testFuzz_OnlyRoleModifier` - verify modifier prevents unauthorized calls
-  - [ ] 4.13 Test role admin functions with fuzzing (getRoleAdmin, setRoleAdmin)
-  - [ ] 4.14 Configure fuzzing runs to at least 256 (aim for 1000+ per PRD success metrics)
-  - [ ] 4.15 Add gas profiling to access control tests using helper functions
-  - [ ] 4.16 Create `test/foundry/fuzz/DiamondRouting.t.sol` for selector routing tests (FR4.1)
-  - [ ] 4.17 Implement test that validates function selectors route to correct facet addresses
-  - [ ] 4.18 Use DiamondLoupe interface to query facet addresses for each selector
-  - [ ] 4.19 Fuzz with random selectors and verify correct routing or revert for invalid selectors
-  - [ ] 4.20 Add test for function selector collision detection (should not have collisions)
-  - [ ] 4.21 Create `test/foundry/fuzz/DiamondInvariants.t.sol` for state consistency tests (FR4.3)
-  - [ ] 4.22 Define invariants that must hold after any valid function sequence
-  - [ ] 4.23 Implement `invariant_OwnershipConsistency` - owner should always be valid address
-  - [ ] 4.24 Implement `invariant_RoleHierarchy` - admin roles should maintain proper hierarchy
-  - [ ] 4.25 Implement `invariant_FacetAddressesValid` - all facet addresses should be non-zero and contain code
-  - [ ] 4.26 Add `invariant_NoSelectorCollisions` - no duplicate function selectors across facets
-  - [ ] 4.27 Use Foundry's invariant testing features with multiple random function calls
-  - [ ] 4.28 Add gas assertions to ensure gas consumption stays within acceptable bounds (FR4.4)
-  - [ ] 4.29 Create gas benchmarks for common operations (grant role, revoke role, call through diamond)
-  - [ ] 4.30 Run all fuzzing tests and verify they pass with at least 256 runs each
-  - [ ] 4.31 Fix any failing tests and document edge cases discovered
-  - [ ] 4.32 Verify all tests work with `--fork-url` pointing to local Hardhat node
+- [x] 4.0 Implement comprehensive fuzzing tests
+  - [x] 4.1 Create directory `test/foundry/fuzz/` if it doesn't exist
+  - [x] 4.2 Create `test/foundry/fuzz/AccessControlFuzz.t.sol` inheriting from DiamondFuzzBase
+  - [x] 4.3 Add test preamble with SPDX, pragma, and imports
+  - [x] 4.4 Define role constants from ExampleAccessControl (e.g., DEFAULT_ADMIN_ROLE, MINTER_ROLE)
+  - [x] 4.5 Implement `testFuzz_GrantRole` - fuzz with random addresses and role values
+  - [x] 4.6 Use `vm.assume()` to constrain role parameter to valid role values (FR4.5)
+  - [x] 4.7 Add assertions to verify role was granted correctly using `hasRole()`
+  - [x] 4.8 Implement `testFuzz_RevokeRole` - fuzz role revocation with random inputs
+  - [x] 4.9 Verify that revoked addresses no longer have the role
+  - [x] 4.10 Implement `testFuzz_RenounceRole` - test role renunciation from random addresses
+  - [x] 4.11 Add test for unauthorized access attempts (should revert) using `vm.expectRevert()`
+  - [x] 4.12 Implement `testFuzz_OnlyRoleModifier` - verify modifier prevents unauthorized calls
+  - [x] 4.13 Test role admin functions with fuzzing (getRoleAdmin, setRoleAdmin)
+  - [x] 4.14 Configure fuzzing runs to at least 256 (aim for 1000+ per PRD success metrics)
+  - [x] 4.15 Add gas profiling to access control tests using helper functions
+  - [x] 4.16 Create `test/foundry/fuzz/DiamondRouting.t.sol` for selector routing tests (FR4.1)
+  - [x] 4.17 Implement test that validates function selectors route to correct facet addresses
+  - [x] 4.18 Use DiamondLoupe interface to query facet addresses for each selector
+  - [x] 4.19 Fuzz with random selectors and verify correct routing or revert for invalid selectors
+  - [x] 4.20 Add test for function selector collision detection (should not have collisions)
+  - [x] 4.21 Create `test/foundry/fuzz/DiamondInvariants.t.sol` for state consistency tests (FR4.3)
+  - [x] 4.22 Define invariants that must hold after any valid function sequence
+  - [x] 4.23 Implement `invariant_OwnershipConsistency` - owner should always be valid address
+  - [x] 4.24 Implement `invariant_RoleHierarchy` - admin roles should maintain proper hierarchy
+  - [x] 4.25 Implement `invariant_FacetAddressesValid` - all facet addresses should be non-zero and contain code
+  - [x] 4.26 Add `invariant_NoSelectorCollisions` - no duplicate function selectors across facets
+  - [x] 4.27 Use Foundry's invariant testing features with multiple random function calls
+  - [x] 4.28 Add gas assertions to ensure gas consumption stays within acceptable bounds (FR4.4)
+  - [x] 4.29 Create gas benchmarks for common operations (grant role, revoke role, call through diamond)
+  - [x] 4.30 Run all fuzzing tests and verify they pass with at least 256 runs each
+  - [x] 4.31 Fix any failing tests and document edge cases discovered
+  - [x] 4.32 Verify all tests work with `--fork-url` pointing to local Hardhat node
 - [ ] 5.0 Add documentation and CI/CD integration
   - [ ] 5.1 Create `test/foundry/helpers/README.md` with comprehensive usage documentation
   - [ ] 5.2 Document the purpose of DiamondFuzzBase and its helper functions

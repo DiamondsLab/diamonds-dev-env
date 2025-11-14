@@ -69,7 +69,7 @@ contract DiamondFuzzBaseTest is Test {
     function test_Selector_Signature_Match() public {
         string memory abiPath = "./diamond-abi/ExampleDiamond.json";
         string memory abiJson = DiamondABILoader.loadDiamondABI(abiPath);
-        
+
         bytes4[] memory selectors = DiamondABILoader.extractSelectors(abiJson);
         string[] memory signatures = DiamondABILoader.extractSignatures(abiJson);
 
@@ -139,4 +139,3 @@ contract DiamondFuzzBaseTest is Test {
         assertTrue(signatures.length >= 20, "Should have at least 20 functions");
     }
 }
-

@@ -12,14 +12,14 @@
  * Task 2.2: Uses LocalDiamondDeployer with writeDeployedDiamondData: true
  */
 
+import chalk from 'chalk';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
+import hre from 'hardhat';
+import { join } from 'path';
 import {
 	LocalDiamondDeployer,
 	LocalDiamondDeployerConfig,
 } from './setup/LocalDiamondDeployer';
-import hre from 'hardhat';
-import { writeFileSync, readFileSync, existsSync } from 'fs';
-import { join } from 'path';
-import chalk from 'chalk';
 
 /**
  * Deployment info interface for .forge-diamond-address file
@@ -202,4 +202,4 @@ if (require.main === module) {
 		});
 }
 
-export { deployForTests, saveForgeDeploymentInfo, ForgeDeploymentInfo };
+export { deployForTests, ForgeDeploymentInfo, saveForgeDeploymentInfo };
