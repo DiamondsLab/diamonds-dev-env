@@ -36,6 +36,13 @@ archive/.env.vault-migrated.20251023_135129
 dist/
 diamonds/ExampleDiamonds/deployments/examplediamonds*
 
+#Foundry files
+out/
+cache_forge/
+broadcast/
+lib/forge-std/
+
+
 # Medusa fuzzing artifacts
 medusa.json
 medusa-corpus/

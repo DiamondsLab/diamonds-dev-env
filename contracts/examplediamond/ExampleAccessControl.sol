@@ -2,6 +2,7 @@
 pragma solidity ^0.8.2;
 
 import "@gnus.ai/contracts-upgradeable-diamond/access/AccessControlEnumerableUpgradeable.sol";
+import "@gnus.ai/contracts-upgradeable-diamond/access/AccessControlUpgradeable.sol";
 import "@gnus.ai/contracts-upgradeable-diamond/proxy/utils/Initializable.sol";
 import "contracts-starter/contracts/libraries/LibDiamond.sol";
 
@@ -9,7 +10,6 @@ import "contracts-starter/contracts/libraries/LibDiamond.sol";
 /// @notice Provides role-based access control with additional constraints for super admins.
 /// @dev Extends `AccessControlEnumerableUpgradeable` to enable enumerability and role management.
 abstract contract ExampleAccessControl is Initializable, AccessControlEnumerableUpgradeable {
-
     /// @notice Role identifier for the upgrader role.
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
 
@@ -42,12 +42,16 @@ abstract contract ExampleAccessControl is Initializable, AccessControlEnumerable
      * @param role The role to renounce.
      * @param account The account renouncing the role.
      */
-    function renounceRole(bytes32 role, address account) public override(IAccessControlUpgradeable) {
+    function renounceRole(
+        bytes32 role,
+        address account
+    ) public virtual override(AccessControlUpgradeable, IAccessControlUpgradeable) {
         require(
-            !(hasRole(DEFAULT_ADMIN_ROLE, account) && (LibDiamond.diamondStorage().contractOwner == account)),
+            !(hasRole(DEFAULT_ADMIN_ROLE, account) &&
+                (LibDiamond.diamondStorage().contractOwner == account)),
             "Cannot renounce superAdmin from Admin Role"
         );
-        super.renounceRole(role, account);
+        AccessControlUpgradeable.renounceRole(role, account);
     }
 
     /**
@@ -57,19 +61,23 @@ abstract contract ExampleAccessControl is Initializable, AccessControlEnumerable
      * @param role The role to revoke.
      * @param account The account losing the role.
      */
-    function revokeRole(bytes32 role, address account) public override(IAccessControlUpgradeable) {
+    function revokeRole(
+        bytes32 role,
+        address account
+    ) public virtual override(AccessControlUpgradeable, IAccessControlUpgradeable) {
         require(
-            !(hasRole(DEFAULT_ADMIN_ROLE, account) && (LibDiamond.diamondStorage().contractOwner == account)),
+            !(hasRole(DEFAULT_ADMIN_ROLE, account) &&
+                (LibDiamond.diamondStorage().contractOwner == account)),
             "Cannot revoke superAdmin from Admin Role"
         );
-        super.revokeRole(role, account);
+        AccessControlUpgradeable.revokeRole(role, account);
     }
 
     /**
      * @notice Modifier to restrict access to functions for the super admin.
      * @dev Ensures that the caller is the owner defined in the `LibDiamond` storage.
      */
-    modifier onlySuperAdminRole {
+    modifier onlySuperAdminRole() {
         require(LibDiamond.diamondStorage().contractOwner == msg.sender, "Only SuperAdmin allowed");
         _;
     }
