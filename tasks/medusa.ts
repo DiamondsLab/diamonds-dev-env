@@ -79,9 +79,8 @@ task('medusa:fuzz', 'Run Medusa fuzzing tests on Diamond contract')
 
 			console.log(chalk.blue('\n🔧 Initializing fuzzing framework...'));
 			const { MedusaFuzzingFramework } = await import(
-				'../scripts/setup/MedusaFuzzingFramework.js'
+				'../dist/scripts/setup/MedusaFuzzingFramework.js'
 			);
-
 			const chainId = (await provider.getNetwork()).chainId;
 			const diamondConfigPath = path.join(
 				'diamonds',
@@ -117,14 +116,13 @@ task('medusa:fuzz', 'Run Medusa fuzzing tests on Diamond contract')
 			const deploymentData = framework.getDeployedDiamondData();
 			console.log(
 				chalk.green('✓'),
-				`Diamond deployed to: ${deploymentData.DiamondAddress}`,
+				`Diamond deployed to: ${deploymentData?.DiamondAddress ?? 'unknown'}`,
 			);
 
-			const facetNames = deploymentData.DeployedFacets
+			const facetNames = deploymentData?.DeployedFacets
 				? Object.keys(deploymentData.DeployedFacets).join(', ')
 				: 'none';
 			console.log(`  Facets: ${facetNames}`);
-
 			console.log(chalk.blue('\n📝 Generating Solidity test contract...'));
 			const testContractPath = await framework.generateTestContract();
 			console.log(chalk.green('✓'), `Test contract: ${testContractPath}`);
