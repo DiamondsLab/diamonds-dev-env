@@ -71,25 +71,25 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 3.14 Add comments to generated contract explaining purpose and structure
   - [x] 3.15 Integrate generation logic into MedusaFuzzingFramework.generateTestContract()
 
-- [ ] 4.0 Create Hardhat task for fuzzing
-  - [ ] 4.1 Create `tasks/medusa.ts` file for task definitions
-  - [ ] 4.2 Define task `medusa:fuzz` with description
-  - [ ] 4.3 Add task parameter `--diamond` (required) for Diamond contract name
-  - [ ] 4.4 Add task parameter `--network` (optional, default: hardhat) for network selection
-  - [ ] 4.5 Add task parameter `--workers` (optional, default: 10) for Medusa worker count
-  - [ ] 4.6 Add task parameter `--limit` (optional, default: 50000) for test limit
-  - [ ] 4.7 Add task parameter `--timeout` (optional, default: 0) for timeout duration
-  - [ ] 4.8 Add task parameter `--config` (optional) for custom fuzzing config file path
-  - [ ] 4.9 Implement task action that instantiates MedusaFuzzingFramework
-  - [ ] 4.10 Load fuzzing configuration from `test/fuzzing/[DiamondName].fuzz.config.json`
-  - [ ] 4.11 Deploy Diamond using LocalDiamondDeployer via framework
-  - [ ] 4.12 Generate Solidity test contract
-  - [ ] 4.13 Compile generated test contract using Hardhat compilation
-  - [ ] 4.14 Generate medusa.json configuration
-  - [ ] 4.15 Execute Medusa and stream output to console
-  - [ ] 4.16 Save artifacts to appropriate directories
-  - [ ] 4.17 Display summary of fuzzing results
-  - [ ] 4.18 Register task in hardhat.config.ts by importing tasks/medusa.ts
+- [x] 4.0 Create Hardhat task for fuzzing
+  - [x] 4.1 Create `tasks/medusa.ts` file for task definitions
+  - [x] 4.2 Define task `medusa:fuzz` with description
+  - [x] 4.3 Add task parameter `--diamond` (required) for Diamond contract name
+  - [x] 4.4 Network determined from Hardhat runtime environment (no separate param)
+  - [x] 4.5 Add task parameter `--workers` (optional, default: 10) for Medusa worker count
+  - [x] 4.6 Add task parameter `--limit` (optional, default: 50000) for test limit
+  - [x] 4.7 Add task parameter `--timeout` (optional, default: 0) for timeout duration
+  - [x] 4.8 Add task parameter `--fuzz-config` (optional) for custom fuzzing config file path
+  - [x] 4.9 Implement task action that instantiates MedusaFuzzingFramework
+  - [x] 4.10 Load fuzzing configuration from `test/fuzzing/[DiamondName].fuzz.config.json`
+  - [x] 4.11 Deploy Diamond using LocalDiamondDeployer via framework
+  - [x] 4.12 Generate Solidity test contract
+  - [x] 4.13 Compile generated test contract using Hardhat compilation
+  - [x] 4.14 Generate medusa.json configuration
+  - [x] 4.15 Execute Medusa and stream output to console
+  - [x] 4.16 Save artifacts to appropriate directories
+  - [x] 4.17 Display summary of fuzzing results
+  - [x] 4.18 Register task in hardhat.config.ts by importing tasks/medusa.ts
 
 - [ ] 5.0 Create ExampleDiamond fuzzing configuration and tests
   - [ ] 5.1 Analyze ExampleDiamond facets to identify 3 critical functions to fuzz

@@ -6,10 +6,13 @@ import * as dotenv from 'dotenv';
 import '@nomicfoundation/hardhat-toolbox';
 import '@nomicfoundation/hardhat-web3-v4';
 import '@typechain/hardhat';
-import { HardhatUserConfig } from 'hardhat/config';
 import 'hardhat-abi-exporter';
 import 'hardhat-gas-reporter';
+import { HardhatUserConfig } from 'hardhat/config';
 import 'solidity-coverage';
+
+// Import custom tasks
+import './tasks/medusa';
 
 dotenv.config();
 
