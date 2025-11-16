@@ -39,37 +39,37 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.6 Add error handling and logging for installation success/failure
   - [x] 1.7 Test installation by rebuilding DevContainer and verifying `medusa --version` works
 
-- [ ] 2.0 Create MedusaFuzzingFramework TypeScript class
-  - [ ] 2.1 Create `scripts/setup/MedusaFuzzingFramework.ts` file with class skeleton
-  - [ ] 2.2 Define TypeScript interfaces: `MedusaFuzzConfig`, `FuzzTargetFunction`, `MedusaOptions`
-  - [ ] 2.3 Implement constructor that accepts MedusaFuzzConfig
-  - [ ] 2.4 Add method `deployDiamond()` that uses LocalDiamondDeployer to deploy Diamond contract
-  - [ ] 2.5 Add method `getDeployedDiamondData()` to retrieve Diamond address, facets, and selectors
-  - [ ] 2.6 Add method `generateMedusaConfig()` to create medusa.json configuration file
-  - [ ] 2.7 Add configuration support for workers, testLimit, timeout, and corpus directory
-  - [ ] 2.8 Add support for local Hardhat network and forked network configurations
-  - [ ] 2.9 Add method `generateTestContract()` (implementation in next task)
-  - [ ] 2.10 Add method `runMedusa()` to execute Medusa via child process
-  - [ ] 2.11 Add method `parseResults()` to read and parse fuzzing results
-  - [ ] 2.12 Add error handling and validation for all methods
-  - [ ] 2.13 Create unit tests in `scripts/setup/MedusaFuzzingFramework.test.ts`
+- [x] 2.0 Create MedusaFuzzingFramework TypeScript class
+  - [x] 2.1 Create `scripts/setup/MedusaFuzzingFramework.ts` file with class skeleton
+  - [x] 2.2 Define TypeScript interfaces: `MedusaFuzzConfig`, `FuzzTargetFunction`, `MedusaOptions`
+  - [x] 2.3 Implement constructor that accepts MedusaFuzzConfig
+  - [x] 2.4 Add method `deployDiamond()` that uses LocalDiamondDeployer to deploy Diamond contract
+  - [x] 2.5 Add method `getDeployedDiamondData()` to retrieve Diamond address, facets, and selectors
+  - [x] 2.6 Add method `generateMedusaConfig()` to create medusa.json configuration file
+  - [x] 2.7 Add configuration support for workers, testLimit, timeout, and corpus directory
+  - [x] 2.8 Add support for local Hardhat network and forked network configurations
+  - [x] 2.9 Add method `generateTestContract()` (implementation in next task)
+  - [x] 2.10 Add method `runMedusa()` to execute Medusa via child process
+  - [x] 2.11 Add method `parseResults()` to read and parse fuzzing results
+  - [x] 2.12 Add error handling and validation for all methods
+  - [x] 2.13 Create unit tests in `scripts/setup/MedusaFuzzingFramework.test.ts`
 
-- [ ] 3.0 Implement Solidity test contract generation
-  - [ ] 3.1 Create `scripts/utils/medusaHelpers.ts` for utility functions
-  - [ ] 3.2 Implement function `generateSolidityTestContract()` that accepts Diamond data and target functions
-  - [ ] 3.3 Generate Solidity contract header with SPDX license and pragma
-  - [ ] 3.4 Generate constructor that verifies Diamond contract exists at deployment address
-  - [ ] 3.5 Add Diamond address as constant in generated contract
-  - [ ] 3.6 Generate fuzzing functions for each configured facet function with randomized parameters
-  - [ ] 3.7 Implement low-level `call()` wrapper function for calling Diamond contract
-  - [ ] 3.8 Add tracking for call success/failure statistics
-  - [ ] 3.9 Generate invariant function: `echidna_diamond_exists()` to verify Diamond code exists
-  - [ ] 3.10 Generate invariant function: `echidna_facets_valid()` to verify facet addresses
-  - [ ] 3.11 Generate invariant function: `echidna_test_integrity()` to verify test contract integrity
-  - [ ] 3.12 Write generated contract to `test/fuzzing/generated/[DiamondName]Test.sol`
-  - [ ] 3.13 Ensure generated contracts use Solidity 0.8.x syntax
-  - [ ] 3.14 Add comments to generated contract explaining purpose and structure
-  - [ ] 3.15 Integrate generation logic into MedusaFuzzingFramework.generateTestContract()
+- [x] 3.0 Implement Solidity test contract generation
+  - [x] 3.1 Create `scripts/utils/medusaHelpers.ts` for utility functions
+  - [x] 3.2 Implement function `generateSolidityTestContract()` that accepts Diamond data and target functions
+  - [x] 3.3 Generate Solidity contract header with SPDX license and pragma
+  - [x] 3.4 Generate constructor that verifies Diamond contract exists at deployment address
+  - [x] 3.5 Add Diamond address as constant in generated contract
+  - [x] 3.6 Generate fuzzing functions for each configured facet function with randomized parameters
+  - [x] 3.7 Implement low-level `call()` wrapper function for calling Diamond contract
+  - [x] 3.8 Add tracking for call success/failure statistics
+  - [x] 3.9 Generate invariant function: `echidna_diamond_exists()` to verify Diamond code exists
+  - [x] 3.10 Generate invariant function: `echidna_facets_valid()` to verify facet addresses
+  - [x] 3.11 Generate invariant function: `echidna_test_integrity()` to verify test contract integrity
+  - [x] 3.12 Write generated contract to `test/fuzzing/generated/[DiamondName]Test.sol`
+  - [x] 3.13 Ensure generated contracts use Solidity 0.8.x syntax
+  - [x] 3.14 Add comments to generated contract explaining purpose and structure
+  - [x] 3.15 Integrate generation logic into MedusaFuzzingFramework.generateTestContract()
 
 - [ ] 4.0 Create Hardhat task for fuzzing
   - [ ] 4.1 Create `tasks/medusa.ts` file for task definitions
