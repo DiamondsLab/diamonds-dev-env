@@ -79,7 +79,7 @@ task('medusa:fuzz', 'Run Medusa fuzzing tests on Diamond contract')
 
 			console.log(chalk.blue('\n🔧 Initializing fuzzing framework...'));
 			const { MedusaFuzzingFramework } = await import(
-				'../dist/scripts/setup/MedusaFuzzingFramework.js'
+				'../scripts/setup/MedusaFuzzingFramework.js'
 			);
 			const chainId = (await provider.getNetwork()).chainId;
 			const diamondConfigPath = path.join(
