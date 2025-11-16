@@ -2,9 +2,10 @@
 
 ## Relevant Files
 
-- `scripts/setup/ForgeFuzzingFramework.ts` - Main fuzzing framework class that integrates with LocalDiamondDeployer (CREATED)
+- `scripts/setup/ForgeFuzzingFramework.ts` - Main fuzzing framework class that integrates with LocalDiamondDeployer (CREATED, UPDATED)
 - `scripts/setup/ForgeFuzzingFramework.test.ts` - Unit tests for the fuzzing framework (CREATED)
-- `scripts/utils/forgeHelpers.ts` - Utility functions for Solidity helper library generation and Forge configuration
+- `scripts/utils/forgeHelpers.ts` - Utility functions for Solidity helper library generation and Forge configuration (CREATED)
+- `tasks/forge.ts` - Hardhat task definitions for Forge fuzzing operations
 - `tasks/forge.ts` - Hardhat task definitions for Forge fuzzing operations
 - `test/foundry/helpers/DiamondDeployment.sol` - Auto-generated Solidity library with deployment data
 - `test/foundry/helpers/DiamondFuzzBase.sol` - Base contract for Diamond fuzzing tests with common utilities
@@ -50,21 +51,21 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.12 Create unit tests in `scripts/setup/ForgeFuzzingFramework.test.ts`
 
 - [ ] 2.0 Implement Solidity helper library generation utilities
-  - [ ] 2.1 Create `scripts/utils/forgeHelpers.ts` for utility functions
-  - [ ] 2.2 Implement function `generateSolidityHelperLibrary()` that accepts DeployedDiamondData
-  - [ ] 2.3 Generate Solidity library header with SPDX license, pragma 0.8.19+, and metadata comments
-  - [ ] 2.4 Add Diamond address as constant `DIAMOND_ADDRESS`
-  - [ ] 2.5 Generate constants for all facet addresses (e.g., `OWNERSHIP_FACET`, `UPGRADE_FACET`)
-  - [ ] 2.6 Generate constants for function selectors per facet from deployment record's registered selectors
-  - [ ] 2.7 Implement helper function `getDiamondAddress()` returning Diamond address
-  - [ ] 2.8 Implement helper function `getFacetAddress(string memory facetName)` with if/else for each facet
-  - [ ] 2.9 Implement helper function `getSelector(string memory facetName, string memory functionName)` for selector lookup
-  - [ ] 2.10 Add comprehensive comments explaining data source, generation timestamp, and regeneration command
-  - [ ] 2.11 Write generated library to `test/foundry/helpers/DiamondDeployment.sol`
-  - [ ] 2.12 Ensure generated code uses consistent formatting and naming conventions
-  - [ ] 2.13 Create helper directory if it doesn't exist
-  - [ ] 2.14 Integrate generation logic into ForgeFuzzingFramework.generateHelperLibrary()
-  - [ ] 2.15 Add validation to ensure deployment data is complete before generation
+  - [x] 2.1 Create `scripts/utils/forgeHelpers.ts` for utility functions
+  - [x] 2.2 Implement function `generateSolidityHelperLibrary()` that accepts DeployedDiamondData
+  - [x] 2.3 Generate Solidity library header with SPDX license, pragma 0.8.19+, and metadata comments
+  - [x] 2.4 Add Diamond address as constant `DIAMOND_ADDRESS`
+  - [x] 2.5 Generate constants for all facet addresses (e.g., `OWNERSHIP_FACET`, `UPGRADE_FACET`)
+  - [x] 2.6 Generate constants for function selectors per facet from deployment record's registered selectors
+  - [x] 2.7 Implement helper function `getDiamondAddress()` returning Diamond address
+  - [x] 2.8 Implement helper function `getFacetAddress(string memory facetName)` with if/else for each facet
+  - [x] 2.9 Implement helper function `getSelector(string memory facetName, string memory functionName)` for selector lookup
+  - [x] 2.10 Add comprehensive comments explaining data source, generation timestamp, and regeneration command
+  - [x] 2.11 Write generated library to `test/foundry/helpers/DiamondDeployment.sol`
+  - [x] 2.12 Ensure generated code uses consistent formatting and naming conventions
+  - [x] 2.13 Create helper directory if it doesn't exist
+  - [x] 2.14 Integrate generation logic into ForgeFuzzingFramework.generateHelperLibrary()
+  - [x] 2.15 Add validation to ensure deployment data is complete before generation
 
 - [ ] 3.0 Create Hardhat tasks for Forge fuzzing
   - [ ] 3.1 Create `tasks/forge.ts` file for task definitions

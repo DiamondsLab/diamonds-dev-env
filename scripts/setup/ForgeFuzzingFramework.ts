@@ -122,8 +122,36 @@ export class ForgeFuzzingFramework {
 	 * Generate Solidity helper library from deployment data
 	 */
 	public async generateHelperLibrary(): Promise<string> {
-		// Implementation will call forgeHelpers utility
-		throw new Error('Not implemented yet');
+		if (!this.diamond) {
+			throw new Error('Diamond not deployed. Call deployDiamond() first.');
+		}
+
+		const deployedData = this.getDeployedDiamondData();
+
+		// Validate deployment data
+		if (!deployedData.DiamondAddress || deployedData.DiamondAddress === '') {
+			throw new Error('Invalid deployment data: missing Diamond address');
+		}
+
+		if (
+			!deployedData.DeployedFacets ||
+			Object.keys(deployedData.DeployedFacets).length === 0
+		) {
+			throw new Error('Invalid deployment data: no facets deployed');
+		}
+
+		log('Generating Solidity helper library...');
+
+		const { generateSolidityHelperLibrary } = await import('../utils/forgeHelpers.js');
+
+		const outputPath = await generateSolidityHelperLibrary(
+			this.config.diamondName,
+			deployedData.DiamondAddress,
+			deployedData,
+		);
+
+		log('Helper library generated successfully at:', outputPath);
+		return outputPath;
 	}
 
 	/**
