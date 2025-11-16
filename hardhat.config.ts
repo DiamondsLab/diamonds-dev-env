@@ -11,8 +11,7 @@ import 'hardhat-gas-reporter';
 import { HardhatUserConfig } from 'hardhat/config';
 import 'solidity-coverage';
 
-// Import custom tasks
-import './tasks/medusa';
+import './scripts/tasks/medusa';
 
 dotenv.config();
 

@@ -122,4 +122,3 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 6.10 Add fuzzing section to main project README.md
   - [x] 6.11 Document troubleshooting common Medusa issues
   - [x] 6.12 Commit all changes with descriptive commit message
-  - [ ] 6.13 Push feature branch to remote repository
