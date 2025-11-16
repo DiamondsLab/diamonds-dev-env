@@ -11,8 +11,9 @@ import { spawn } from 'child_process';
 import type { Provider, JsonRpcProvider } from 'ethers';
 import debug from 'debug';
 import type { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
-import { LocalDiamondDeployer } from './LocalDiamondDeployer.js';
+import { LocalDiamondDeployer } from './LocalDiamondDeployer';
 import type { Diamond, DeployedDiamondData } from '@diamondslab/diamonds';
+import { generateSolidityHelperLibrary } from '../utils/forgeHelpers';
 
 const log: debug.Debugger = debug('ForgeFuzzingFramework');
 
@@ -142,10 +143,10 @@ export class ForgeFuzzingFramework {
 
 		log('Generating Solidity helper library...');
 
-		const { generateSolidityHelperLibrary } = await import('../utils/forgeHelpers.js');
-
 		const outputPath = await generateSolidityHelperLibrary(
 			this.config.diamondName,
+			this.config.networkName,
+			this.config.chainId,
 			deployedData.DiamondAddress,
 			deployedData,
 		);

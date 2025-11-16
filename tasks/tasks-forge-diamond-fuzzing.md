@@ -68,24 +68,24 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 2.15 Add validation to ensure deployment data is complete before generation
 
 - [ ] 3.0 Create Hardhat tasks for Forge fuzzing
-  - [ ] 3.1 Create `tasks/forge.ts` file for task definitions
-  - [ ] 3.2 Define task `forge:deploy` with description and parameters `--diamond`, `--network`
-  - [ ] 3.3 Implement `forge:deploy` action that instantiates ForgeFuzzingFramework
-  - [ ] 3.4 In `forge:deploy`, deploy Diamond using LocalDiamondDeployer via framework
-  - [ ] 3.5 In `forge:deploy`, generate Solidity helper library after successful deployment
-  - [ ] 3.6 In `forge:deploy`, display deployment summary (Diamond address, facets, network)
-  - [ ] 3.7 Define task `forge:generate-helpers` with parameters `--diamond`, `--network`
-  - [ ] 3.8 Implement `forge:generate-helpers` to regenerate helper library from existing deployment record
-  - [ ] 3.9 Add validation to ensure deployment record exists before generating helpers
-  - [ ] 3.10 Define task `forge:fuzz` with parameters `--diamond`, `--network`, `--match-test` (optional)
-  - [ ] 3.11 Implement `forge:fuzz` to check deployment exists, optionally deploy if missing
-  - [ ] 3.12 In `forge:fuzz`, execute `forge test` with appropriate parameters
-  - [ ] 3.13 Add support for `--force-deploy` flag to force redeployment
-  - [ ] 3.14 Add support for both `--network localhost` and `--network anvil` in all tasks
-  - [ ] 3.15 Configure RPC URLs based on network selection (localhost: http://127.0.0.1:8545, anvil: auto-detect)
-  - [ ] 3.16 Add error handling for missing deployment records and network connection issues
-  - [ ] 3.17 Register tasks in `hardhat.config.ts` by importing `tasks/forge.ts`
-  - [ ] 3.18 Update `package.json` scripts to include shortcuts (e.g., `yarn forge:deploy`, `yarn forge:fuzz`)
+  - [x] 3.1 Create `tasks/forge.ts` file for task definitions
+  - [x] 3.2 Define task `forge:deploy` with description and parameters `--diamond`, `--network`
+  - [x] 3.3 Implement `forge:deploy` action that instantiates ForgeFuzzingFramework
+  - [x] 3.4 In `forge:deploy`, deploy Diamond using LocalDiamondDeployer via framework
+  - [x] 3.5 In `forge:deploy`, generate Solidity helper library after successful deployment
+  - [x] 3.6 In `forge:deploy`, display deployment summary (Diamond address, facets, network)
+  - [x] 3.7 Define task `forge:generate-helpers` with parameters `--diamond`, `--network`
+  - [x] 3.8 Implement `forge:generate-helpers` to regenerate helper library from existing deployment record
+  - [x] 3.9 Add validation to ensure deployment record exists before generating helpers
+  - [x] 3.10 Define task `forge:fuzz` with parameters `--diamond`, `--network`, `--match-test` (optional)
+  - [x] 3.11 Implement `forge:fuzz` to check deployment exists, optionally deploy if missing
+  - [x] 3.12 In `forge:fuzz`, execute `forge test` with appropriate parameters
+  - [x] 3.13 Add support for `--force-deploy` flag to force redeployment
+  - [x] 3.14 Add support for both `--network localhost` and `--network anvil` in all tasks
+  - [x] 3.15 Configure RPC URLs based on network selection (localhost: http://127.0.0.1:8545, anvil: auto-detect)
+  - [x] 3.16 Add error handling for missing deployment records and network connection issues
+  - [x] 3.17 Register tasks in `hardhat.config.ts` by importing `tasks/forge.ts`
+  - [x] 3.18 Update `package.json` scripts to include shortcuts (e.g., `yarn forge:deploy`, `yarn forge:fuzz`)
 
 - [ ] 4.0 Implement comprehensive Forge tests for ExampleDiamond
   - [ ] 4.1 Create `test/foundry/helpers/DiamondFuzzBase.sol` base contract

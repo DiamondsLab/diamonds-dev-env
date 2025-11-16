@@ -12,6 +12,7 @@ import { HardhatUserConfig } from 'hardhat/config';
 import 'solidity-coverage';
 
 import './scripts/tasks/medusa';
+import './tasks/forge';
 
 dotenv.config();
 

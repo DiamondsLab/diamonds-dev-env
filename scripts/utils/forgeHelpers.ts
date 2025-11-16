@@ -17,6 +17,8 @@ const log: debug.Debugger = debug('forgeHelpers');
  */
 export function generateSolidityHelperLibrary(
 	diamondName: string,
+	networkName: string,
+	chainId: bigint | number,
 	diamondAddress: string,
 	deploymentData: DeployedDiamondData,
 	outputPath?: string,
@@ -24,7 +26,7 @@ export function generateSolidityHelperLibrary(
 	log('Generating Solidity helper library for', diamondName);
 
 	const timestamp = new Date().toISOString();
-	const networkInfo = `${deploymentData.networkName ?? 'unknown'}-${deploymentData.chainId ?? 'unknown'}`;
+	const networkInfo = `${networkName}-${chainId}`;
 	const deploymentFileName = `${diamondName.toLowerCase()}-${networkInfo}.json`;
 	const deploymentFilePath = `diamonds/${diamondName}/deployments/${deploymentFileName}`;
 
@@ -67,10 +69,10 @@ export function generateSolidityHelperLibrary(
 	// Add function selectors per facet
 	source += '    // Function selectors\n';
 	for (const [facetName, facetData] of Object.entries(facets)) {
-		if (facetData.functionSelectors && facetData.functionSelectors.length > 0) {
+		if (facetData.funcSelectors && facetData.funcSelectors.length > 0) {
 			source += `    // ${facetName} selectors\n`;
 
-			for (const selector of facetData.functionSelectors) {
+			for (const selector of facetData.funcSelectors) {
 				const selectorName = `${facetName.replace(/Facet$/, '').toUpperCase()}_${selector.replace('0x', 'SEL_')}`;
 				source += `    bytes4 constant ${selectorName} = ${selector};\n`;
 			}

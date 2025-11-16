@@ -5,8 +5,8 @@
 
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
-import { ForgeFuzzingFramework } from './ForgeFuzzingFramework.js';
-import type { ForgeFuzzConfig } from './ForgeFuzzingFramework.js';
+import { ForgeFuzzingFramework } from './ForgeFuzzingFramework';
+import type { ForgeFuzzConfig } from './ForgeFuzzingFramework';
 
 describe('ForgeFuzzingFramework', () => {
 	let config: ForgeFuzzConfig;
