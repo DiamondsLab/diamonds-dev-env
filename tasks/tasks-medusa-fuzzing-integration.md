@@ -109,17 +109,17 @@ Update the file after completing each sub-task, not just after completing an ent
   - [ ] 5.15 Verify corpus directory is created with interesting inputs (blocked by solc-select)
   - [ ] 5.16 Check fuzzing reports are saved to `reports/fuzzing/` (not implemented yet)
 
-- [ ] 6.0 Add .gitignore entries and documentation
-  - [ ] 6.1 Add `medusa.json` to .gitignore
-  - [ ] 6.2 Add `medusa-corpus/` to .gitignore
-  - [ ] 6.3 Add `test/fuzzing/generated/` to .gitignore
-  - [ ] 6.4 Add `.medusa/` to .gitignore (Medusa working directory)
-  - [ ] 6.5 Ensure `reports/fuzzing/` is tracked but contents are optional
-  - [ ] 6.6 Create `test/fuzzing/README.md` documenting fuzzing setup and usage
-  - [ ] 6.7 Document how to configure target functions in fuzzing config
-  - [ ] 6.8 Document available Hardhat task parameters and examples
-  - [ ] 6.9 Document how to interpret fuzzing results and coverage reports
-  - [ ] 6.10 Add fuzzing section to main project README.md
-  - [ ] 6.11 Document troubleshooting common Medusa issues
-  - [ ] 6.12 Commit all changes with descriptive commit message
+- [x] 6.0 Add .gitignore entries and documentation
+  - [x] 6.1 Add `medusa.json` to .gitignore
+  - [x] 6.2 Add `medusa-corpus/` to .gitignore
+  - [x] 6.3 Add `test/fuzzing/generated/` to .gitignore
+  - [x] 6.4 Add `.medusa/` to .gitignore (Medusa working directory)
+  - [x] 6.5 Ensure `reports/fuzzing/` is tracked but contents are optional (added crytic-export/)
+  - [x] 6.6 Create `test/fuzzing/README.md` documenting fuzzing setup and usage
+  - [x] 6.7 Document how to configure target functions in fuzzing config
+  - [x] 6.8 Document available Hardhat task parameters and examples
+  - [x] 6.9 Document how to interpret fuzzing results and coverage reports
+  - [x] 6.10 Add fuzzing section to main project README.md
+  - [x] 6.11 Document troubleshooting common Medusa issues
+  - [x] 6.12 Commit all changes with descriptive commit message
   - [ ] 6.13 Push feature branch to remote repository

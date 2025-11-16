@@ -35,3 +35,10 @@ archive/.env.vault-migrated.20251023_135129
 .yarn/
 dist/
 diamonds/ExampleDiamonds/deployments/examplediamonds*
+
+# Medusa fuzzing artifacts
+medusa.json
+medusa-corpus/
+test/fuzzing/generated/
+crytic-export/
+.medusa/

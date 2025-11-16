@@ -191,6 +191,24 @@ yarn workspace hardhat-diamonds run test:watch
 - Unit tests: `packages/hardhat-diamonds/src/__tests__/`
 - Integration tests: `test/integration/`
 - Contract tests: `test/`
+- **Fuzzing tests**: `test/fuzzing/` - Medusa fuzzing configurations and generated tests
+
+### Fuzzing with Medusa
+
+Run fuzzing tests on Diamond contracts:
+
+```bash
+# Run fuzzing campaign on ExampleDiamond
+npx hardhat medusa:fuzz --diamond ExampleDiamond
+
+# Custom workers and test limits
+npx hardhat medusa:fuzz --diamond YourDiamond --workers 20 --limit 100000
+
+# With timeout (in seconds)
+npx hardhat medusa:fuzz --diamond YourDiamond --timeout 300
+```
+
+See [test/fuzzing/README.md](test/fuzzing/README.md) for detailed fuzzing documentation.
 
 ## 📋 Code Quality
 
