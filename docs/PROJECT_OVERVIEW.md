@@ -1,6 +1,6 @@
 ## Project Overview: Diamonds Dev Env
 
-The repo we are working with is a project called Diamonds Dev Env or Diamonds Development environment. It is built as a monorepo to develop the Ethereum Solidity Smart Contract based ERC-2535 Diamond Proxy management system called Diamonds which are node modules built using typescript and hardhat. The main module, @diamondslab/diamonds node module aka diamonds, is located in the workspace git submodule (`packages/diamonds`).
+The Diamonds Dev Env or Diamonds Development environment is built as a monorepo to develop the Ethereum Solidity Smart Contract based ERC-2535 Diamond Proxy management system called Diamonds. This is made up of a set of node modules built using typescript and hardhat. The main module, @diamondslab/diamonds node module aka diamonds, is located in the workspace git submodule (`packages/diamonds`).
 
 The over all Diamonds Dev Env project is used to work on the Diamonds module and to create resuable functionality associated with the Diamonds module and provide new features that smart contract projects employing the Diamonds node module can use.
 
