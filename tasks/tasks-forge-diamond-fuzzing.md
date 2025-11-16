@@ -2,8 +2,8 @@
 
 ## Relevant Files
 
-- `scripts/setup/ForgeFuzzingFramework.ts` - Main fuzzing framework class that integrates with LocalDiamondDeployer
-- `scripts/setup/ForgeFuzzingFramework.test.ts` - Unit tests for the fuzzing framework
+- `scripts/setup/ForgeFuzzingFramework.ts` - Main fuzzing framework class that integrates with LocalDiamondDeployer (CREATED)
+- `scripts/setup/ForgeFuzzingFramework.test.ts` - Unit tests for the fuzzing framework (CREATED)
 - `scripts/utils/forgeHelpers.ts` - Utility functions for Solidity helper library generation and Forge configuration
 - `tasks/forge.ts` - Hardhat task definitions for Forge fuzzing operations
 - `test/foundry/helpers/DiamondDeployment.sol` - Auto-generated Solidity library with deployment data
@@ -35,18 +35,19 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 0.2 Verify branch creation with `git branch` command
 
 - [ ] 1.0 Create ForgeFuzzingFramework TypeScript class
-  - [ ] 1.1 Create `scripts/setup/ForgeFuzzingFramework.ts` file with class skeleton
-  - [ ] 1.2 Define TypeScript interfaces: `ForgeFuzzConfig`, `ForgeOptions`, mirroring MedusaFuzzingFramework patterns
-  - [ ] 1.3 Implement constructor that accepts ForgeFuzzConfig
-  - [ ] 1.4 Add method `deployDiamond()` that uses LocalDiamondDeployer with `writeDeployedDiamondData: true`
-  - [ ] 1.5 Add method `getDeployedDiamondData()` to retrieve Diamond address, facets, and selectors from deployment record
+  - [x] 1.1 Create `scripts/setup/ForgeFuzzingFramework.ts` file with class skeleton
+  - [x] 1.2 Define TypeScript interfaces: `ForgeFuzzConfig`, `ForgeOptions`, mirroring MedusaFuzzingFramework patterns
+  - [x] 1.3 Implement constructor that accepts ForgeFuzzConfig
+  - [x] 1.3 Implement constructor that accepts ForgeFuzzConfig
+  - [x] 1.4 Add method `deployDiamond()` that uses LocalDiamondDeployer with `writeDeployedDiamondData: true`
+  - [x] 1.5 Add method `getDeployedDiamondData()` to retrieve Diamond address, facets, and selectors from deployment record
   - [ ] 1.6 Add method `generateHelperLibrary()` to create Solidity helper from deployment data (implementation in next task)
-  - [ ] 1.7 Add method `runForgeTests()` to execute Forge via child process
-  - [ ] 1.8 Add method `validateDeployment()` to check if deployment record exists and is valid
-  - [ ] 1.9 Add configuration support for Hardhat node and Anvil networks
-  - [ ] 1.10 Add error handling and validation for all methods
-  - [ ] 1.11 Implement singleton pattern similar to LocalDiamondDeployer (optional but recommended)
-  - [ ] 1.12 Create unit tests in `scripts/setup/ForgeFuzzingFramework.test.ts`
+  - [x] 1.7 Add method `runForgeTests()` to execute Forge via child process
+  - [x] 1.8 Add method `validateDeployment()` to check if deployment record exists and is valid
+  - [x] 1.9 Add configuration support for Hardhat node and Anvil networks
+  - [x] 1.10 Add error handling and validation for all methods
+  - [x] 1.11 Implement singleton pattern similar to LocalDiamondDeployer (optional but recommended)
+  - [x] 1.12 Create unit tests in `scripts/setup/ForgeFuzzingFramework.test.ts`
 
 - [ ] 2.0 Implement Solidity helper library generation utilities
   - [ ] 2.1 Create `scripts/utils/forgeHelpers.ts` for utility functions
