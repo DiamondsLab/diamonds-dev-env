@@ -143,4 +143,4 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 6.15 Verify helper library is correctly generated with all expected data
   - [ ] 6.16 Test framework reusability by simulating setup in a new directory (optional)
   - [x] 6.17 Commit all changes with descriptive commit message
-  - [ ] 6.18 Update main project README if necessary to mention Forge fuzzing capabilities
+  - [x] 6.18 Update main project README if necessary to mention Forge fuzzing capabilities
