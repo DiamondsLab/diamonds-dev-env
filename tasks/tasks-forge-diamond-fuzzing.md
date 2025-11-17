@@ -87,31 +87,31 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 3.17 Register tasks in `hardhat.config.ts` by importing `tasks/forge.ts`
   - [x] 3.18 Update `package.json` scripts to include shortcuts (e.g., `yarn forge:deploy`, `yarn forge:fuzz`)
 
-- [ ] 4.0 Implement comprehensive Forge tests for ExampleDiamond
-  - [ ] 4.1 Create `test/foundry/helpers/DiamondFuzzBase.sol` base contract
-  - [ ] 4.2 In DiamondFuzzBase, import DiamondDeployment library
-  - [ ] 4.3 In DiamondFuzzBase, add helper functions for common Diamond interactions
-  - [ ] 4.4 In DiamondFuzzBase, add utility to call Diamond functions via low-level call with selector
-  - [ ] 4.5 Create `test/foundry/fuzz/ExampleDiamondAccessControl.t.sol` for access control fuzzing
-  - [ ] 4.6 In AccessControl test, implement fuzz test for role granting with random addresses and roles
-  - [ ] 4.7 In AccessControl test, implement fuzz test for role revocation
-  - [ ] 4.8 In AccessControl test, implement fuzz test for role renunciation
-  - [ ] 4.9 In AccessControl test, add checks for unauthorized access attempts (should revert)
-  - [ ] 4.10 Create `test/foundry/fuzz/ExampleDiamondOwnership.t.sol` for ownership fuzzing
-  - [ ] 4.11 In Ownership test, implement fuzz test for ownership transfer with random addresses
-  - [ ] 4.12 In Ownership test, add checks for ownership constraints (e.g., zero address rejection)
-  - [ ] 4.13 Update existing `test/foundry/integration/ExampleDiamondIntegration.t.sol` to use DiamondDeployment library
-  - [ ] 4.14 In integration test, add tests for facet upgrade scenarios using deployment data
-  - [ ] 4.15 Create `test/foundry/invariant/DiamondProxyInvariant.t.sol` for invariant testing
-  - [ ] 4.16 In invariant test, implement invariant: Diamond contract code exists at deployment address
-  - [ ] 4.17 In invariant test, implement invariant: All facet addresses remain valid and have code
-  - [ ] 4.18 In invariant test, implement invariant: Function selectors route to correct facets
-  - [ ] 4.19 In invariant test, implement invariant: Owner address is non-zero and valid
-  - [ ] 4.20 Create `test/foundry/ExampleDiamond.forge.config.json` configuration file
-  - [ ] 4.21 In config file, specify target functions, workers, test limits, and network settings
-  - [ ] 4.22 Add gas profiling tests to measure function call costs
-  - [ ] 4.23 Ensure all tests use `vm.assume()` to constrain fuzz inputs to valid ranges
-  - [ ] 4.24 Run all tests to verify they pass: `forge test -vv`
+- [x] 4.0 Implement comprehensive Forge tests for ExampleDiamond
+  - [x] 4.1 Create `test/foundry/helpers/DiamondFuzzBase.sol` base contract
+  - [x] 4.2 In DiamondFuzzBase, import DiamondDeployment library
+  - [x] 4.3 In DiamondFuzzBase, add helper functions for common Diamond interactions
+  - [x] 4.4 In DiamondFuzzBase, add utility to call Diamond functions via low-level call with selector
+  - [x] 4.5 Create `test/foundry/fuzz/ExampleDiamondAccessControl.t.sol` for access control fuzzing
+  - [x] 4.6 In AccessControl test, implement fuzz test for role granting with random addresses and roles
+  - [x] 4.7 In AccessControl test, implement fuzz test for role revocation
+  - [x] 4.8 In AccessControl test, implement fuzz test for role renunciation
+  - [x] 4.9 In AccessControl test, add checks for unauthorized access attempts (should revert)
+  - [x] 4.10 Create `test/foundry/fuzz/ExampleDiamondOwnership.t.sol` for ownership fuzzing
+  - [x] 4.11 In Ownership test, implement fuzz test for ownership transfer with random addresses
+  - [x] 4.12 In Ownership test, add checks for ownership constraints (e.g., zero address rejection)
+  - [x] 4.13 Update existing `test/foundry/integration/ExampleDiamondIntegration.t.sol` to use DiamondDeployment library
+  - [x] 4.14 In integration test, add tests for facet upgrade scenarios using deployment data
+  - [x] 4.15 Create `test/foundry/invariant/DiamondProxyInvariant.t.sol` for invariant testing
+  - [x] 4.16 In invariant test, implement invariant: Diamond contract code exists at deployment address
+  - [x] 4.17 In invariant test, implement invariant: All facet addresses remain valid and have code
+  - [x] 4.18 In invariant test, implement invariant: Function selectors route to correct facets
+  - [x] 4.19 In invariant test, implement invariant: Owner address is non-zero and valid
+  - [x] 4.20 Create `test/foundry/ExampleDiamond.forge.config.json` configuration file
+  - [x] 4.21 In config file, specify target functions, workers, test limits, and network settings
+  - [x] 4.22 Add gas profiling tests to measure function call costs
+  - [x] 4.23 Ensure all tests use `vm.assume()` to constrain fuzz inputs to valid ranges
+  - [x] 4.24 Run all tests to verify they pass: `forge test -vv`
 
 - [ ] 5.0 Remove deprecated files and update configuration
   - [ ] 5.1 Remove `.forge-diamond-address` file if it exists
