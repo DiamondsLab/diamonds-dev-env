@@ -139,8 +139,8 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 6.11 Add inline JSDoc comments to all ForgeFuzzingFramework methods
   - [x] 6.12 Add inline Solidity comments to generated helper library explaining each section
   - [x] 6.13 Create README in `test/foundry/` explaining test structure and usage
-  - [ ] 6.14 Run final validation: deploy ExampleDiamond and run all Forge tests
-  - [ ] 6.15 Verify helper library is correctly generated with all expected data
+  - [x] 6.14 Run final validation: deploy ExampleDiamond and run all Forge tests
+  - [x] 6.15 Verify helper library is correctly generated with all expected data
   - [ ] 6.16 Test framework reusability by simulating setup in a new directory (optional)
-  - [ ] 6.17 Commit all changes with descriptive commit message
+  - [x] 6.17 Commit all changes with descriptive commit message
   - [ ] 6.18 Update main project README if necessary to mention Forge fuzzing capabilities

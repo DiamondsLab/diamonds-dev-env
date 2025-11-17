@@ -36,8 +36,9 @@ diamonds-dev-env/
 ### Development Environment
 
 - **🏗️ Yarn Workspaces**: Monorepo structure for managing multiple packages
-- **🧪 Comprehensive Testing**: Unit tests, integration tests, and coverage reporting
-- **� TypeScript Support**: Full type safety with modern TypeScript features
+- **🧪 Comprehensive Testing**: Unit tests, integration tests, fuzz tests, and coverage reporting
+- **🔍 Advanced Fuzzing**: Medusa and Forge fuzzing frameworks for comprehensive security testing
+- **🛠️ TypeScript Support**: Full type safety with modern TypeScript features
 - **📋 Code Quality**: ESLint, Prettier, and Husky for code formatting and git hooks
 - **🚀 CI/CD Pipeline**: Automated testing, building, and publishing via GitHub Actions
 - **📦 Professional Packaging**: Ready for NPM publication with proper versioning
@@ -192,6 +193,7 @@ yarn workspace hardhat-diamonds run test:watch
 - Integration tests: `test/integration/`
 - Contract tests: `test/`
 - **Fuzzing tests**: `test/fuzzing/` - Medusa fuzzing configurations and generated tests
+- **Forge tests**: `test/foundry/` - Foundry fuzz, integration, and invariant tests
 
 ### Fuzzing with Medusa
 
@@ -209,6 +211,23 @@ npx hardhat medusa:fuzz --diamond YourDiamond --timeout 300
 ```
 
 See [test/fuzzing/README.md](test/fuzzing/README.md) for detailed fuzzing documentation.
+
+### Fuzzing with Forge
+
+Run Foundry-based fuzz, integration, and invariant tests:
+
+```bash
+# Deploy diamond and generate helper library
+npx hardhat forge:deploy --diamond ExampleDiamond
+
+# Run all Forge tests (fuzz + integration + invariant)
+npx hardhat forge:fuzz --diamond ExampleDiamond
+
+# Generate Solidity helpers for deployed diamond
+npx hardhat forge:generate-helpers --diamond ExampleDiamond
+```
+
+See [docs/FORGE_FUZZING_GUIDE.md](docs/FORGE_FUZZING_GUIDE.md) for comprehensive documentation on the Forge fuzzing framework.
 
 ## 📋 Code Quality
 
