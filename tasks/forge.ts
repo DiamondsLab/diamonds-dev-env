@@ -25,8 +25,9 @@ task('forge:deploy', 'Deploy Diamond for Forge fuzzing tests')
 		const { diamond, targetNetwork, force } = taskArgs;
 
 		// Dynamic import to avoid circular dependency
-		// @ts-expect-error - Hardhat ts-node doesn't use .js extensions
+		// Hardhat ts-node doesn't use .js extensions
 		const { ForgeFuzzingFramework } = await import(
+			// @ts-ignore
 			'../scripts/setup/ForgeFuzzingFramework'
 		);
 
@@ -119,8 +120,9 @@ task('forge:generate-helpers', 'Generate Solidity helper library from Diamond de
 		const { diamond, targetNetwork } = taskArgs;
 
 		// Dynamic import to avoid circular dependency
-		// @ts-expect-error - Hardhat ts-node doesn't use .js extensions
+		// Hardhat ts-node doesn't use .js extensions
 		const { ForgeFuzzingFramework } = await import(
+			// @ts-ignore
 			'../scripts/setup/ForgeFuzzingFramework'
 		);
 
@@ -184,8 +186,9 @@ task('forge:fuzz', 'Run Forge fuzzing tests for Diamond')
 		const { diamond, targetNetwork, matchTest, force } = taskArgs;
 
 		// Dynamic import to avoid circular dependency
-		// @ts-expect-error - Hardhat ts-node doesn't use .js extensions
+		// Hardhat ts-node doesn't use .js extensions
 		const { ForgeFuzzingFramework } = await import(
+			// @ts-ignore
 			'../scripts/setup/ForgeFuzzingFramework'
 		);
 
