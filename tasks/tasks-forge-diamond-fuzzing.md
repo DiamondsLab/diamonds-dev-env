@@ -125,20 +125,20 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 5.9 Update existing Foundry tests to use new helper library if applicable
   - [x] 5.10 Run all tests (Hardhat + Forge) to ensure nothing broke: `yarn test:all`
 
-- [ ] 6.0 Add documentation and finalize framework
-  - [ ] 6.1 Create `docs/FORGE_FUZZING_GUIDE.md` comprehensive guide
-  - [ ] 6.2 In guide, document framework architecture and design decisions
-  - [ ] 6.3 In guide, document workflow: deploy → generate helpers → run tests
-  - [ ] 6.4 In guide, provide examples of all task usages (`forge:deploy`, `forge:fuzz`, etc.)
-  - [ ] 6.5 In guide, document how to use DiamondDeployment library in tests
-  - [ ] 6.6 In guide, provide example test patterns (unit, integration, invariant)
-  - [ ] 6.7 In guide, document network options (Hardhat node vs Anvil)
-  - [ ] 6.8 In guide, document how to copy framework to new Diamond projects
-  - [ ] 6.9 In guide, add troubleshooting section for common issues
-  - [ ] 6.10 Update `docs/FOUNDRY_GUIDE.md` to reference new Forge fuzzing framework
-  - [ ] 6.11 Add inline JSDoc comments to all ForgeFuzzingFramework methods
-  - [ ] 6.12 Add inline Solidity comments to generated helper library explaining each section
-  - [ ] 6.13 Create README in `test/foundry/` explaining test structure and usage
+- [x] 6.0 Add documentation and finalize framework
+  - [x] 6.1 Create `docs/FORGE_FUZZING_GUIDE.md` comprehensive guide
+  - [x] 6.2 In guide, document framework architecture and design decisions
+  - [x] 6.3 In guide, document workflow: deploy → generate helpers → run tests
+  - [x] 6.4 In guide, provide examples of all task usages (`forge:deploy`, `forge:fuzz`, etc.)
+  - [x] 6.5 In guide, document how to use DiamondDeployment library in tests
+  - [x] 6.6 In guide, provide example test patterns (unit, integration, invariant)
+  - [x] 6.7 In guide, document network options (Hardhat node vs Anvil)
+  - [x] 6.8 In guide, document how to copy framework to new Diamond projects
+  - [x] 6.9 In guide, add troubleshooting section for common issues
+  - [x] 6.10 Update `docs/FOUNDRY_GUIDE.md` to reference new Forge fuzzing framework
+  - [x] 6.11 Add inline JSDoc comments to all ForgeFuzzingFramework methods
+  - [x] 6.12 Add inline Solidity comments to generated helper library explaining each section
+  - [x] 6.13 Create README in `test/foundry/` explaining test structure and usage
   - [ ] 6.14 Run final validation: deploy ExampleDiamond and run all Forge tests
   - [ ] 6.15 Verify helper library is correctly generated with all expected data
   - [ ] 6.16 Test framework reusability by simulating setup in a new directory (optional)

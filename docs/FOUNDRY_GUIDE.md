@@ -11,6 +11,7 @@ This project is configured as a hybrid **Hardhat + Foundry** development environ
 - [Testing](#testing)
 - [Building and Compiling](#building-and-compiling)
 - [Available Scripts](#available-scripts)
+- [Forge Fuzzing Framework](#forge-fuzzing-framework)
 - [Best Practices](#best-practices)
 - [Common Patterns](#common-patterns)
 - [Troubleshooting](#troubleshooting)
@@ -209,6 +210,11 @@ yarn forge:snapshot           # Create gas snapshots
 yarn forge:clean              # Clean Forge artifacts
 yarn forge:fmt                # Format Solidity code
 yarn forge:fmt:check          # Check Solidity formatting
+
+# Forge Fuzzing Framework (New)
+yarn forge:deploy             # Deploy Diamond and generate test helpers
+yarn forge:fuzz               # Run Forge fuzzing tests
+yarn forge:generate-helpers   # Regenerate helper libraries
 ```
 
 ### Combined Scripts
@@ -352,12 +358,107 @@ yarn forge:test
 - Test directory: `test/foundry/`
 - Cache directory: `cache_forge/`
 - Output directory: `out/`
+- Remappings include `@helpers/` for auto-generated test libraries
 
 ### hardhat.config.ts
 
 - Maintains existing Hardhat configuration
 - Diamond-specific plugins configured
 - Network configurations for deployment
+- Forge tasks registered via `import './tasks/forge'`
+
+---
+
+## Forge Fuzzing Framework
+
+This project includes a comprehensive **Forge Fuzzing Framework** for testing Diamond contracts with advanced fuzzing capabilities.
+
+### Quick Start
+
+```bash
+# 1. Start a local network
+npx hardhat node
+
+# 2. Deploy Diamond and generate test helpers
+yarn forge:deploy
+
+# 3. Run fuzzing tests
+yarn forge:fuzz
+```
+
+### Features
+
+- **Integrated Deployment**: Uses `LocalDiamondDeployer` for consistent Diamond deployment
+- **Auto-Generated Helpers**: Creates `DiamondDeployment.sol` library with addresses and selectors
+- **Comprehensive Tests**: Includes fuzz, integration, and invariant test patterns
+- **Multi-Network Support**: Works with Hardhat node, localhost, and Anvil
+
+### Framework Components
+
+| Component               | Purpose                                               |
+| ----------------------- | ----------------------------------------------------- |
+| `ForgeFuzzingFramework` | TypeScript class orchestrating deployment and testing |
+| `DiamondDeployment.sol` | Auto-generated library with deployment data           |
+| `DiamondFuzzBase.sol`   | Base contract with helper functions for tests         |
+| `forge:deploy` task     | Deploy Diamond and generate helpers                   |
+| `forge:fuzz` task       | Run comprehensive Forge test suite                    |
+
+### Test Structure
+
+```
+test/foundry/
+├── helpers/
+│   ├── DiamondDeployment.sol      # Auto-generated (DO NOT EDIT)
+│   ├── DiamondFuzzBase.sol        # Base contract for tests
+│   └── DiamondABILoader.sol       # ABI parsing utilities
+├── fuzz/
+│   ├── ExampleDiamondAccessControl.t.sol   # Access control fuzzing
+│   └── ExampleDiamondOwnership.t.sol       # Ownership fuzzing
+├── integration/
+│   └── ExampleDiamondIntegrationDeployed.t.sol  # Integration tests
+├── invariant/
+│   └── DiamondProxyInvariant.t.sol         # Invariant tests
+└── ExampleDiamond.forge.config.json        # Forge fuzzing config
+```
+
+### Writing Fuzz Tests
+
+Example fuzz test using the framework:
+
+```solidity
+import "../helpers/DiamondFuzzBase.sol";
+
+contract MyFuzzTest is DiamondFuzzBase {
+    function setUp() public override {
+        super.setUp(); // Loads Diamond address and ABI
+    }
+
+    function testFuzz_MyFunction(address user, uint256 amount) public {
+        vm.assume(user != address(0));
+        vm.assume(amount > 0 && amount < 1e18);
+
+        bytes4 selector = bytes4(keccak256("myFunction(address,uint256)"));
+        (bool success, ) = _callDiamond(selector, abi.encode(user, amount));
+
+        assertTrue(success);
+    }
+}
+```
+
+### Complete Documentation
+
+For comprehensive documentation on the Forge Fuzzing Framework, including:
+
+- Detailed architecture explanation
+- Task reference and options
+- Writing different test types (fuzz, integration, invariant)
+- Network configuration
+- Reusability guide for new projects
+- Troubleshooting common issues
+
+**See**: [FORGE_FUZZING_GUIDE.md](./FORGE_FUZZING_GUIDE.md)
+
+---
 
 ## Additional Resources
 

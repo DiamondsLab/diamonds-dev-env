@@ -61,6 +61,26 @@ export class ForgeFuzzingFramework {
 
 	/**
 	 * Get or create singleton instance of ForgeFuzzingFramework
+	 *
+	 * @param config - Configuration for the fuzzing framework
+	 * @param config.diamondName - Name of the Diamond contract (e.g., "ExampleDiamond")
+	 * @param config.networkName - Network name (e.g., "localhost", "hardhat", "anvil")
+	 * @param config.provider - Ethers provider instance
+	 * @param config.chainId - Chain ID of the network
+	 * @param config.configFilePath - Path to Diamond configuration JSON file
+	 * @param config.forgeOptions - Optional Forge test execution options
+	 * @param config.writeDeployedDiamondData - Whether to write deployment record (default: true)
+	 * @param config.rpcUrl - Optional RPC URL override
+	 * @param config.forceRedeploy - Force new instance even if one exists
+	 * @returns Promise resolving to ForgeFuzzingFramework instance
+	 * @example
+	 * const framework = await ForgeFuzzingFramework.getInstance({
+	 *   diamondName: "ExampleDiamond",
+	 *   networkName: "localhost",
+	 *   provider: ethers.provider,
+	 *   chainId: 31337,
+	 *   configFilePath: "diamonds/ExampleDiamond/examplediamond.config.json"
+	 * });
 	 */
 	public static async getInstance(config: ForgeFuzzConfig): Promise<ForgeFuzzingFramework> {
 		const key = `${config.diamondName}-${config.networkName}-${config.chainId}`;
@@ -79,6 +99,16 @@ export class ForgeFuzzingFramework {
 
 	/**
 	 * Deploy the Diamond contract using LocalDiamondDeployer
+	 *
+	 * Deploys the Diamond contract to the configured network using the existing
+	 * LocalDiamondDeployer infrastructure. Creates a deployment record at
+	 * `diamonds/{DiamondName}/deployments/{name}-{network}-{chainId}.json`
+	 *
+	 * @returns Promise resolving to deployed Diamond instance
+	 * @throws Error if deployment fails
+	 * @example
+	 * const diamond = await framework.deployDiamond();
+	 * console.log("Diamond deployed at:", diamond.getDeployedDiamondData().DiamondAddress);
 	 */
 	public async deployDiamond(): Promise<Diamond> {
 		if (this.diamond && !this.config.forceRedeploy) {
@@ -107,6 +137,19 @@ export class ForgeFuzzingFramework {
 
 	/**
 	 * Get deployed Diamond data including address, facets, and selectors from deployment record
+	 *
+	 * Retrieves comprehensive deployment information including:
+	 * - Diamond contract address
+	 * - Facet addresses and function selectors
+	 * - Protocol version
+	 * - Deployment metadata
+	 *
+	 * @returns DeployedDiamondData object with all deployment information
+	 * @throws Error if Diamond not deployed yet
+	 * @example
+	 * const data = framework.getDeployedDiamondData();
+	 * console.log("Diamond:", data.DiamondAddress);
+	 * console.log("Facets:", Object.keys(data.DeployedFacets));
 	 */
 	public getDeployedDiamondData(): DeployedDiamondData {
 		if (!this.diamond) {
@@ -120,6 +163,20 @@ export class ForgeFuzzingFramework {
 
 	/**
 	 * Generate Solidity helper library from deployment data
+	 *
+	 * Creates `test/foundry/helpers/DiamondDeployment.sol` library containing:
+	 * - Diamond address constant
+	 * - Facet address constants
+	 * - Function selector constants
+	 * - Helper functions for accessing deployment data
+	 *
+	 * This file is auto-generated and should not be edited manually.
+	 *
+	 * @returns Promise resolving to path of generated library file
+	 * @throws Error if Diamond not deployed or deployment data invalid
+	 * @example
+	 * const path = await framework.generateHelperLibrary();
+	 * console.log("Helper library generated at:", path);
 	 */
 	public async generateHelperLibrary(): Promise<string> {
 		if (!this.diamond) {
@@ -156,6 +213,17 @@ export class ForgeFuzzingFramework {
 
 	/**
 	 * Execute Forge tests via child process
+	 *
+	 * Runs `forge test` with configured options including:
+	 * - Verbosity level
+	 * - Test name filtering
+	 * - Worker count
+	 * - RPC URL for network connection
+	 *
+	 * @returns Promise that resolves when tests complete successfully
+	 * @throws Error if tests fail or Forge cannot be started
+	 * @example
+	 * await framework.runForgeTests();
 	 */
 	public async runForgeTests(): Promise<void> {
 		const options = this.config.forgeOptions ?? {};
@@ -203,6 +271,20 @@ export class ForgeFuzzingFramework {
 
 	/**
 	 * Validate that deployment record exists and is valid
+	 *
+	 * Checks:
+	 * - Deployment record file exists at expected path
+	 * - Record is readable and parseable
+	 * - Diamond address is non-zero
+	 * - Facet data is present
+	 *
+	 * @returns true if deployment is valid, false otherwise
+	 * @example
+	 * if (framework.validateDeployment()) {
+	 *   console.log("Deployment validated successfully");
+	 * } else {
+	 *   console.log("Deployment not found or invalid");
+	 * }
 	 */
 	public validateDeployment(): boolean {
 		try {
@@ -238,7 +320,14 @@ export class ForgeFuzzingFramework {
 	}
 
 	/**
-	 * Set verbose logging
+	 * Set verbose logging mode
+	 *
+	 * Controls whether framework logs detailed information during operations.
+	 * Applies to both framework operations and underlying LocalDiamondDeployer.
+	 *
+	 * @param verbose - true to enable verbose logging, false to disable
+	 * @example
+	 * framework.setVerbose(false); // Disable verbose output
 	 */
 	public setVerbose(verbose: boolean): void {
 		this.verbose = verbose;
@@ -246,6 +335,19 @@ export class ForgeFuzzingFramework {
 
 	/**
 	 * Run complete fuzzing workflow: deploy, generate helpers, and run tests
+	 *
+	 * Executes the full fuzzing campaign in sequence:
+	 * 1. Validates configuration
+	 * 2. Deploys Diamond (if not already deployed or force redeploy)
+	 * 3. Generates Solidity helper library
+	 * 4. Runs Forge tests
+	 *
+	 * This is a convenience method that combines all steps into one call.
+	 *
+	 * @returns Promise that resolves when entire campaign completes
+	 * @throws Error if any step fails
+	 * @example
+	 * await framework.runFuzzingCampaign();
 	 */
 	public async runFuzzingCampaign(): Promise<void> {
 		try {
