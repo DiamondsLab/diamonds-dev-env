@@ -15,7 +15,7 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
         // Diamond address should be loaded from DiamondDeployment library
         assertTrue(diamond != address(0), "Diamond should have valid address");
         assertTrue(diamond.code.length > 0, "Diamond should have code");
-        
+
         console.log("Deployed Diamond verified at:", diamond);
     }
 
@@ -24,22 +24,27 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
     function test_DeployedFacetsIntrospection() public view {
         // Call facets() via DiamondLoupe
         bytes4 selector = bytes4(keccak256("facets()"));
-        (bool success, bytes memory returnData) = diamond.staticcall(abi.encodeWithSelector(selector));
-        
+        (bool success, bytes memory returnData) = diamond.staticcall(
+            abi.encodeWithSelector(selector)
+        );
+
         assertTrue(success, "facets() call should succeed");
-        
+
         // Decode facet data
         IDiamondLoupe.Facet[] memory facets = abi.decode(returnData, (IDiamondLoupe.Facet[]));
-        
+
         // Should have multiple facets
         assertGt(facets.length, 0, "Should have at least one facet");
-        
+
         console.log("Total facets deployed:", facets.length);
-        
+
         // Verify each facet has selectors
         for (uint256 i = 0; i < facets.length; i++) {
             assertGt(facets[i].functionSelectors.length, 0, "Each facet should have selectors");
-            assertTrue(facets[i].facetAddress != address(0), "Each facet should have valid address");
+            assertTrue(
+                facets[i].facetAddress != address(0),
+                "Each facet should have valid address"
+            );
             console.log("Facet address:", facets[i].facetAddress);
         }
     }
@@ -49,17 +54,17 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
     function test_FacetAddressLookup() public view {
         // Get all selectors
         bytes4[] memory selectors = _getDiamondSelectors();
-        
+
         assertGt(selectors.length, 0, "Should have selectors");
-        
+
         // Test first few selectors
         uint256 testCount = selectors.length < 5 ? selectors.length : 5;
-        
+
         for (uint256 i = 0; i < testCount; i++) {
             address facetAddr = _verifyFacetRouting(selectors[i], address(0));
             assertTrue(facetAddr != address(0), "Selector should route to valid facet");
         }
-        
+
         console.log("Verified facet routing for", testCount, "selectors");
     }
 
@@ -67,9 +72,9 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
     /// @dev Task 4.13: Verify ownership functions work on deployed Diamond
     function test_DeployedDiamondOwner() public view {
         address owner = _getDiamondOwner();
-        
+
         assertNotEq(owner, address(0), "Owner should not be zero address");
-        
+
         console.log("Diamond owner:", owner);
     }
 
@@ -81,25 +86,25 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
         (bool success, bytes memory returnData) = diamond.staticcall(
             abi.encodeWithSelector(facetAddressesSelector)
         );
-        
+
         assertTrue(success, "facetAddresses() should succeed");
-        
+
         address[] memory facetAddresses = abi.decode(returnData, (address[]));
         assertGt(facetAddresses.length, 0, "Should have facet addresses");
-        
+
         // For each facet, get its selectors
         bytes4 facetFuncSelectorsSelector = bytes4(keccak256("facetFunctionSelectors(address)"));
-        
+
         for (uint256 i = 0; i < facetAddresses.length; i++) {
             (bool selectorsSuccess, bytes memory selectorsData) = diamond.staticcall(
                 abi.encodeWithSelector(facetFuncSelectorsSelector, facetAddresses[i])
             );
-            
+
             assertTrue(selectorsSuccess, "facetFunctionSelectors() should succeed");
-            
+
             bytes4[] memory selectors = abi.decode(selectorsData, (bytes4[]));
             assertGt(selectors.length, 0, "Each facet should have selectors");
-            
+
             console.log("Facet has functions:", selectors.length);
         }
     }
@@ -108,22 +113,22 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
     /// @dev Task 4.13: Cross-check ABI selectors with on-chain selectors
     function test_SelectorsMatchOnChain() public view {
         bytes4[] memory abiSelectors = _getDiamondSelectors();
-        
+
         // Verify each selector routes to a valid facet
         for (uint256 i = 0; i < abiSelectors.length; i++) {
             bytes4 selector = abiSelectors[i];
-            
+
             bytes4 facetAddressSelector = bytes4(keccak256("facetAddress(bytes4)"));
             (bool success, bytes memory returnData) = diamond.staticcall(
                 abi.encodeWithSelector(facetAddressSelector, selector)
             );
-            
+
             assertTrue(success, "facetAddress lookup should succeed");
-            
+
             address facetAddr = abi.decode(returnData, (address));
             assertTrue(facetAddr != address(0), "Selector should have valid facet");
         }
-        
+
         console.log("All", abiSelectors.length, "selectors validated on-chain");
     }
 
@@ -133,9 +138,9 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
         // Test gas for owner() call
         bytes4 ownerSelector = bytes4(keccak256("owner()"));
         uint256 gasUsed = _measureDiamondGas(ownerSelector, "");
-        
+
         console.log("Gas for owner() call:", gasUsed);
-        
+
         // Should be reasonable (Diamond proxy adds ~2k gas overhead)
         assertLt(gasUsed, 10000, "owner() should use less than 10k gas");
     }
@@ -148,20 +153,23 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
         (bool success, bytes memory returnData) = diamond.staticcall(
             abi.encodeWithSelector(facetsSelector)
         );
-        
+
         assertTrue(success, "facets() should succeed");
-        
-        IDiamondLoupe.Facet[] memory currentFacets = abi.decode(returnData, (IDiamondLoupe.Facet[]));
-        
+
+        IDiamondLoupe.Facet[] memory currentFacets = abi.decode(
+            returnData,
+            (IDiamondLoupe.Facet[])
+        );
+
         // Verify we have facets that could be upgraded
         assertGt(currentFacets.length, 0, "Should have facets to upgrade");
-        
+
         // Log facet information for upgrade planning
         for (uint256 i = 0; i < currentFacets.length; i++) {
             console.log("Facet address:", currentFacets[i].facetAddress);
             console.log("Function count:", currentFacets[i].functionSelectors.length);
         }
-        
+
         // Note: Actual upgrade would require:
         // 1. Deploy new facet version
         // 2. Create FacetCut with Replace action
@@ -174,11 +182,11 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
     function test_SupportsERC165() public view {
         bytes4 erc165Selector = bytes4(keccak256("supportsInterface(bytes4)"));
         bytes4 erc165InterfaceId = 0x01ffc9a7;
-        
+
         (bool success, bytes memory returnData) = diamond.staticcall(
             abi.encodeWithSelector(erc165Selector, erc165InterfaceId)
         );
-        
+
         if (success) {
             bool supportsERC165 = abi.decode(returnData, (bool));
             assertTrue(supportsERC165, "Should support ERC165");
@@ -193,11 +201,11 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
     function test_ConstantsFacet() public view {
         // Try to call a constants function
         bytes4 selector = bytes4(keccak256("getMaxSupply()"));
-        
+
         (bool success, bytes memory returnData) = diamond.staticcall(
             abi.encodeWithSelector(selector)
         );
-        
+
         if (success) {
             uint256 maxSupply = abi.decode(returnData, (uint256));
             assertGt(maxSupply, 0, "Max supply should be positive");
@@ -212,14 +220,14 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
     function test_CannotReinitialize() public {
         // Try to call init function (if it exists)
         bytes4 initSelector = bytes4(keccak256("init()"));
-        
-        (bool success,) = diamond.call(abi.encodeWithSelector(initSelector));
-        
+
+        (bool success, ) = diamond.call(abi.encodeWithSelector(initSelector));
+
         // Should either:
         // 1. Revert (protected against re-initialization)
         // 2. Not exist (function not found)
         // Either is acceptable - we just log the result
-        
+
         if (success) {
             console.log("Warning: init() succeeded - may lack re-init protection");
         } else {

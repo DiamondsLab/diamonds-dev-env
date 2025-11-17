@@ -17,7 +17,10 @@ library DiamondDeployment {
      * @return The address of the deployed Diamond
      */
     function getDiamondAddress() internal pure returns (address) {
-        require(DIAMOND_ADDRESS != address(0), "DiamondDeployment: No deployment found - run forge:deploy first");
+        require(
+            DIAMOND_ADDRESS != address(0),
+            "DiamondDeployment: No deployment found - run forge:deploy first"
+        );
         return DIAMOND_ADDRESS;
     }
 
@@ -38,7 +41,10 @@ library DiamondDeployment {
      * @param functionName The name of the function
      * @return The function selector (returns bytes4(0) if not found)
      */
-    function getSelector(string memory facetName, string memory functionName) internal pure returns (bytes4) {
+    function getSelector(
+        string memory facetName,
+        string memory functionName
+    ) internal pure returns (bytes4) {
         // Placeholder - will be populated during generation
         facetName; // silence unused warning
         functionName; // silence unused warning

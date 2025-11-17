@@ -264,7 +264,9 @@ abstract contract DiamondFuzzBase is Test {
     /// @dev Task 4.3: Helper to access deployment data from generated library
     /// @param facetName The name of the facet (e.g., "ExampleOwnershipFacet")
     /// @return facetAddress The address of the facet
-    function _getFacetAddress(string memory facetName) internal pure returns (address facetAddress) {
+    function _getFacetAddress(
+        string memory facetName
+    ) internal pure returns (address facetAddress) {
         return DiamondDeployment.getFacetAddress(facetName);
     }
 
@@ -273,7 +275,10 @@ abstract contract DiamondFuzzBase is Test {
     /// @param facetName The name of the facet
     /// @param functionName The name of the function
     /// @return selector The function selector
-    function _getSelector(string memory facetName, string memory functionName) internal pure returns (bytes4 selector) {
+    function _getSelector(
+        string memory facetName,
+        string memory functionName
+    ) internal pure returns (bytes4 selector) {
         return DiamondDeployment.getSelector(facetName, functionName);
     }
 
@@ -291,7 +296,7 @@ abstract contract DiamondFuzzBase is Test {
     ) internal returns (bool success, bytes memory returnData) {
         bytes4 selector = DiamondDeployment.getSelector(facetName, functionName);
         require(selector != bytes4(0), "DiamondFuzzBase: Function selector not found");
-        
+
         return _callDiamond(selector, args);
     }
 
@@ -300,7 +305,7 @@ abstract contract DiamondFuzzBase is Test {
     function setUp() public virtual {
         // Load Diamond address from DiamondDeployment library
         diamond = _loadDiamondAddress();
-        
+
         // Verify Diamond has code deployed
         require(diamond.code.length > 0, "DiamondFuzzBase: Diamond has no code");
 

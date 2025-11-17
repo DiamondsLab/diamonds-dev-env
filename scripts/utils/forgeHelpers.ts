@@ -4,10 +4,10 @@
  * Generates Solidity helper libraries from Diamond deployment data
  */
 
-import { writeFileSync, mkdirSync, existsSync } from 'fs';
-import { join } from 'path';
 import type { DeployedDiamondData } from '@diamondslab/diamonds';
 import debug from 'debug';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { join } from 'path';
 
 const log: debug.Debugger = debug('forgeHelpers');
 

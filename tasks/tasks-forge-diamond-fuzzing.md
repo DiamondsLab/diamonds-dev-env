@@ -113,17 +113,17 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 4.23 Ensure all tests use `vm.assume()` to constrain fuzz inputs to valid ranges
   - [x] 4.24 Run all tests to verify they pass: `forge test -vv`
 
-- [ ] 5.0 Remove deprecated files and update configuration
-  - [ ] 5.1 Remove `.forge-diamond-address` file if it exists
-  - [ ] 5.2 Remove `scripts/test-deploy-diamond.ts` file
-  - [ ] 5.3 Remove `scripts/foundry/deploy-for-tests.sh` file
-  - [ ] 5.4 Remove `scripts/foundry/` directory if now empty
-  - [ ] 5.5 Update `.gitignore` to remove `.forge-diamond-address` pattern
-  - [ ] 5.6 Update `.gitignore` to add `test/foundry/helpers/DiamondDeployment.sol` (or decide to commit it)
-  - [ ] 5.7 Update `foundry.toml` to add remapping for helper library: `@helpers/=test/foundry/helpers/`
-  - [ ] 5.8 Verify no references to deprecated files exist in codebase (grep search)
-  - [ ] 5.9 Update existing Foundry tests to use new helper library if applicable
-  - [ ] 5.10 Run all tests (Hardhat + Forge) to ensure nothing broke: `yarn test:all`
+- [x] 5.0 Remove deprecated files and update configuration
+  - [x] 5.1 Remove `.forge-diamond-address` file if it exists
+  - [x] 5.2 Remove `scripts/test-deploy-diamond.ts` file
+  - [x] 5.3 Remove `scripts/foundry/deploy-for-tests.sh` file
+  - [x] 5.4 Remove `scripts/foundry/` directory if now empty
+  - [x] 5.5 Update `.gitignore` to remove `.forge-diamond-address` pattern
+  - [x] 5.6 Update `.gitignore` to add `test/foundry/helpers/DiamondDeployment.sol` (or decide to commit it)
+  - [x] 5.7 Update `foundry.toml` to add remapping for helper library: `@helpers/=test/foundry/helpers/`
+  - [x] 5.8 Verify no references to deprecated files exist in codebase (grep search)
+  - [x] 5.9 Update existing Foundry tests to use new helper library if applicable
+  - [x] 5.10 Run all tests (Hardhat + Forge) to ensure nothing broke: `yarn test:all`
 
 - [ ] 6.0 Add documentation and finalize framework
   - [ ] 6.1 Create `docs/FORGE_FUZZING_GUIDE.md` comprehensive guide

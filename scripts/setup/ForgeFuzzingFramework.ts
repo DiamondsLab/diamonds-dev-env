@@ -5,15 +5,14 @@
  * Mirrors architecture of MedusaFuzzingFramework for consistency
  */
 
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import { join } from 'path';
+import type { DeployedDiamondData, Diamond } from '@diamondslab/diamonds';
 import { spawn } from 'child_process';
-import type { Provider, JsonRpcProvider } from 'ethers';
 import debug from 'debug';
-import type { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
-import { LocalDiamondDeployer } from './LocalDiamondDeployer';
-import type { Diamond, DeployedDiamondData } from '@diamondslab/diamonds';
+import type { JsonRpcProvider, Provider } from 'ethers';
+import { existsSync } from 'fs';
+import { join } from 'path';
 import { generateSolidityHelperLibrary } from '../utils/forgeHelpers';
+import { LocalDiamondDeployer } from './LocalDiamondDeployer';
 
 const log: debug.Debugger = debug('ForgeFuzzingFramework');
 
