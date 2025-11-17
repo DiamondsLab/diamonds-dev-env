@@ -107,7 +107,7 @@ This PRD outlines the refactoring and improvement of the Forge fuzzing integrati
 6.7. `forge:fuzz` must verify deployment exists before running tests  
 6.8. `forge:fuzz` must optionally deploy if deployment record not found  
 6.9. Tasks must support both `--network localhost` and `--network anvil`  
-6.10. Register tasks in `hardhat.config.ts` by importing `tasks/forge.ts`
+6.10. Register tasks in `hardhat.config.ts` by importing `scripts/tasks/forge.ts`
 
 ### FR7: Fuzzing Test Capabilities
 

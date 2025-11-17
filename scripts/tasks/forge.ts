@@ -25,11 +25,7 @@ task('forge:deploy', 'Deploy Diamond for Forge fuzzing tests')
 		const { diamond, targetNetwork, force } = taskArgs;
 
 		// Dynamic import to avoid circular dependency
-		// Hardhat ts-node doesn't use .js extensions
-		const { ForgeFuzzingFramework } = await import(
-			// @ts-ignore
-			'../scripts/setup/ForgeFuzzingFramework'
-		);
+		const { ForgeFuzzingFramework } = await import('../setup/ForgeFuzzingFramework');
 
 		console.log('\n🚀 Starting Forge Diamond deployment...');
 		console.log(`   Diamond: ${diamond}`);
@@ -120,11 +116,7 @@ task('forge:generate-helpers', 'Generate Solidity helper library from Diamond de
 		const { diamond, targetNetwork } = taskArgs;
 
 		// Dynamic import to avoid circular dependency
-		// Hardhat ts-node doesn't use .js extensions
-		const { ForgeFuzzingFramework } = await import(
-			// @ts-ignore
-			'../scripts/setup/ForgeFuzzingFramework'
-		);
+		const { ForgeFuzzingFramework } = await import('../setup/ForgeFuzzingFramework');
 
 		console.log('\n📝 Generating Solidity helper library...');
 		console.log(`   Diamond: ${diamond}`);
@@ -186,11 +178,7 @@ task('forge:fuzz', 'Run Forge fuzzing tests for Diamond')
 		const { diamond, targetNetwork, matchTest, force } = taskArgs;
 
 		// Dynamic import to avoid circular dependency
-		// Hardhat ts-node doesn't use .js extensions
-		const { ForgeFuzzingFramework } = await import(
-			// @ts-ignore
-			'../scripts/setup/ForgeFuzzingFramework'
-		);
+		const { ForgeFuzzingFramework } = await import('../setup/ForgeFuzzingFramework');
 
 		console.log('\n🧪 Starting Forge fuzzing tests...');
 		console.log(`   Diamond: ${diamond}`);

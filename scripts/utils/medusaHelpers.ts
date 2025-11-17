@@ -1,5 +1,15 @@
 import { DeployedDiamondData } from '@diamondslab/diamonds';
+import { id } from 'ethers';
 import { FuzzTargetFunction } from '../setup/MedusaFuzzingFramework';
+
+/**
+ * Compute function selector from signature
+ * @param signature Function signature like "transferOwnership(address)"
+ * @returns bytes4 selector like "0xf2fde38b"
+ */
+function computeSelector(signature: string): string {
+	return id(signature).slice(0, 10);
+}
 
 /**
  * Generate a Solidity test contract for Medusa fuzzing
@@ -17,6 +27,33 @@ export function generateSolidityTestContract(
 ): string {
 	const contractName = `${diamondName}Test`;
 
+	// Populate selectors from deployed data or compute them
+	const functionsWithSelectors = targetFunctions.map((target) => {
+		let selector = target.selector;
+		if (!selector || selector === '') {
+			// Try common function signatures
+			const commonSignatures = [
+				`${target.functionName}()`,
+				`${target.functionName}(address)`,
+				`${target.functionName}(address,bytes32)`,
+				`${target.functionName}(bytes32,address)`,
+			];
+
+			// Check which selector exists in the facet
+			const facetData = deployedData.DeployedFacets?.[target.facet];
+			if (facetData?.funcSelectors) {
+				for (const sig of commonSignatures) {
+					const computed = computeSelector(sig);
+					if (facetData.funcSelectors.includes(computed)) {
+						selector = computed;
+						break;
+					}
+				}
+			}
+		}
+		return { ...target, selector: selector || '0x00000000' };
+	});
+
 	// Generate contract header
 	const header = generateContractHeader(diamondName);
 
@@ -27,7 +64,7 @@ export function generateSolidityTestContract(
 	const helpers = generateHelperFunctions();
 
 	// Generate fuzzing functions for each target
-	const fuzzingFunctions = generateFuzzingFunctions(targetFunctions);
+	const fuzzingFunctions = generateFuzzingFunctions(functionsWithSelectors);
 
 	// Generate invariants
 	const invariants = generateInvariants(diamondAddress, deployedData);
@@ -51,7 +88,7 @@ ${invariants}
  */
 function generateContractHeader(diamondName: string): string {
 	return `// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.19;
 
 /**
  * @title ${diamondName}Test

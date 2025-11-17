@@ -8,7 +8,7 @@
 - `scripts/utils/medusaHelpers.ts` - Utility functions for Medusa configuration and contract generation
 - `test/fuzzing/ExampleDiamond.fuzz.config.json` - Manual configuration file for ExampleDiamond fuzzing
 - `test/fuzzing/generated/` - Directory for auto-generated Solidity test contracts
-- `tasks/medusa.ts` - Hardhat task definitions for fuzzing operations
+- `scripts/tasks/medusa.ts` - Hardhat task definitions for fuzzing operations
 - `.gitignore` - Add entries for medusa-corpus, medusa.json, and other fuzzing artifacts
 - `contracts/examplediamond/ExampleConstantsFacet.sol` - Reference for facet functions to fuzz
 - `medusa-corpus/` - Directory for fuzzing corpus (gitignored)
@@ -72,7 +72,7 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 3.15 Integrate generation logic into MedusaFuzzingFramework.generateTestContract()
 
 - [x] 4.0 Create Hardhat task for fuzzing
-  - [x] 4.1 Create `tasks/medusa.ts` file for task definitions
+  - [x] 4.1 Create `scripts/tasks/medusa.ts` file for task definitions
   - [x] 4.2 Define task `medusa:fuzz` with description
   - [x] 4.3 Add task parameter `--diamond` (required) for Diamond contract name
   - [x] 4.4 Network determined from Hardhat runtime environment (no separate param)
@@ -89,7 +89,7 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 4.15 Execute Medusa and stream output to console
   - [x] 4.16 Save artifacts to appropriate directories
   - [x] 4.17 Display summary of fuzzing results
-  - [x] 4.18 Register task in hardhat.config.ts by importing tasks/medusa.ts
+  - [x] 4.18 Register task in hardhat.config.ts by importing scripts/tasks/medusa.ts
 
 - [x] 5.0 Create ExampleDiamond fuzzing configuration and tests
   - [x] 5.1 Analyze ExampleDiamond facets to identify 3 critical functions to fuzz

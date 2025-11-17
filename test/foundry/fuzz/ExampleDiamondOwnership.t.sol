@@ -42,7 +42,7 @@ contract ExampleDiamondOwnership is DiamondFuzzBase {
         vm.prank(currentOwner);
         bytes4 selector = bytes4(keccak256("transferOwnership(address)"));
         bytes memory data = abi.encode(newOwner);
-        (bool success, bytes memory returnData) = _callDiamond(selector, data);
+        (bool success, ) = _callDiamond(selector, data);
 
         assertTrue(success, "Ownership transfer should succeed");
 

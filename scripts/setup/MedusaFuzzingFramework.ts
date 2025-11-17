@@ -159,7 +159,7 @@ export class MedusaFuzzingFramework {
 		const outputPath = join(outputDir, `${this.config.diamondName}Test.sol`);
 
 		// Generate contract (will be implemented via medusaHelpers)
-		const { generateSolidityTestContract } = await import('../utils/medusaHelpers.js');
+		const { generateSolidityTestContract } = await import('../utils/medusaHelpers');
 		if (!deployedData.DiamondAddress) {
 			throw new Error('Diamond address not found in deployed data');
 		}
@@ -201,7 +201,7 @@ export class MedusaFuzzingFramework {
 				platform: 'crytic-compile',
 				platformConfig: {
 					target: './test/fuzzing/generated',
-					solcVersion: '0.8.28',
+					solcVersion: '0.8.19',
 					exportDirectory: './crytic-export',
 				},
 			},
@@ -228,12 +228,12 @@ export class MedusaFuzzingFramework {
 
 		const args = ['fuzz', '--config', 'medusa.json'];
 
-		// Add fork parameters if provided
+		// Add RPC parameters if provided
 		if (this.config.rpcUrl) {
-			args.push('--fork-url', this.config.rpcUrl);
+			args.push('--rpc-url', this.config.rpcUrl);
 		}
 		if (this.config.blockNumber) {
-			args.push('--fork-block', this.config.blockNumber.toString());
+			args.push('--rpc-block', this.config.blockNumber.toString());
 		}
 
 		return new Promise((resolve, reject) => {

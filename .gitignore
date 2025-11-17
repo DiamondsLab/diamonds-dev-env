@@ -56,3 +56,4 @@ medusa-corpus/
 test/fuzzing/generated/
 crytic-export/
 .medusa/
+.medusacache/

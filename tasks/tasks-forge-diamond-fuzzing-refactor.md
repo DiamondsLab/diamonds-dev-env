@@ -5,8 +5,8 @@
 - `scripts/setup/ForgeFuzzingFramework.ts` - Main fuzzing framework class that integrates with LocalDiamondDeployer (CREATED, UPDATED)
 - `scripts/setup/ForgeFuzzingFramework.test.ts` - Unit tests for the fuzzing framework (CREATED)
 - `scripts/utils/forgeHelpers.ts` - Utility functions for Solidity helper library generation and Forge configuration (CREATED)
-- `tasks/forge.ts` - Hardhat task definitions for Forge fuzzing operations
-- `tasks/forge.ts` - Hardhat task definitions for Forge fuzzing operations
+- `scripts/tasks/forge.ts` - Hardhat task definitions for Forge fuzzing operations
+- `scripts/tasks/forge.ts` - Hardhat task definitions for Forge fuzzing operations
 - `test/foundry/helpers/DiamondDeployment.sol` - Auto-generated Solidity library with deployment data
 - `test/foundry/helpers/DiamondFuzzBase.sol` - Base contract for Diamond fuzzing tests with common utilities
 - `test/foundry/fuzz/ExampleDiamondAccessControl.t.sol` - Fuzzing tests for ExampleDiamond access control
@@ -68,7 +68,7 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 2.15 Add validation to ensure deployment data is complete before generation
 
 - [ ] 3.0 Create Hardhat tasks for Forge fuzzing
-  - [x] 3.1 Create `tasks/forge.ts` file for task definitions
+  - [x] 3.1 Create `scripts/tasks/forge.ts` file for task definitions
   - [x] 3.2 Define task `forge:deploy` with description and parameters `--diamond`, `--network`
   - [x] 3.3 Implement `forge:deploy` action that instantiates ForgeFuzzingFramework
   - [x] 3.4 In `forge:deploy`, deploy Diamond using LocalDiamondDeployer via framework
@@ -84,7 +84,7 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 3.14 Add support for both `--network localhost` and `--network anvil` in all tasks
   - [x] 3.15 Configure RPC URLs based on network selection (localhost: http://127.0.0.1:8545, anvil: auto-detect)
   - [x] 3.16 Add error handling for missing deployment records and network connection issues
-  - [x] 3.17 Register tasks in `hardhat.config.ts` by importing `tasks/forge.ts`
+  - [x] 3.17 Register tasks in `hardhat.config.ts` by importing `scripts/tasks/forge.ts`
   - [x] 3.18 Update `package.json` scripts to include shortcuts (e.g., `yarn forge:deploy`, `yarn forge:fuzz`)
 
 - [x] 4.0 Implement comprehensive Forge tests for ExampleDiamond

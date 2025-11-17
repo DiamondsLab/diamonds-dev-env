@@ -23,7 +23,7 @@ library DiamondABILoader {
     /// @dev Task 1.2: Create POC test reading Diamond ABI file
     /// @param abiPath Path to the Diamond ABI JSON file (e.g., "./diamond-abi/ExampleDiamond.json")
     /// @return abiJson The raw JSON string content
-    function loadDiamondABI(string memory abiPath) internal returns (string memory abiJson) {
+    function loadDiamondABI(string memory abiPath) internal view returns (string memory abiJson) {
         Vm vm = Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
         abiJson = vm.readFile(abiPath);
         require(bytes(abiJson).length > 0, "DiamondABILoader: Empty ABI file");

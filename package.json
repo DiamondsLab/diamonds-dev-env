@@ -29,6 +29,7 @@
     "forge:deploy": "npx hardhat forge:deploy --diamond ExampleDiamond",
     "forge:fuzz": "npx hardhat forge:fuzz --diamond ExampleDiamond",
     "forge:generate-helpers": "npx hardhat forge:generate-helpers --diamond ExampleDiamond",
+    "medusa:fuzz": "npx hardhat medusa:fuzz --diamond ExampleDiamond --network localhost --workers 2 --limit 100",
     "test:all": "yarn test && yarn forge:test",
     "test:deploy-diamond": "npx hardhat run scripts/test-deploy-diamond.ts --network localhost",
     "test:deploy-with-node": "bash scripts/foundry/deploy-for-tests.sh",

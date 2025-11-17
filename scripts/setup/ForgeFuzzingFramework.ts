@@ -244,6 +244,11 @@ export class ForgeFuzzingFramework {
 			args.push('--match-test', options.matchTest);
 		}
 
+		// Add fork URL to connect to deployed Diamond
+		if (this.config.rpcUrl) {
+			args.push('--fork-url', this.config.rpcUrl);
+		}
+
 		return new Promise((resolve, reject) => {
 			const forgeProcess = spawn('forge', args, {
 				cwd: process.cwd(),

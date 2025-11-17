@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.19;
 
 /**
  * @title ExampleDiamondTest
@@ -12,7 +12,7 @@ pragma solidity ^0.8.28;
 
 contract ExampleDiamondTest {
     // Address of the deployed Diamond contract
-    address constant DIAMOND = 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512;
+    address constant DIAMOND = 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0;
     
     // Track call statistics
     uint256 public totalCalls;
@@ -81,7 +81,7 @@ contract ExampleDiamondTest {
         bytes memory data
     ) public {
         // Call transferOwnership with random inputs
-        callDiamond(, abi.encode(addr1, val1, data));
+        callDiamond(0xf2fde38b, abi.encode(addr1, val1, data));
     }
 
     /**
@@ -96,7 +96,7 @@ contract ExampleDiamondTest {
         bytes memory data
     ) public {
         // Call owner with random inputs
-        callDiamond(, abi.encode(addr1, val1, data));
+        callDiamond(0x8da5cb5b, abi.encode(addr1, val1, data));
     }
 
     /**
@@ -111,7 +111,7 @@ contract ExampleDiamondTest {
         bytes memory data
     ) public {
         // Call isDeployed with random inputs
-        callDiamond(, abi.encode(addr1, val1, data));
+        callDiamond(0xc52046de, abi.encode(addr1, val1, data));
     }
 
     /**
@@ -126,7 +126,7 @@ contract ExampleDiamondTest {
         bytes memory data
     ) public {
         // Call getSelector with random inputs
-        callDiamond(, abi.encode(addr1, val1, data));
+        callDiamond(0x034899bc, abi.encode(addr1, val1, data));
     }
 
     /**
@@ -141,7 +141,7 @@ contract ExampleDiamondTest {
         bytes memory data
     ) public {
         // Call hasRole with random inputs
-        callDiamond(, abi.encode(addr1, val1, data));
+        callDiamond(0x00000000, abi.encode(addr1, val1, data));
     }
 
 
@@ -161,11 +161,11 @@ contract ExampleDiamondTest {
      * @dev Checks that key facet contracts still exist
      */
     function echidna_facets_valid() public view returns (bool) {
-                require(address(0x5FbDB2315678afecb367f032d93F642f64180aa3).code.length > 0, "Facet not found");
-        require(address(0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0).code.length > 0, "Facet not found");
-        require(address(0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9).code.length > 0, "Facet not found");
-        require(address(0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9).code.length > 0, "Facet not found");
-        require(address(0x5FC8d32690cc91D4c39d9d3abcBD16989F875707).code.length > 0, "Facet not found");
+                require(address(0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512).code.length > 0, "Facet not found");
+        require(address(0xa513E6E4b8f2a923D98304ec87F64353C4D5C853).code.length > 0, "Facet not found");
+        require(address(0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6).code.length > 0, "Facet not found");
+        require(address(0x8A791620dd6260079BF849Dc5567aDC3F2FdC318).code.length > 0, "Facet not found");
+        require(address(0x610178dA211FEF7D417bC0e6FeD39F05609AD788).code.length > 0, "Facet not found");
         return true;
     }
     

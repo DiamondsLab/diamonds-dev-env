@@ -135,7 +135,7 @@ contract ExampleDiamondAccessControl is DiamondFuzzBase {
         bytes4 selector = bytes4(keccak256("grantRole(bytes32,address)"));
         bytes memory data = abi.encode(TEST_ROLE, recipient);
 
-        (bool success, bytes memory returnData) = _callDiamond(selector, data);
+        (bool success, ) = _callDiamond(selector, data);
 
         // Should fail
         assertFalse(success, "Unauthorized grant should fail");

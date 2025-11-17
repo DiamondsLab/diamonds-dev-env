@@ -157,7 +157,7 @@ Abstract base contract providing:
 - `_verifyFacetRouting(selector, expectedFacet)`: Validate selector routing
 - `_measureDiamondGas(selector, data)`: Profile gas usage
 
-#### 4. **Hardhat Tasks** (`tasks/forge.ts`)
+#### 4. **Hardhat Tasks** (`scripts/tasks/forge.ts`)
 
 Three main tasks for the workflow:
 
@@ -696,7 +696,7 @@ cp -r scripts/setup/ForgeFuzzingFramework.ts your-project/scripts/setup/
 cp -r scripts/utils/forgeHelpers.ts your-project/scripts/utils/
 
 # Hardhat tasks
-cp tasks/forge.ts your-project/tasks/
+cp scripts/tasks/forge.ts your-project/tasks/
 
 # Test helpers
 cp -r test/foundry/helpers/ your-project/test/foundry/
@@ -791,7 +791,7 @@ yarn forge:fuzz
 
 - [ ] `ForgeFuzzingFramework.ts` copied
 - [ ] `forgeHelpers.ts` copied
-- [ ] `tasks/forge.ts` copied and registered
+- [ ] `scripts/tasks/forge.ts` copied and registered
 - [ ] `DiamondFuzzBase.sol` copied
 - [ ] Diamond config created
 - [ ] `foundry.toml` updated with `@helpers/` remapping

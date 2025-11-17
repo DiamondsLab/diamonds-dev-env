@@ -78,7 +78,7 @@ task('medusa:fuzz', 'Run Medusa fuzzing tests on Diamond contract')
 			console.log(chalk.green('✓'), `Connected to ${networkName}`);
 
 			console.log(chalk.blue('\n🔧 Initializing fuzzing framework...'));
-			const { MedusaFuzzingFramework } = await import('../setup/MedusaFuzzingFramework.js');
+			const { MedusaFuzzingFramework } = await import('../setup/MedusaFuzzingFramework');
 			const chainId = (await provider.getNetwork()).chainId;
 			const diamondConfigPath = path.join(
 				'diamonds',
@@ -104,6 +104,7 @@ task('medusa:fuzz', 'Run Medusa fuzzing tests on Diamond contract')
 					timeout: taskArgs.timeout,
 					...configFile.medusaOptions,
 				},
+				rpcUrl: 'http://127.0.0.1:8545', // Connect to Hardhat node
 			});
 
 			framework.setVerbose(false);
