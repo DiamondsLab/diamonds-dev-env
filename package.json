@@ -9,6 +9,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "npx hardhat test",
+    "test-multichain": "npx hardhat test-multichain",
     "clean": "rm -rf artifacts/* cache/* diamond-abi/* typechain-types/* diamond-typechain-types/*",
     "build": "yarn clean-compile && npx tsc",
     "compile": "npx hardhat compile && yarn diamond:generate-abi-typechain",
