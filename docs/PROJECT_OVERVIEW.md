@@ -119,3 +119,7 @@ ownerDiamond = exampleDiamond.connect(ownerSigner);
 ### Loading the Diamond Artifact
 
 In the example above we use the `loadDiamondContract` utility function to load the Diamond contract artifact using the Diamond address from the deployed diamond data. This allows us to interact with the Diamond contract and its facets using the Typechain types generated for the Diamond contract. This is a helper function that is not currently part of the Diamonds module but is provided as a utility in the Diamonds Dev Env project.
+
+## Hardhat-Multichain Extension
+
+The Diamonds Dev Env project also includes a Hardhat extension module called hardhat-multichain located in `packages/hardhat-multichain`. This module provides functionality to manage multiple chain deployments and configurations. It allows for easy switching between different chain configurations and provides utilities to interact with multiple chains from within the Hardhat environment.

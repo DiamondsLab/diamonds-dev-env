@@ -91,16 +91,29 @@
         "logs"
       ],
       "runtimeArgs": ["--preserve-symlinks"],
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js"
+      ],
       "skipFiles": [
         "<node_internals>/**",
-        "${workspaceFolder}/node_modules/**/*.js"
+        "${workspaceFolder}/node_modules/*/**",
+        "!${workspaceFolder}/node_modules/@diamondslab/**"
       ],
       "resolveSourceMapLocations": [
         "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/node_modules/@diamondslab/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/src/**/*.ts",
         "${workspaceFolder}/**/*.ts",
-        "${workspaceFolder}/node_modules/hardhat/**/*.js",
-        "${workspaceFolder}/node_modules/hardhat/**/*.ts"
+        "!**/node_modules/**",
+        "${workspaceFolder}/node_modules/@diamondslab/**"
       ],
       "sourceMaps": true,
       "smartStep": true,
@@ -163,16 +176,23 @@
         "logs"
       ],
       "runtimeArgs": ["--preserve-symlinks"],
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-      "skipFiles": [
-        "<node_internals>/**",
-        "${workspaceFolder}/node_modules/**/*.js"
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js"
       ],
+      "skipFiles": ["<node_internals>/**"],
       "resolveSourceMapLocations": [
         "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/src/**/*.ts",
         "${workspaceFolder}/**/*.ts",
-        "${workspaceFolder}/node_modules/hardhat/**/*.js",
-        "${workspaceFolder}/node_modules/hardhat/**/*.ts"
+        "!**/node_modules/**"
       ],
       "sourceMaps": true,
       "smartStep": true,
@@ -182,7 +202,12 @@
       "name": "Multichain Deployment Tests",
       "type": "node",
       "request": "launch",
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js"
+      ],
       "program": "${workspaceFolder}/node_modules/hardhat/internal/cli/cli.js",
       "args": [
         "test-multichain",
@@ -197,11 +222,21 @@
       "runtimeArgs": ["--preserve-symlinks"],
       "skipFiles": [
         "<node_internals>/**",
-        "${workspaceFolder}/node_modules/**/*.js"
+        "${workspaceFolder}/node_modules/*/**",
+        "!${workspaceFolder}/node_modules/@diamondslab/**"
       ],
       "resolveSourceMapLocations": [
         "${workspaceFolder}/dist/**/*.js",
-        "${workspaceFolder}/**/*.ts"
+        "${workspaceFolder}/node_modules/@diamondslab/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/src/**/*.ts",
+        "${workspaceFolder}/**/*.ts",
+        "!**/node_modules/**",
+        "${workspaceFolder}/node_modules/@diamondslab/**"
       ],
       "sourceMaps": true,
       "smartStep": true,

@@ -8,7 +8,7 @@ import "forge-std/Test.sol";
 contract DiamondABIDebugTest is Test {
     string constant DIAMOND_ABI_PATH = "./diamond-abi/ExampleDiamond.json";
 
-    function test_CountFunctions() public {
+    function test_CountFunctions() public view {
         string memory abiJson = vm.readFile(DIAMOND_ABI_PATH);
 
         uint256 functionCount = 0;
