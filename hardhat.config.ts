@@ -1,3 +1,4 @@
+import '@diamondslab/diamonds-monitor';
 import '@diamondslab/hardhat-diamonds';
 import 'hardhat-multichain';
 

@@ -123,3 +123,14 @@ In the example above we use the `loadDiamondContract` utility function to load t
 ## Hardhat-Multichain Extension
 
 The Diamonds Dev Env project also includes a Hardhat extension module called hardhat-multichain located in `packages/hardhat-multichain`. This module provides functionality to manage multiple chain deployments and configurations. It allows for easy switching between different chain configurations and provides utilities to interact with multiple chains from within the Hardhat environment.
+
+## Diamonds-Monitor Module
+
+The Diamonds Dev Env project also includes a Diamonds monitoring module called diamonds-monitor located in `packages/diamonds-monitor`. This module provides tools to monitor and analyze deployed Diamond contracts. It includes functionality to list facets, analyze facet usage, validate function selectors, analytics and performance metrics, and monitor diamond cut events.
+
+- 💎 **Diamond Contract Monitoring**: Real-time monitoring of diamond proxy contracts
+- 📊 **Health Checks**: Automated health monitoring and diagnostics
+- 🚨 **Event Monitoring**: Track diamond cut events and contract changes
+- 🛠️ **Developer Tools**: Utilities for diamond development and debugging
+- 📈 **Analytics**: Performance metrics and usage analytics
+- 🔧 **Dual Usage**: Works as a Hardhat plugin or standalone library
