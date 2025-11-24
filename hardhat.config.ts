@@ -122,7 +122,7 @@ const config: HardhatUserConfig = {
 			},
 			sepolia: {
 				rpcUrl: sepoliaUrl,
-				// blockNumber: sepoliaBlock,
+				blockNumber: sepoliaBlock,
 				chainId: 11155111,
 			},
 			polygon_amoy: {
