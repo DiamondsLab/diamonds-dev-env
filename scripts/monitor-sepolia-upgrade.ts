@@ -12,11 +12,11 @@
  */
 import { Diamond } from '@diamondslab/diamonds';
 import {
-  DiamondMonitor,
-  DiamondMonitorConfig,
-  EventHandlers,
-  FacetManager,
-  ParsedDiamondCutEvent,
+	DiamondMonitor,
+	DiamondMonitorConfig,
+	EventHandlers,
+	FacetManager,
+	ParsedDiamondCutEvent,
 } from '@diamondslab/diamonds-monitor';
 import chalk from 'chalk';
 import * as dotenv from 'dotenv';
@@ -134,13 +134,19 @@ async function loadExistingDiamond(config: UpgradeMonitoringConfig): Promise<Dia
 	const deployedData = diamond.getDeployedDiamondData();
 
 	if (!deployedData.DiamondAddress) {
-		throw new Error(`No deployment found for ${config.diamondName} on ${config.networkName}`);
+		throw new Error(
+			`No deployment found for ${config.diamondName} on ${config.networkName}`,
+		);
 	}
 
 	console.log(chalk.green('✅ Diamond loaded successfully!'));
 	console.log(`   📍 Address: ${deployedData.DiamondAddress}`);
-	console.log(`   📋 Current Protocol Version: ${deployedData.protocolVersion || 'Unknown'}`);
-	console.log(`   🔧 Deployed Facets: ${Object.keys(deployedData.DeployedFacets || {}).length}`);
+	console.log(
+		`   📋 Current Protocol Version: ${deployedData.protocolVersion || 'Unknown'}`,
+	);
+	console.log(
+		`   🔧 Deployed Facets: ${Object.keys(deployedData.DeployedFacets || {}).length}`,
+	);
 
 	// Log current facets
 	const facets = deployedData.DeployedFacets || {};
@@ -160,7 +166,11 @@ async function initializeMonitoring(
 	diamond: Diamond,
 	provider: ethers.JsonRpcProvider,
 	config: UpgradeMonitoringConfig,
-): Promise<{ monitor: DiamondMonitor; facetManager: FacetManager; eventHandlers: EventHandlers }> {
+): Promise<{
+	monitor: DiamondMonitor;
+	facetManager: FacetManager;
+	eventHandlers: EventHandlers;
+}> {
 	console.log(chalk.blue('📊 Initializing Diamond monitoring...'));
 
 	const monitorConfig: DiamondMonitorConfig = {
@@ -297,7 +307,7 @@ async function executeUpgrade(config: UpgradeMonitoringConfig): Promise<void> {
 	console.log(chalk.yellow('🐛 Debug: Configuration details:'));
 	console.log(`   📄 Config File Path: ${config.configFilePath}`);
 	console.log(`   📄 Upgrade Config Path: ${config.upgradeConfigPath}`);
-	
+
 	// Verify the config file exists
 	const fs = require('fs');
 	if (fs.existsSync(config.configFilePath!)) {
@@ -305,14 +315,16 @@ async function executeUpgrade(config: UpgradeMonitoringConfig): Promise<void> {
 		// Log the config file content
 		const configContent = JSON.parse(fs.readFileSync(config.configFilePath!, 'utf8'));
 		console.log(`   📋 Protocol Version in config: ${configContent.protocolVersion}`);
-		console.log(`   🔧 Facets in config: ${Object.keys(configContent.facets || {}).join(', ')}`);
+		console.log(
+			`   🔧 Facets in config: ${Object.keys(configContent.facets || {}).join(', ')}`,
+		);
 	} else {
 		console.log(chalk.red(`   ❌ Config file does NOT exist: ${config.configFilePath}`));
 	}
 
 	// Import the upgrade function from the upgrade-rpc script
 	const { createRPCConfig } = await import('./deploy/rpc/common');
-	
+
 	// Create RPC config for the upgrade
 	const upgradeConfig = createRPCConfig({
 		diamondName: config.diamondName,
@@ -325,7 +337,7 @@ async function executeUpgrade(config: UpgradeMonitoringConfig): Promise<void> {
 
 	const deployer = await RPCDiamondDeployer.getInstance(upgradeConfig);
 
-	// Get diamond instance for analysis 
+	// Get diamond instance for analysis
 	const diamond = await deployer.getDiamond();
 
 	// Perform upgrade analysis
@@ -412,9 +424,15 @@ async function analyzeUpgrade(diamond: any): Promise<void> {
 		});
 
 		console.log(chalk.blue('\n🔄 Upgrade Plan:'));
-		console.log(`📦 New Facets: ${chalk.white(newFacets)} ${newFacetNames.length > 0 ? `(${newFacetNames.join(', ')})` : ''}`);
-		console.log(`🔄 Updated Facets: ${chalk.white(updatedFacets)} ${updatedFacetNames.length > 0 ? `(${updatedFacetNames.join(', ')})` : ''}`);
-		console.log(`🗑️  Removed Facets: ${chalk.white(removedFacets)} ${removedFacetNames.length > 0 ? `(${removedFacetNames.join(', ')})` : ''}`);
+		console.log(
+			`📦 New Facets: ${chalk.white(newFacets)} ${newFacetNames.length > 0 ? `(${newFacetNames.join(', ')})` : ''}`,
+		);
+		console.log(
+			`🔄 Updated Facets: ${chalk.white(updatedFacets)} ${updatedFacetNames.length > 0 ? `(${updatedFacetNames.join(', ')})` : ''}`,
+		);
+		console.log(
+			`🗑️  Removed Facets: ${chalk.white(removedFacets)} ${removedFacetNames.length > 0 ? `(${removedFacetNames.join(', ')})` : ''}`,
+		);
 	} catch (error) {
 		console.log(
 			chalk.yellow(`⚠️  Unable to perform detailed analysis: ${(error as Error).message}`),
@@ -460,7 +478,9 @@ async function validateNewFacetFunctionality(
 		const selector = await diamondContract.getSelector();
 		console.log(`      ✅ Result: ${selector} (expected: 0x034899bc)`);
 		if (selector !== '0x034899bc') {
-			console.log(chalk.yellow(`      ⚠️  Selector mismatch: got ${selector}, expected 0x034899bc`));
+			console.log(
+				chalk.yellow(`      ⚠️  Selector mismatch: got ${selector}, expected 0x034899bc`),
+			);
 		}
 
 		// Test getMonitorData()
@@ -514,20 +534,30 @@ async function performPostUpgradeHealthChecks(
 
 		// Get current facet information
 		const currentFacets = await facetManager.listFacets();
-		console.log(chalk.cyan(`🔧 Post-Upgrade Facet Analysis (${currentFacets.length} facets):`));
+		console.log(
+			chalk.cyan(`🔧 Post-Upgrade Facet Analysis (${currentFacets.length} facets):`),
+		);
 
 		currentFacets.forEach((facet, idx: number) => {
-			const isNew = !preState.facets.some((preFacet: any) => preFacet.address === facet.address);
+			const isNew = !preState.facets.some(
+				(preFacet: any) => preFacet.address === facet.address,
+			);
 			const indicator = isNew ? '🆕' : '   ';
-			console.log(`   ${indicator}${idx + 1}. ${facet.name || 'Unknown'} (${facet.address})`);
+			console.log(
+				`   ${indicator}${idx + 1}. ${facet.name || 'Unknown'} (${facet.address})`,
+			);
 			console.log(`      📋 Selectors: ${facet.selectors.length}`);
 		});
 
 		// Perform upgrade-specific analysis
 		const currentAnalysis = await facetManager.analyzeFacets(currentFacets);
 		console.log(chalk.cyan('🔬 Upgrade Impact Analysis:'));
-		console.log(`   📊 Total Selectors: ${currentAnalysis.totalSelectors} (+${currentAnalysis.totalSelectors - preState.analysis.totalSelectors})`);
-		console.log(`   🔧 Total Facets: ${currentAnalysis.totalFacets} (+${currentAnalysis.totalFacets - preState.analysis.totalFacets})`);
+		console.log(
+			`   📊 Total Selectors: ${currentAnalysis.totalSelectors} (+${currentAnalysis.totalSelectors - preState.analysis.totalSelectors})`,
+		);
+		console.log(
+			`   🔧 Total Facets: ${currentAnalysis.totalFacets} (+${currentAnalysis.totalFacets - preState.analysis.totalFacets})`,
+		);
 		console.log(`   🏷️  Conflicts Found: ${currentAnalysis.conflicts.length}`);
 
 		if (currentAnalysis.details.largestFacet) {
@@ -545,7 +575,9 @@ async function performPostUpgradeHealthChecks(
 		if (missingSelectors.length === 0) {
 			console.log(chalk.green('✅ All expected new selectors are present'));
 		} else {
-			console.log(chalk.red(`❌ Missing expected selectors: ${missingSelectors.join(', ')}`));
+			console.log(
+				chalk.red(`❌ Missing expected selectors: ${missingSelectors.join(', ')}`),
+			);
 			throw new Error('Upgrade validation failed: missing expected selectors');
 		}
 

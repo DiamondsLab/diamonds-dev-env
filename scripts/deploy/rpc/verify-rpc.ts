@@ -10,28 +10,34 @@ import chalk from 'chalk';
 import { AddressLike, ethers } from 'ethers';
 import { RPCDiamondDeployer } from '../../setup/RPCDiamondDeployer';
 import {
-  VerifyOptions,
-  addVerifyOptions,
-  createLegacyCommand,
-  createMainCommand,
-  createQuickCommand,
-  createRPCConfig,
-  setupProgram,
-  showOperationSummary,
-  showPreOperationInfo,
+	VerifyOptions,
+	addVerifyOptions,
+	createLegacyCommand,
+	createMainCommand,
+	createQuickCommand,
+	createRPCConfig,
+	setupProgram,
+	showOperationSummary,
+	showPreOperationInfo,
 } from './common';
 
 /**
  * Validates contract ABIs against deployed contracts
  */
-async function validateABIs(diamond: Diamond, provider: ethers.JsonRpcProvider): Promise<void> {
+async function validateABIs(
+	diamond: Diamond,
+	provider: ethers.JsonRpcProvider,
+): Promise<void> {
 	console.log(chalk.blue('\n🔍 Validating contract ABIs...'));
 
 	const deployedData = diamond.getDeployedDiamondData();
 	const facets = deployedData.DeployedFacets ?? {};
 	let validCount = 0;
 
-	for (const [facetName, facetData] of Object.entries(facets) as [string, DeployedFacet][]) {
+	for (const [facetName, facetData] of Object.entries(facets) as [
+		string,
+		DeployedFacet,
+	][]) {
 		try {
 			const code = await provider.getCode(facetData.address as AddressLike);
 			if (code === '0x') {
@@ -93,7 +99,7 @@ async function validateSelectors(
 
 		for (const onChainFacet of onChainFacets) {
 			totalSelectors += onChainFacet.functionSelectors.length;
-      
+
 			const matchingFacet = Object.entries(deployedFacets).find(
 				([, facetData]: [string, DeployedFacet]) =>
 					facetData.address!.toLowerCase() === onChainFacet.facetAddress.toLowerCase(),

@@ -12,11 +12,11 @@
 
 import { Diamond } from '@diamondslab/diamonds';
 import {
-    DiamondMonitor,
-    DiamondMonitorConfig,
-    EventHandlers,
-    FacetManager,
-    ParsedDiamondCutEvent,
+	DiamondMonitor,
+	DiamondMonitorConfig,
+	EventHandlers,
+	FacetManager,
+	ParsedDiamondCutEvent,
 } from '@diamondslab/diamonds-monitor';
 import chalk from 'chalk';
 import * as dotenv from 'dotenv';
@@ -48,11 +48,11 @@ interface MonitoringConfig {
  */
 function getConfig(): MonitoringConfig {
 	const config: MonitoringConfig = {
-		diamondName: process.env.DIAMOND_NAME || 'ExampleDiamond',
-		networkName: process.env.NETWORK_NAME || 'sepolia',
-		chainId: parseInt(process.env.CHAIN_ID || '11155111'),
-		rpcUrl: process.env.RPC_URL || process.env.SEPOLIA_RPC_URL || '',
-		privateKey: process.env.PRIVATE_KEY || '',
+		diamondName: process.env.DIAMOND_NAME ?? 'ExampleDiamond',
+		networkName: process.env.NETWORK_NAME ?? 'sepolia',
+		chainId: parseInt(process.env.CHAIN_ID ?? '11155111'),
+		rpcUrl: process.env.RPC_URL ?? process.env.SEPOLIA_RPC_URL ?? '',
+		privateKey: process.env.PRIVATE_KEY ?? '',
 		pollingInterval: 5000,
 		alertThresholds: {
 			maxResponseTime: 2000,

@@ -9,15 +9,15 @@ import { Diamond } from '@diamondslab/diamonds';
 import chalk from 'chalk';
 import { RPCDiamondDeployer } from '../../setup/RPCDiamondDeployer';
 import {
-  UpgradeOptions,
-  addUpgradeOptions,
-  createLegacyCommand,
-  createMainCommand,
-  createQuickCommand,
-  createRPCConfig,
-  setupProgram,
-  showOperationSummary,
-  showPreOperationInfo,
+	UpgradeOptions,
+	addUpgradeOptions,
+	createLegacyCommand,
+	createMainCommand,
+	createQuickCommand,
+	createRPCConfig,
+	setupProgram,
+	showOperationSummary,
+	showPreOperationInfo,
 } from './common';
 
 /**

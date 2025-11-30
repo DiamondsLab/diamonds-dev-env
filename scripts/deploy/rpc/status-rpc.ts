@@ -8,17 +8,20 @@
 import { DeployedFacet, Diamond } from '@diamondslab/diamonds';
 import chalk from 'chalk';
 import { ethers } from 'ethers';
-import { RPCDiamondDeployer, RPCDiamondDeployerConfig } from '../../setup/RPCDiamondDeployer';
 import {
-  StatusOptions,
-  addStatusOptions,
-  createLegacyCommand,
-  createMainCommand,
-  createQuickCommand,
-  createRPCConfig,
-  setupProgram,
-  showOperationSummary,
-  showPreOperationInfo,
+	RPCDiamondDeployer,
+	RPCDiamondDeployerConfig,
+} from '../../setup/RPCDiamondDeployer';
+import {
+	StatusOptions,
+	addStatusOptions,
+	createLegacyCommand,
+	createMainCommand,
+	createQuickCommand,
+	createRPCConfig,
+	setupProgram,
+	showOperationSummary,
+	showPreOperationInfo,
 } from './common';
 
 /**
@@ -63,7 +66,10 @@ async function showFacetDetails(diamond: Diamond): Promise<void> {
 	console.log(`📦 Total Facets: ${chalk.white(facetCount)}\n`);
 
 	let facetIndex = 1;
-	for (const [facetName, facetData] of Object.entries(facets) as [string, DeployedFacet][]) {
+	for (const [facetName, facetData] of Object.entries(facets) as [
+		string,
+		DeployedFacet,
+	][]) {
 		console.log(`${facetIndex}. ${chalk.green(facetName)}`);
 		console.log(`   📍 Address: ${chalk.white(facetData.address)}`);
 		console.log(`   🔗 TX Hash: ${chalk.white(facetData.tx_hash ?? 'N/A')}`);
@@ -89,7 +95,10 @@ async function showSelectorDetails(diamond: Diamond): Promise<void> {
 	const facets = deployedData.DeployedFacets ?? {};
 	let totalSelectors = 0;
 
-	for (const [facetName, facetData] of Object.entries(facets) as [string, DeployedFacet][]) {
+	for (const [facetName, facetData] of Object.entries(facets) as [
+		string,
+		DeployedFacet,
+	][]) {
 		const selectors = facetData.funcSelectors ?? [];
 		totalSelectors += selectors.length;
 

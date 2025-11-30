@@ -6,7 +6,7 @@ export const assert = chai.assert;
 export const expect = chai.expect;
 
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { CreateProposalRequest } from "@openzeppelin/defender-sdk-proposal-client";
+import { CreateProposalRequest } from '@openzeppelin/defender-sdk-proposal-client';
 import fs from 'fs';
 import util from 'util';
 
@@ -40,7 +40,7 @@ export interface INetworkDeployInfo {
 	DeployerAddress: string;
 	FacetDeployedInfo: FacetDeployedInfo;
 	// nosemgrep: typescript-any-usage
-	ExternalLibraries?: any;  // These are external Solidity libraries that the Diamond depends on
+	ExternalLibraries?: any; // These are external Solidity libraries that the Diamond depends on
 	protocolVersion?: number;
 	provider?: JsonRpcProvider | undefined;
 }

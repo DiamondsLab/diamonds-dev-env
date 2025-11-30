@@ -2,7 +2,10 @@ import { Diamond } from '@diamondslab/diamonds';
 import { DiamondMonitor, EventHandlers, FacetManager } from '@diamondslab/diamonds-monitor';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import { LocalDiamondDeployer, LocalDiamondDeployerConfig } from '../../scripts/setup/LocalDiamondDeployer';
+import {
+	LocalDiamondDeployer,
+	LocalDiamondDeployerConfig,
+} from '../../scripts/setup/LocalDiamondDeployer';
 
 describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 	this.timeout(600000); // 10 minutes for e2e tests
@@ -77,7 +80,7 @@ describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 			});
 
 			// Wait for monitoring to initialize
-			await new Promise(resolve => setTimeout(resolve, 2000));
+			await new Promise((resolve) => setTimeout(resolve, 2000));
 
 			// Check that monitoring is set up correctly
 			expect(eventEmitter).to.be.instanceOf(require('events').EventEmitter);
@@ -103,7 +106,7 @@ describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 			expect(facets.length).to.be.greaterThan(0);
 
 			// Each facet should have required properties
-			facets.forEach(facet => {
+			facets.forEach((facet) => {
 				expect(facet).to.have.property('address');
 				expect(facet).to.have.property('selectors');
 				expect(facet.selectors).to.be.an('array');
@@ -169,7 +172,7 @@ describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 			});
 
 			// Wait a short time to see if any events are captured
-			await new Promise(resolve => setTimeout(resolve, 1000));
+			await new Promise((resolve) => setTimeout(resolve, 1000));
 
 			// Since this is a fresh deployment, there might not be events yet
 			// The important thing is that the event emitter is set up correctly
@@ -180,7 +183,7 @@ describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 			await monitor.startMonitoring();
 
 			// Wait for a few health checks
-			await new Promise(resolve => setTimeout(resolve, 5000));
+			await new Promise((resolve) => setTimeout(resolve, 5000));
 
 			const health = await monitor.getHealthStatus();
 			expect(health).to.have.property('isHealthy');
@@ -199,7 +202,7 @@ describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 			// Test creating add facet cut
 			const addCut = facetManager.createAddFacetCut(
 				testFacet.address,
-				testFacet.selectors.slice(0, 1) // Just one selector
+				testFacet.selectors.slice(0, 1), // Just one selector
 			);
 
 			expect(addCut).to.have.property('facetAddress');
