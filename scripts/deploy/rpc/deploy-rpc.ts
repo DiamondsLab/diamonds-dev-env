@@ -3,50 +3,28 @@
 /**
  * Main deployment script for RPC-based Diamond deployment
  * Deploys example Diamond contracts using RPCDiamondDeployer
+ *
+ * IMPORTANT: This script requires Hardhat's runtime context.
+ * Use one of these methods:
+ *
+ * 1. Via Hardhat runtime (Recommended):
+ *    DIAMOND_NAME=ExampleDiamond npx hardhat run scripts/deploy/rpc/hardhat-run-deploy-rpc.ts --network sepolia
+ *
+ * 2. Via CLI with --no-use-hardhat-config (Legacy mode, requires explicit RPC URL):
+ *    npx ts-node scripts/deploy/rpc/deploy-rpc.ts ExampleDiamond sepolia --no-use-hardhat-config --rpc-url <RPC_URL>
  */
-
 import { RPCDiamondDeployer } from '../../setup/RPCDiamondDeployer';
 import {
+	addDeploymentOptions,
+	createLegacyCommand,
+	createMainCommand,
+	createQuickCommand,
 	DeploymentOptions,
 	setupProgram,
-	addDeploymentOptions,
-	createRPCConfig,
-	showPreOperationInfo,
 	showOperationSummary,
-	createMainCommand,
-	createLegacyCommand,
-	createQuickCommand,
+	showPreOperationInfo,
 } from './common';
-
-/**
- * Main deployment function
- */
-async function deployDiamond(options: DeploymentOptions): Promise<void> {
-	const config = createRPCConfig(options);
-	const startTime = Date.now();
-
-	await showPreOperationInfo(config, 'Diamond Deployment', {
-		'🔧 Force Deploy': options.force ? 'Yes' : 'No',
-		'✅ Skip Verification': options.skipVerification ? 'Yes' : 'No',
-	});
-
-	const deployer = await RPCDiamondDeployer.getInstance(config);
-
-	console.log(`🏁 Starting deployment of diamond "${config.diamondName}"...`);
-
-	const diamond = await deployer.deployDiamond();
-
-	const duration = (Date.now() - startTime) / 1000;
-	const deployedData = diamond.getDeployedDiamondData();
-	const deploymentStatus = deployer.getDeploymentStatus();
-
-	showOperationSummary('Diamond Deployment', duration, {
-		'💎 Diamond Address': deployedData.DiamondAddress,
-		'📈 Status': deploymentStatus,
-		'🎯 Network': config.networkName,
-		'⛽ Chain ID': config.chainId,
-	});
-}
+import { deployDiamond } from './deploy-rpc-core';
 
 // Set up CLI program
 const program = setupProgram(

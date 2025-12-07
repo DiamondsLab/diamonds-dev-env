@@ -94,7 +94,7 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@diamondslab/diamonds": "workspace:*",
-    "@diamondslab/diamonds-monitor": "workspace:*",
+    "@diamondslab/diamonds-monitor": "workspace:^",
     "@diamondslab/hardhat-diamonds": "workspace:*",
     "@gnus.ai/contracts-upgradeable-diamond": "=4.5.0",
     "@nomicfoundation/hardhat-chai-matchers": "^2.1.2",
@@ -137,7 +137,7 @@
     "eslint-plugin-security": "^3.0.0",
     "ethers": "^6.4.0",
     "globals": "^15.14.0",
-    "hardhat": "^2.27.0",
+    "hardhat": "git a2.26.5",
     "hardhat-abi-exporter": "^2.8.0",
     "hardhat-gas-reporter": "^1.0.8",
     "hardhat-multichain": "workspace:*",
@@ -160,7 +160,7 @@
   "resolutions": {
     "@nomicfoundation/hardhat-ethers": "^3.1.2",
     "@nomicfoundation/hardhat-chai-matchers": "^2.1.2",
-    "hardhat": "^2.27.0"
+    "hardhat": "2.26.5"
   },
   "packageManager": "yarn@4.10.3"
 }

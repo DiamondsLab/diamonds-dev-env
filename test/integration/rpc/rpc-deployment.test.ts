@@ -1,11 +1,10 @@
 import { expect } from 'chai';
+import hre, { ethers } from 'hardhat';
 import {
+	DeploymentStatus,
 	RPCDiamondDeployer,
 	RPCDiamondDeployerConfig,
-	DeploymentStatus,
 } from '../../../scripts/setup/RPCDiamondDeployer';
-import { ethers } from 'hardhat';
-import hre from 'hardhat';
 
 describe('RPC Deployment Integration', function () {
 	this.timeout(300000); // 5 minutes for deployment tests
@@ -40,12 +39,16 @@ describe('RPC Deployment Integration', function () {
 
 	beforeEach(async function () {
 		// Clear instances before each test
-		(RPCDiamondDeployer as any).instances.clear();
+		(
+			RPCDiamondDeployer as unknown as { instances: Map<string, RPCDiamondDeployer> }
+		).instances.clear();
 	});
 
 	after(async function () {
 		// Clean up
-		(RPCDiamondDeployer as any).instances.clear();
+		(
+			RPCDiamondDeployer as unknown as { instances: Map<string, RPCDiamondDeployer> }
+		).instances.clear();
 	});
 
 	describe('Deployment Lifecycle', function () {
@@ -54,6 +57,7 @@ describe('RPC Deployment Integration', function () {
 
 			expect(deployer).to.exist;
 			expect(deployer.getDeploymentStatus()).to.equal(DeploymentStatus.NOT_STARTED);
+			let deployed = deployer.isDiamondDeployed();
 			expect(deployer.isDiamondDeployed()).to.be.false;
 		});
 

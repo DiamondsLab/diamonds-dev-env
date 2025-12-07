@@ -1,6 +1,7 @@
 # Diamonds-Monitor Integration and E2E Testing
 
 ## Overview
+
 Complete the integration of the diamonds-monitor node module into the Diamonds Dev Env monorepo, including comprehensive testing for local Hardhat deployments and RPC deployments/upgrades, with full event monitoring capabilities.
 
 ## Tasks

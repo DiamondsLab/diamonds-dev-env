@@ -21,6 +21,7 @@ import {
 import chalk from 'chalk';
 import * as dotenv from 'dotenv';
 import { ethers } from 'ethers';
+import winston from 'winston';
 import { createRPCConfig } from './deploy/rpc/common';
 import { RPCDiamondDeployer } from './setup/RPCDiamondDeployer';
 
@@ -51,7 +52,7 @@ function getConfig(): MonitoringConfig {
 		diamondName: process.env.DIAMOND_NAME ?? 'ExampleDiamond',
 		networkName: process.env.NETWORK_NAME ?? 'sepolia',
 		chainId: parseInt(process.env.CHAIN_ID ?? '11155111'),
-		rpcUrl: process.env.RPC_URL ?? process.env.SEPOLIA_RPC_URL ?? '',
+		rpcUrl: process.env.RPC_URL ?? process.env.SEPOLIA_RPC ?? '',
 		privateKey: process.env.PRIVATE_KEY ?? '',
 		pollingInterval: 5000,
 		alertThresholds: {
@@ -62,7 +63,7 @@ function getConfig(): MonitoringConfig {
 
 	// Validation
 	if (!config.rpcUrl) {
-		throw new Error('RPC_URL or SEPOLIA_RPC_URL must be set in environment');
+		throw new Error('RPC_URL or SEPOLIA_RPC must be set in environment');
 	}
 	if (!config.privateKey) {
 		throw new Error('PRIVATE_KEY must be set in environment');
@@ -180,7 +181,12 @@ function setupEventMonitoring(monitor: DiamondMonitor): void {
 		console.log(`   📦 Block: ${event.blockNumber}`);
 
 		// Analyze the cut impact
-		const eventHandlers = new EventHandlers(console as any); // Simplified logger for demo
+		const logger = winston.createLogger({
+			level: 'info',
+			format: winston.format.simple(),
+			transports: [new winston.transports.Console()],
+		});
+		const eventHandlers = new EventHandlers(logger);
 		const analysis = eventHandlers.analyzeCutImpact(event);
 
 		console.log(`   📊 Summary: ${analysis.summary}`);
@@ -189,22 +195,29 @@ function setupEventMonitoring(monitor: DiamondMonitor): void {
 
 		if (event.changes && event.changes.length > 0) {
 			console.log(`   🔧 Changes:`);
-			event.changes.forEach((change: any, idx: number) => {
-				console.log(
-					`     ${idx + 1}. ${change.action} - ${change.facetAddress} (${change.functionSelectors.length} selectors)`,
-				);
-			});
+			event.changes.forEach(
+				(
+					change: { action: string; facetAddress: string; functionSelectors: string[] },
+					idx: number,
+				) => {
+					console.log(
+						`     ${idx + 1}. ${change.action} - ${change.facetAddress} (${change.functionSelectors.length} selectors)`,
+					);
+				},
+			);
 		}
 	});
 
-	eventEmitter.on('healthIssue', (issue: any) => {
-		console.log(chalk.red('🚨 Health Issue Detected:'));
-		console.log(`   🏷️  Type: ${issue.type}`);
-		console.log(`   📋 Message: ${issue.message}`);
-		console.log(`   ⚠️  Severity: ${issue.severity}`);
-		console.log(`   🕐 Timestamp: ${new Date(issue.timestamp).toISOString()}`);
-	});
-
+	eventEmitter.on(
+		'healthIssue',
+		(issue: { type: string; message: string; severity: string; timestamp: number }) => {
+			console.log(chalk.red('🚨 Health Issue Detected:'));
+			console.log(`   🏷️  Type: ${issue.type}`);
+			console.log(`   📋 Message: ${issue.message}`);
+			console.log(`   ⚠️  Severity: ${issue.severity}`);
+			console.log(`   🕐 Timestamp: ${new Date(issue.timestamp).toISOString()}`);
+		},
+	);
 	eventEmitter.on('error', (error: Error) => {
 		console.error(chalk.red('❌ Monitoring Error:'), error);
 	});
@@ -324,7 +337,7 @@ async function main(): Promise<void> {
 		console.log(chalk.blue('👀 Continuing monitoring for 30 seconds...'));
 		await new Promise((resolve) => setTimeout(resolve, 30000));
 
-		console.log(chalk.green('\n✅ Monitoring demonstration complete!'));
+		// console.log(chalk.green('\n✅ Monitoring demonstration complete!'));
 		console.log(chalk.yellow('💡 Diamond is deployed and ready for use'));
 	} catch (error) {
 		console.error(chalk.red('\n❌ Error during execution:'), error);

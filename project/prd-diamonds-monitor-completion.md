@@ -22,7 +22,7 @@ Deliver a fully integrated, professionally coded, and well-tested diamonds-monit
 
 ## Goals
 
-1. **Fix TypeScript Compilation**: Ensure both the monorepo (`yarn tsc`) and diamonds-monitor package compile without errors
+1. **Ensure TypeScript Compilation**: Ensure both the monorepo (`yarn tsc`) and diamonds-monitor package compile without errors
 2. **Complete Integration**: Properly integrate diamonds-monitor into the monorepo with correct dependencies and module resolution
 3. **Script Refinement**: Analyze, test, and improve existing monitoring scripts with moderate refactoring for better code quality
 4. **Full Event Monitoring**: Implement comprehensive real-time monitoring system including DiamondCut events, health monitoring, facet changes, upgrades, and custom event types with optional dashboard capabilities
@@ -112,8 +112,7 @@ Deliver a fully integrated, professionally coded, and well-tested diamonds-monit
 **REQ-6.4**: Test upgrade monitoring on Sepolia testnet  
 **REQ-6.5**: Test event tracking for real blockchain events  
 **REQ-6.6**: Include network resilience and retry logic testing  
-**REQ-6.7**: Test OpenZeppelin Defender deployment monitoring integration  
-**REQ-6.8**: Achieve 90%+ code coverage for RPC deployment scenarios
+**REQ-6.7**: Achieve 90%+ code coverage for RPC deployment scenarios
 
 ### 7. Performance & Stress Testing
 

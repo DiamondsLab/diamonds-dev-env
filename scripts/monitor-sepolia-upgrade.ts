@@ -21,6 +21,7 @@ import {
 import chalk from 'chalk';
 import * as dotenv from 'dotenv';
 import { ethers } from 'ethers';
+import winston from 'winston';
 import { RPCDiamondDeployer, RPCDiamondDeployerConfig } from './setup/RPCDiamondDeployer';
 
 // Load environment variables
@@ -45,16 +46,16 @@ interface UpgradeMonitoringConfig extends RPCDiamondDeployerConfig {
  * Get configuration from environment variables
  */
 function getConfig(): UpgradeMonitoringConfig {
-	const diamondName = process.env.DIAMOND_NAME || 'ExampleDiamond';
-	const networkName = process.env.NETWORK_NAME || 'sepolia';
-	const upgradeConfigPath = `diamonds/${diamondName}/examplediamond.config.json`;
+	const diamondName = process.env.DIAMOND_NAME ?? 'ExampleDiamond';
+	const networkName = process.env.NETWORK_NAME ?? 'sepolia';
+	const upgradeConfigPath = `diamonds/${diamondName}/examplediamond-upgrade.config.json`;
 
 	const config: UpgradeMonitoringConfig = {
 		diamondName,
 		networkName,
-		chainId: parseInt(process.env.CHAIN_ID || '11155111'),
-		rpcUrl: process.env.RPC_URL || process.env.SEPOLIA_RPC_URL || '',
-		privateKey: process.env.PRIVATE_KEY || '',
+		chainId: parseInt(process.env.CHAIN_ID ?? '11155111'),
+		rpcUrl: process.env.RPC_URL ?? process.env.SEPOLIA_RPC ?? '',
+		privateKey: process.env.PRIVATE_KEY ?? '',
 		verbose: true,
 		gasLimitMultiplier: 1.2,
 		maxRetries: 3,
@@ -97,7 +98,10 @@ async function initializeProvider(
 	try {
 		const network = await provider.getNetwork();
 		const blockNumber = await provider.getBlockNumber();
-		const balance = await signer.provider!.getBalance(signer.address);
+		if (!signer.provider) {
+			throw new Error('Signer provider is not defined');
+		}
+		const balance = await signer.provider.getBalance(signer.address);
 
 		console.log(chalk.green(`✅ Connected to ${network.name} (${network.chainId})`));
 		console.log(chalk.green(`📦 Latest block: ${blockNumber}`));
@@ -142,19 +146,24 @@ async function loadExistingDiamond(config: UpgradeMonitoringConfig): Promise<Dia
 	console.log(chalk.green('✅ Diamond loaded successfully!'));
 	console.log(`   📍 Address: ${deployedData.DiamondAddress}`);
 	console.log(
-		`   📋 Current Protocol Version: ${deployedData.protocolVersion || 'Unknown'}`,
+		`   📋 Current Protocol Version: ${deployedData.protocolVersion ?? 'Unknown'}`,
 	);
 	console.log(
-		`   🔧 Deployed Facets: ${Object.keys(deployedData.DeployedFacets || {}).length}`,
+		`   🔧 Deployed Facets: ${Object.keys(deployedData.DeployedFacets ?? {}).length}`,
 	);
 
 	// Log current facets
-	const facets = deployedData.DeployedFacets || {};
-	Object.entries(facets).forEach(([name, data]: [string, any]) => {
-		console.log(
-			`     - ${name}: ${data.address} (${data.funcSelectors?.length || 0} selectors)`,
-		);
-	});
+	const facets = deployedData.DeployedFacets ?? {};
+	Object.entries(facets).forEach(
+		([name, data]: [
+			string,
+			{ address?: string; funcSelectors?: string[]; version?: number },
+		]) => {
+			console.log(
+				`     - ${name}: ${data.address} (${data.funcSelectors?.length ?? 0} selectors)`,
+			);
+		},
+	);
 
 	return diamond;
 }
@@ -181,9 +190,15 @@ async function initializeMonitoring(
 		fromBlock: 'latest',
 	};
 
+	const logger = winston.createLogger({
+		level: 'info',
+		format: winston.format.simple(),
+		transports: [new winston.transports.Console()],
+	});
+
 	const monitor = new DiamondMonitor(diamond, provider, monitorConfig);
 	const facetManager = new FacetManager(diamond, provider);
-	const eventHandlers = new EventHandlers(console as any);
+	const eventHandlers = new EventHandlers(logger);
 
 	console.log(chalk.green('✅ Monitoring initialized'));
 	console.log(`   🔄 Polling interval: ${config.pollingInterval}ms`);
@@ -193,23 +208,38 @@ async function initializeMonitoring(
 	return { monitor, facetManager, eventHandlers };
 }
 
+import type { FacetAnalysisResult, FacetInfo } from '@diamondslab/diamonds-monitor';
+
+interface PreUpgradeState {
+	timestamp: number;
+	healthStatus: {
+		isHealthy: boolean;
+		timestamp: Date;
+		totalTime: number;
+		checks?: Array<{ status: string; name: string; message: string; duration?: number }>;
+	};
+	facets: FacetInfo[];
+	analysis: FacetAnalysisResult;
+}
+
 /**
  * Capture pre-upgrade state for comparison
  */
 async function capturePreUpgradeState(
 	monitor: DiamondMonitor,
 	facetManager: FacetManager,
-): Promise<any> {
+): Promise<PreUpgradeState> {
 	console.log(chalk.blue('📸 Capturing pre-upgrade state...'));
 
-	const preState = {
+	const facets = await facetManager.listFacets();
+	const analysis = await facetManager.analyzeFacets(facets);
+
+	const preState: PreUpgradeState = {
 		timestamp: Date.now(),
 		healthStatus: await monitor.getHealthStatus(),
-		facets: await facetManager.listFacets(),
-		analysis: null as any,
+		facets,
+		analysis,
 	};
-
-	preState.analysis = await facetManager.analyzeFacets(preState.facets);
 
 	console.log(chalk.cyan('📊 Pre-Upgrade State:'));
 	console.log(`   💚 Health: ${preState.healthStatus.isHealthy ? 'HEALTHY' : 'UNHEALTHY'}`);
@@ -254,22 +284,27 @@ function setupUpgradeEventMonitoring(
 			// Check if this includes our expected new facet
 			if (event.changes && event.changes.length > 0) {
 				console.log(`   🔧 Changes:`);
-				event.changes.forEach((change: any, idx: number) => {
-					console.log(
-						`     ${idx + 1}. ${change.action} - ${change.facetAddress} (${change.functionSelectors?.length || 0} selectors)`,
-					);
+				event.changes.forEach(
+					(
+						change: { action: string; facetAddress: string; functionSelectors?: string[] },
+						idx: number,
+					) => {
+						console.log(
+							`     ${idx + 1}. ${change.action} - ${change.facetAddress} (${change.functionSelectors?.length ?? 0} selectors)`,
+						);
 
-					// Check for ExampleUpgradeFacet addition
-					if (
-						change.action === 'Add' &&
-						config.expectedNewSelectors.some((selector) =>
-							change.functionSelectors?.includes(selector),
-						)
-					) {
-						console.log(chalk.green('🎉 ExampleUpgradeFacet detected in upgrade!'));
-						upgradeDetected = true;
-					}
-				});
+						// Check for ExampleUpgradeFacet addition
+						if (
+							change.action === 'Add' &&
+							config.expectedNewSelectors.some((selector) =>
+								change.functionSelectors?.includes(selector),
+							)
+						) {
+							console.log(chalk.green('🎉 ExampleUpgradeFacet detected in upgrade!'));
+							upgradeDetected = true;
+						}
+					},
+				);
 			}
 
 			// Resolve after detecting the upgrade
@@ -281,13 +316,16 @@ function setupUpgradeEventMonitoring(
 			}
 		});
 
-		eventEmitter.on('healthIssue', (issue: any) => {
-			console.log(chalk.red('🚨 Health Issue During Upgrade:'));
-			console.log(`   🏷️  Type: ${issue.type}`);
-			console.log(`   📋 Message: ${issue.message}`);
-			console.log(`   ⚠️  Severity: ${issue.severity}`);
-			console.log(`   🕐 Timestamp: ${new Date(issue.timestamp).toISOString()}`);
-		});
+		eventEmitter.on(
+			'healthIssue',
+			(issue: { type: string; message: string; severity: string; timestamp: number }) => {
+				console.log(chalk.red('🚨 Health Issue During Upgrade:'));
+				console.log(`   🏷️  Type: ${issue.type}`);
+				console.log(`   📋 Message: ${issue.message}`);
+				console.log(`   ⚠️  Severity: ${issue.severity}`);
+				console.log(`   🕐 Timestamp: ${new Date(issue.timestamp).toISOString()}`);
+			},
+		);
 
 		eventEmitter.on('error', (error: Error) => {
 			console.error(chalk.red('❌ Monitoring Error:'), error);
@@ -310,13 +348,19 @@ async function executeUpgrade(config: UpgradeMonitoringConfig): Promise<void> {
 
 	// Verify the config file exists
 	const fs = require('fs');
-	if (fs.existsSync(config.configFilePath!)) {
+	if (!config.configFilePath) {
+		throw new Error('Config file path is not defined');
+	}
+	if (fs.existsSync(config.configFilePath)) {
 		console.log(chalk.green(`   ✅ Config file exists: ${config.configFilePath}`));
 		// Log the config file content
-		const configContent = JSON.parse(fs.readFileSync(config.configFilePath!, 'utf8'));
+		if (!config.configFilePath) {
+			throw new Error('Config file path is not defined');
+		}
+		const configContent = JSON.parse(fs.readFileSync(config.configFilePath, 'utf8'));
 		console.log(`   📋 Protocol Version in config: ${configContent.protocolVersion}`);
 		console.log(
-			`   🔧 Facets in config: ${Object.keys(configContent.facets || {}).join(', ')}`,
+			`   🔧 Facets in config: ${Object.keys(configContent.facets ?? {}).join(', ')}`,
 		);
 	} else {
 		console.log(chalk.red(`   ❌ Config file does NOT exist: ${config.configFilePath}`));
@@ -367,15 +411,15 @@ async function executeUpgrade(config: UpgradeMonitoringConfig): Promise<void> {
 /**
  * Analyzes what will be upgraded (copied from upgrade-rpc.ts)
  */
-async function analyzeUpgrade(diamond: any): Promise<void> {
+async function analyzeUpgrade(diamond: Diamond): Promise<void> {
 	try {
 		const deployedData = diamond.getDeployedDiamondData();
-		const currentVersion = deployedData.protocolVersion || 0;
+		const currentVersion = deployedData.protocolVersion ?? 0;
 		const config = diamond.getDeployConfig();
-		const targetVersion = config.protocolVersion || 0;
+		const targetVersion = config.protocolVersion ?? 0;
 
 		console.log(
-			`💎 Diamond Address: ${chalk.white(deployedData.DiamondAddress || 'Not deployed')}`,
+			`💎 Diamond Address: ${chalk.white(deployedData.DiamondAddress ?? 'Not deployed')}`,
 		);
 		console.log(`📋 Current Protocol Version: ${chalk.white(currentVersion)}`);
 		console.log(`🎯 Target Protocol Version: ${chalk.white(targetVersion)}`);
@@ -385,8 +429,8 @@ async function analyzeUpgrade(diamond: any): Promise<void> {
 			return;
 		}
 
-		const facetsConfig = config.facets || {};
-		const deployedFacets = deployedData.DeployedFacets || {};
+		const facetsConfig = config.facets ?? {};
+		const deployedFacets = deployedData.DeployedFacets ?? {};
 
 		let newFacets = 0;
 		let updatedFacets = 0;
@@ -397,15 +441,19 @@ async function analyzeUpgrade(diamond: any): Promise<void> {
 		const removedFacetNames: string[] = [];
 
 		// Count new and updated facets
-		Object.keys(facetsConfig).forEach((facetName) => {
-			if (!deployedFacets[facetName]) {
+		const facetConfigEntries = Object.entries(facetsConfig);
+		const deployedFacetsEntries = Object.entries(deployedFacets);
+		const deployedFacetsMap = new Map(deployedFacetsEntries);
+
+		facetConfigEntries.forEach(([facetName, facetConfig]) => {
+			const deployedFacet = deployedFacetsMap.get(facetName);
+			if (!deployedFacet) {
 				newFacets++;
 				newFacetNames.push(facetName);
 			} else {
-				const deployedVersion = deployedFacets[facetName].version || 0;
-				const availableVersions = Object.keys(facetsConfig[facetName].versions || {}).map(
-					Number,
-				);
+				const deployedVersion = deployedFacet.version ?? 0;
+				const versions = facetConfig?.versions ?? {};
+				const availableVersions = Object.keys(versions).map(Number);
 				const targetFacetVersion = Math.max(...availableVersions, 0);
 
 				if (targetFacetVersion > deployedVersion) {
@@ -416,8 +464,9 @@ async function analyzeUpgrade(diamond: any): Promise<void> {
 		});
 
 		// Count removed facets
-		Object.keys(deployedFacets).forEach((facetName) => {
-			if (!facetsConfig[facetName] && facetName !== 'DiamondCutFacet') {
+		const facetConfigKeys = new Set(facetConfigEntries.map(([name]) => name));
+		deployedFacetsEntries.forEach(([facetName]) => {
+			if (!facetConfigKeys.has(facetName) && facetName !== 'DiamondCutFacet') {
 				removedFacets++;
 				removedFacetNames.push(facetName);
 			}
@@ -452,8 +501,11 @@ async function validateNewFacetFunctionality(
 	console.log(chalk.blue('🧪 Validating ExampleUpgradeFacet functionality...'));
 
 	const deployedData = diamond.getDeployedDiamondData();
+	if (!deployedData.DiamondAddress) {
+		throw new Error('Diamond address is not defined');
+	}
 	const diamondContract = new ethers.Contract(
-		deployedData.DiamondAddress!,
+		deployedData.DiamondAddress,
 		[
 			'function isDeployed() external pure returns (bool)',
 			'function getSelector() external pure returns (bytes4)',
@@ -504,7 +556,7 @@ async function validateNewFacetFunctionality(
 async function performPostUpgradeHealthChecks(
 	monitor: DiamondMonitor,
 	facetManager: FacetManager,
-	preState: any,
+	preState: PreUpgradeState,
 	config: UpgradeMonitoringConfig,
 ): Promise<void> {
 	console.log(chalk.blue('🏥 Performing post-upgrade health checks...'));
@@ -540,16 +592,14 @@ async function performPostUpgradeHealthChecks(
 
 		currentFacets.forEach((facet, idx: number) => {
 			const isNew = !preState.facets.some(
-				(preFacet: any) => preFacet.address === facet.address,
+				(preFacet: { address: string }) => preFacet.address === facet.address,
 			);
 			const indicator = isNew ? '🆕' : '   ';
 			console.log(
-				`   ${indicator}${idx + 1}. ${facet.name || 'Unknown'} (${facet.address})`,
+				`   ${indicator}${idx + 1}. ${facet.name ?? 'Unknown'} (${facet.address})`,
 			);
 			console.log(`      📋 Selectors: ${facet.selectors.length}`);
-		});
-
-		// Perform upgrade-specific analysis
+		}); // Perform upgrade-specific analysis
 		const currentAnalysis = await facetManager.analyzeFacets(currentFacets);
 		console.log(chalk.cyan('🔬 Upgrade Impact Analysis:'));
 		console.log(
