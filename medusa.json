@@ -1,0 +1,38 @@
+{
+  "fuzzing": {
+    "workers": 4,
+    "testLimit": 10000,
+    "timeout": 60,
+    "targetContracts": [
+      "ExampleDiamondTest"
+    ],
+    "targetContractBalances": [
+      "0xffffffffffffffffffffffff"
+    ],
+    "constructorArgs": {},
+    "deployerAddress": "0x30000",
+    "senderAddresses": [
+      "0x10000",
+      "0x20000",
+      "0x30000"
+    ],
+    "blockNumberDelayMax": 60480,
+    "blockTimestampDelayMax": 604800,
+    "corpusDirectory": "./medusa-corpus"
+  },
+  "compilation": {
+    "platform": "crytic-compile",
+    "platformConfig": {
+      "target": "./test/fuzzing/generated",
+      "solcVersion": "0.8.19",
+      "exportDirectory": "./crytic-export"
+    }
+  },
+  "chainConfig": {
+    "codeSizeCheckDisabled": true,
+    "cheatCodes": {
+      "cheatCodesEnabled": true,
+      "enableFFI": false
+    }
+  }
+}

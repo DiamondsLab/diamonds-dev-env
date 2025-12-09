@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022", "dom"],
-    "module": "nodenext",
+    "module": "CommonJS",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -21,14 +21,21 @@
     "allowJs": true,
     "checkJs": false,
     "typeRoots": ["node_modules/@types", "./types"],
-    "moduleResolution": "nodenext"
+    "moduleResolution": "node"
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
   },
   "include": [
     "./scripts",
     "./test",
     "./typechain-types",
     "./diamond-typechain-types",
-    "test-suites/"
+    "test-suites/",
+    "./tasks"
   ],
   "files": ["./hardhat.config.ts"],
   "exclude": [

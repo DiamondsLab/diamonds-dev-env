@@ -12,3 +12,6 @@
 [submodule "hardhat-multichain-sub"]
 	path = packages/hardhat-multichain
 	url = https://github.com/DiamondsLab/hardhat-multichain.git
+[submodule "packages/diamonds-monitor"]
+	path = packages/diamonds-monitor
+	url = https://github.com/DiamondsLab/diamonds-monitor.git

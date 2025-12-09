@@ -36,8 +36,9 @@ diamonds-dev-env/
 ### Development Environment
 
 - **🏗️ Yarn Workspaces**: Monorepo structure for managing multiple packages
-- **🧪 Comprehensive Testing**: Unit tests, integration tests, and coverage reporting
-- **� TypeScript Support**: Full type safety with modern TypeScript features
+- **🧪 Comprehensive Testing**: Unit tests, integration tests, fuzz tests, and coverage reporting
+- **🔍 Advanced Fuzzing**: Medusa and Forge fuzzing frameworks for comprehensive security testing
+- **🛠️ TypeScript Support**: Full type safety with modern TypeScript features
 - **📋 Code Quality**: ESLint, Prettier, and Husky for code formatting and git hooks
 - **🚀 CI/CD Pipeline**: Automated testing, building, and publishing via GitHub Actions
 - **📦 Professional Packaging**: Ready for NPM publication with proper versioning
@@ -88,6 +89,18 @@ yarn format
 # Clean all build artifacts
 yarn workspace:clean
 ```
+
+### TypeScript Build Process
+
+```bash
+# Build TypeScript to JavaScript
+yarn tsc
+
+# Build and deploy task files (required for Hardhat tasks)
+yarn tsc && cp dist/scripts/setup/*.js scripts/setup/ && cp dist/scripts/utils/*.js scripts/utils/
+```
+
+**Important**: Hardhat tasks use dynamic imports that require compiled `.js` files. After modifying TypeScript files in `scripts/`, you must rebuild and copy the compiled files. See [docs/BUILD_AND_DEPLOYMENT.md](docs/BUILD_AND_DEPLOYMENT.md) for details.
 
 ### Contract Compilation, Diamond-ABI and Typechain Generation
 
@@ -191,6 +204,56 @@ yarn workspace hardhat-diamonds run test:watch
 - Unit tests: `packages/hardhat-diamonds/src/__tests__/`
 - Integration tests: `test/integration/`
 - Contract tests: `test/`
+- **Fuzzing tests**: `test/fuzzing/` - Medusa fuzzing configurations and generated tests
+- **Forge tests**: `test/foundry/` - Foundry fuzz, integration, and invariant tests
+
+### Fuzzing with Medusa
+
+Run fuzzing tests on Diamond contracts using Medusa (Trail of Bits):
+
+```bash
+# Prerequisites: Install dependencies (if not in DevContainer)
+pipx install solc-select crytic-compile
+solc-select install 0.8.19 && solc-select use 0.8.19
+
+# Run fuzzing campaign on ExampleDiamond
+npx hardhat medusa:fuzz --diamond ExampleDiamond
+
+# Custom workers and test limits
+npx hardhat medusa:fuzz --diamond ExampleDiamond --workers 4 --limit 10000
+
+# With timeout (in seconds)
+npx hardhat medusa:fuzz --diamond ExampleDiamond --timeout 300
+```
+
+**Note**: Medusa uses its own EVM and cannot fork from Hardhat node. Best for testing self-contained contract logic.
+
+See [docs/MEDUSA_FUZZING_GUIDE.md](docs/MEDUSA_FUZZING_GUIDE.md) for comprehensive Medusa fuzzing documentation.
+
+### Fuzzing with Forge
+
+Run Foundry-based fuzz, integration, and invariant tests with chain forking:
+
+```bash
+# Prerequisites: Start Hardhat node
+npx hardhat node  # In separate terminal
+
+# Deploy Diamond and generate helper library
+npx hardhat forge:deploy --diamond ExampleDiamond --network localhost
+
+# Run all Forge tests with forking (fuzz + integration + invariant)
+npx hardhat forge:fuzz --diamond ExampleDiamond --network localhost
+
+# Generate Solidity helpers from existing deployment
+npx hardhat forge:generate-helpers --diamond ExampleDiamond --network localhost
+
+# Or run directly with Forge (after deployment)
+forge test --fork-url http://127.0.0.1:8545 -vv
+```
+
+Forge fuzzing supports testing against deployed state via chain forking, making it ideal for integration testing.
+
+See [docs/FORGE_FUZZING_GUIDE.md](docs/FORGE_FUZZING_GUIDE.md) for comprehensive Forge fuzzing documentation.
 
 ## 📋 Code Quality
 

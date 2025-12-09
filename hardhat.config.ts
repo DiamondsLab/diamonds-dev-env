@@ -1,3 +1,4 @@
+import '@diamondslab/diamonds-monitor';
 import '@diamondslab/hardhat-diamonds';
 import 'hardhat-multichain';
 
@@ -6,10 +7,13 @@ import * as dotenv from 'dotenv';
 import '@nomicfoundation/hardhat-toolbox';
 import '@nomicfoundation/hardhat-web3-v4';
 import '@typechain/hardhat';
-import { HardhatUserConfig } from 'hardhat/config';
 import 'hardhat-abi-exporter';
 import 'hardhat-gas-reporter';
+import { HardhatUserConfig } from 'hardhat/config';
 import 'solidity-coverage';
+
+import './scripts/tasks/forge';
+import './scripts/tasks/medusa';
 
 dotenv.config();
 
@@ -97,11 +101,11 @@ const config: HardhatUserConfig = {
 		target: 'ethers-v6', // Match the version of Ethers.js you're using
 	},
 	solidity: {
-		version: '0.8.9',
+		version: '0.8.19',
 		settings: {
 			optimizer: {
 				enabled: true,
-				runs: 1000,
+				runs: 200,
 			},
 		},
 	},

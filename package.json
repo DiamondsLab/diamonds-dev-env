@@ -1,6 +1,6 @@
 {
   "name": "hardhat-diamonds-dev",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Professional development environment for hardhat-diamonds and ERC-2535 Diamond Proxy projects",
   "private": true,
   "workspaces": [
@@ -9,6 +9,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "npx hardhat test",
+    "test-multichain": "npx hardhat test-multichain",
     "clean": "rm -rf artifacts/* cache/* diamond-abi/* typechain-types/* diamond-typechain-types/*",
     "build": "yarn clean-compile && npx tsc",
     "compile": "npx hardhat compile && yarn diamond:generate-abi-typechain",
@@ -17,6 +18,22 @@
     "clean-compile": "yarn clean && yarn compile",
     "diamond:generate-abi": "npx hardhat diamond:generate-abi --diamond-name ExampleDiamond",
     "diamond:generate-abi-typechain": "npx hardhat diamond:generate-abi-typechain --diamond-name ExampleDiamond",
+    "forge:build": "forge build",
+    "forge:test": "forge test -vv",
+    "forge:test:verbose": "forge test -vvv",
+    "forge:test:gas": "forge test --gas-report",
+    "forge:coverage": "forge coverage",
+    "forge:snapshot": "forge snapshot",
+    "forge:clean": "forge clean",
+    "forge:fmt": "forge fmt",
+    "forge:fmt:check": "forge fmt --check",
+    "forge:deploy": "npx hardhat forge:deploy --diamond ExampleDiamond",
+    "forge:fuzz": "npx hardhat forge:fuzz --diamond ExampleDiamond",
+    "forge:generate-helpers": "npx hardhat forge:generate-helpers --diamond ExampleDiamond",
+    "medusa:fuzz": "npx hardhat medusa:fuzz --diamond ExampleDiamond --network localhost --workers 2 --limit 100",
+    "test:all": "yarn test && yarn forge:test",
+    "test:deploy-diamond": "npx hardhat run scripts/test-deploy-diamond.ts --network localhost",
+    "test:deploy-with-node": "bash scripts/foundry/deploy-for-tests.sh",
     "lint": "eslint . --ext .ts,.js --fix",
     "format": "prettier --write \"**/*.{ts,js,json,md,sol}\"",
     "install:frozen": "yarn install --frozen-lockfile",
@@ -77,10 +94,11 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@diamondslab/diamonds": "workspace:*",
+    "@diamondslab/diamonds-monitor": "workspace:^",
     "@diamondslab/hardhat-diamonds": "workspace:*",
     "@gnus.ai/contracts-upgradeable-diamond": "=4.5.0",
-    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
-    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.1.2",
+    "@nomicfoundation/hardhat-ethers": "^3.1.2",
     "@nomicfoundation/hardhat-ignition": "^0.15.0",
     "@nomicfoundation/hardhat-ignition-ethers": "^0.15.0",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
@@ -119,7 +137,7 @@
     "eslint-plugin-security": "^3.0.0",
     "ethers": "^6.4.0",
     "globals": "^15.14.0",
-    "hardhat": "^2.26.2",
+    "hardhat": "git a2.26.5",
     "hardhat-abi-exporter": "^2.8.0",
     "hardhat-gas-reporter": "^1.0.8",
     "hardhat-multichain": "workspace:*",
@@ -138,6 +156,11 @@
     "uint32": "^0.2.1",
     "web3": "^4.16.0",
     "winston": "^3.17.0"
+  },
+  "resolutions": {
+    "@nomicfoundation/hardhat-ethers": "^3.1.2",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.1.2",
+    "hardhat": "2.26.5"
   },
   "packageManager": "yarn@4.10.3"
 }

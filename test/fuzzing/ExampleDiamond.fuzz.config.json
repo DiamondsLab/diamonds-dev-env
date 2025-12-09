@@ -1,0 +1,36 @@
+{
+  "diamondName": "ExampleDiamond",
+  "targetFunctions": [
+    {
+      "facet": "ExampleOwnershipFacet",
+      "function": "transferOwnership",
+      "description": "Test ownership transfer - should only work for contract owner and properly update roles"
+    },
+    {
+      "facet": "ExampleOwnershipFacet",
+      "function": "owner",
+      "description": "Test owner getter - should always return valid address"
+    },
+    {
+      "facet": "ExampleUpgradeFacet",
+      "function": "isDeployed",
+      "description": "Test deployment status - should always return true"
+    },
+    {
+      "facet": "ExampleUpgradeFacet",
+      "function": "getSelector",
+      "description": "Test selector retrieval - should return valid function selector"
+    },
+    {
+      "facet": "ExampleAccessControl",
+      "function": "hasRole",
+      "description": "Test role checking - verify role assignments are consistent"
+    }
+  ],
+  "medusaOptions": {
+    "workers": 4,
+    "testLimit": 10000,
+    "timeout": 60,
+    "corpusDirectory": "./medusa-corpus"
+  }
+}

@@ -68,16 +68,15 @@
         "test-multichain",
         // "test",
         // "./test/unit/diamond-abi-generator.test.ts",
-        // "${workspaceFolder}/test/deployment/GeniusDiamondDeployment.test.ts",
+        "${workspaceFolder}/test/deployment/DiamondDeployment.test.ts",
         // "${workspaceFolder}/test/unit/NFTFactory.test.ts",
         // "${workspaceFolder}/test/integration/multichain/tests/GNUSBridge.test.ts",
         // "${workspaceFolder}/test/unit/GNUSERC20.test.ts",
         // "${workspaceFolder}/test/integration/multichain/tests/Erc20Batch.test.ts",
         "--chains",
         "hardhat",
-        "--logs",
-        "logs"
-        // "--chains", "sepolia", "--logs", "logs",
+        // "--chains",
+        // "sepolia",
         // "--chains", "polygon_amoy", "--logs", "logs",
         // "--chains", "mainnet", "--logs", "logs",
         // "--chains", "polygon", "--logs", "logs",
@@ -88,18 +87,33 @@
         // "--chains", "hardhat,sepolia", "--logs", "logs",
         // "--chains", "sepolia,polygon_amoy", "--logs", "logs",
         // "--chains", "hardhat,sepolia,polygon_amoy", "--logs", "logs",
+        "--logs",
+        "logs"
       ],
       "runtimeArgs": ["--preserve-symlinks"],
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js"
+      ],
       "skipFiles": [
         "<node_internals>/**",
-        "${workspaceFolder}/node_modules/**/*.js"
+        "${workspaceFolder}/node_modules/*/**",
+        "!${workspaceFolder}/node_modules/@diamondslab/**"
       ],
       "resolveSourceMapLocations": [
         "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/node_modules/@diamondslab/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/src/**/*.ts",
         "${workspaceFolder}/**/*.ts",
-        "${workspaceFolder}/node_modules/hardhat/**/*.js",
-        "${workspaceFolder}/node_modules/hardhat/**/*.ts"
+        "!**/node_modules/**",
+        "${workspaceFolder}/node_modules/@diamondslab/**"
       ],
       "sourceMaps": true,
       "smartStep": true,
@@ -114,8 +128,9 @@
       "args": [
         "hardhat",
         "test",
-        "test/unit/rpc/RPCDiamondDeployer.hardhat.test.ts"
-        // "test/unit/defender/ErrorHandling.test.ts"
+        // "test/unit/rpc/RPCDiamondDeployer.hardhat.test.ts",
+        "test/unit/rpc/RPCDiamondDeployer.test.ts"
+        // "test/integration/rpc/rpc-deployment.test.ts"
       ],
       "runtimeArgs": ["--preserve-symlinks"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
@@ -134,25 +149,20 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "Multichain Plugin Test",
+      "name": "Multichain Plugin Test-hardhat",
       "type": "node",
       "request": "launch",
       // "preLaunchTask": "tsc: build - tsconfig.json",
       "program": "${workspaceFolder}/node_modules/hardhat/internal/cli/cli.js",
       "args": [
-        // "test-multichain",
-        "test",
+        "test-multichain",
+        // "test",
         // "./test/unit/diamond-abi-generator.test.ts",
-        // "${workspaceFolder}/test/deployment/GeniusDiamondDeployment.test.ts",
-        // "${workspaceFolder}/test/unit/NFTFactory.test.ts",
-        // "${workspaceFolder}/test/integration/multichain/tests/GNUSBridge.test.ts",
-        // "${workspaceFolder}/test/unit/GNUSERC20.test.ts",
-        // "${workspaceFolder}/test/integration/multichain/tests/Erc20Batch.test.ts",
+        "${workspaceFolder}/test/deployment/DiamondDeployment.test.ts",
         "--chains",
         "hardhat",
-        "--logs",
-        "logs"
-        // "--chains", "sepolia", "--logs", "logs",
+        // "--chains",
+        // "sepolia",
         // "--chains", "polygon_amoy", "--logs", "logs",
         // "--chains", "mainnet", "--logs", "logs",
         // "--chains", "polygon", "--logs", "logs",
@@ -163,18 +173,27 @@
         // "--chains", "hardhat,sepolia", "--logs", "logs",
         // "--chains", "sepolia,polygon_amoy", "--logs", "logs",
         // "--chains", "hardhat,sepolia,polygon_amoy", "--logs", "logs",
+        "--logs",
+        "logs"
       ],
       "runtimeArgs": ["--preserve-symlinks"],
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-      "skipFiles": [
-        "<node_internals>/**",
-        "${workspaceFolder}/node_modules/**/*.js"
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js"
       ],
+      "skipFiles": ["<node_internals>/**"],
       "resolveSourceMapLocations": [
         "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/src/**/*.ts",
         "${workspaceFolder}/**/*.ts",
-        "${workspaceFolder}/node_modules/hardhat/**/*.js",
-        "${workspaceFolder}/node_modules/hardhat/**/*.ts"
+        "!**/node_modules/**"
       ],
       "sourceMaps": true,
       "smartStep": true,
@@ -184,26 +203,41 @@
       "name": "Multichain Deployment Tests",
       "type": "node",
       "request": "launch",
-      "preLaunchTask": "tsc: build - tsconfig.json",
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js"
+      ],
       "program": "${workspaceFolder}/node_modules/hardhat/internal/cli/cli.js",
       "args": [
         "test-multichain",
-        "${workspaceFolder}/test/unit/rpc/RPCDiamondDeployer.test.ts",
+        "${workspaceFolder}/test/deployment/DiamondDeployment.test.ts",
         "--chains",
+        // "hardhat",
         "sepolia",
-        // "polygon_amoy,sepolia",
+        // "polygon_amoy",
         "--logs",
         "logs"
       ],
       "runtimeArgs": ["--preserve-symlinks"],
       "skipFiles": [
         "<node_internals>/**",
-        "${workspaceFolder}/node_modules/**/*.js"
+        "${workspaceFolder}/node_modules/*/**",
+        "!${workspaceFolder}/node_modules/@diamondslab/**"
       ],
       "resolveSourceMapLocations": [
         "${workspaceFolder}/dist/**/*.js",
-        "${workspaceFolder}/**/*.ts"
+        "${workspaceFolder}/node_modules/@diamondslab/**/*.js",
+        "${workspaceFolder}/packages/diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-diamonds/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-diamonds/src/**/*.ts",
+        "${workspaceFolder}/packages/hardhat-multichain/dist/**/*.js",
+        "${workspaceFolder}/packages/hardhat-multichain/src/**/*.ts",
+        "${workspaceFolder}/**/*.ts",
+        "!**/node_modules/**",
+        "${workspaceFolder}/node_modules/@diamondslab/**"
       ],
       "sourceMaps": true,
       "smartStep": true,
