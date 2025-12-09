@@ -63,9 +63,9 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 3.6 Generate fuzzing functions for each configured facet function with randomized parameters
   - [x] 3.7 Implement low-level `call()` wrapper function for calling Diamond contract
   - [x] 3.8 Add tracking for call success/failure statistics
-  - [x] 3.9 Generate invariant function: `echidna_diamond_exists()` to verify Diamond code exists
-  - [x] 3.10 Generate invariant function: `echidna_facets_valid()` to verify facet addresses
-  - [x] 3.11 Generate invariant function: `echidna_test_integrity()` to verify test contract integrity
+  - [x] 3.9 Generate invariant function: `medusa_diamond_exists()` to verify Diamond code exists
+  - [x] 3.10 Generate invariant function: `medusa_facets_valid()` to verify facet addresses
+  - [x] 3.11 Generate invariant function: `medusa_test_integrity()` to verify test contract integrity
   - [x] 3.12 Write generated contract to `test/fuzzing/generated/[DiamondName]Test.sol`
   - [x] 3.13 Ensure generated contracts use Solidity 0.8.x syntax
   - [x] 3.14 Add comments to generated contract explaining purpose and structure

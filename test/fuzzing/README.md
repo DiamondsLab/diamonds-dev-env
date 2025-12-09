@@ -135,7 +135,7 @@ contract ExampleDiamondTest {
     }
 
     // Invariants
-    function echidna_diamond_exists() public view returns (bool) {
+    function medusa_diamond_exists() public view returns (bool) {
         return DIAMOND.code.length > 0;
     }
 }
@@ -168,9 +168,9 @@ Generated as `medusa.json` in project root:
 
 The generated test contracts include several default invariants:
 
-1. **echidna_diamond_exists**: Diamond contract must always exist at the deployed address
-2. **echidna_facets_valid**: All registered facets must have valid selectors
-3. **echidna_test_integrity**: Test contract state must remain consistent
+1. **medusa_diamond_exists**: Diamond contract must always exist at the deployed address
+2. **medusa_facets_valid**: All registered facets must have valid selectors
+3. **medusa_test_integrity**: Test contract state must remain consistent
 
 These invariants are checked after every fuzz test execution.
 
@@ -248,7 +248,7 @@ Add fuzzing to your CI pipeline:
 
 - [Medusa Documentation](https://github.com/crytic/medusa)
 - [Trail of Bits Blog](https://blog.trailofbits.com/)
-- [Smart Contract Fuzzing Guide](https://secure-contracts.com/program-analysis/echidna/index.html)
+- [Smart Contract Fuzzing Guide](https://secure-contracts.com/program-analysis/medusa/index.html)
 - [Diamond Standard (ERC-2535)](https://eips.ethereum.org/EIPS/eip-2535)
 
 ## Support

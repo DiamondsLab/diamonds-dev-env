@@ -256,7 +256,7 @@ contract ExampleDiamondTest {
     }
 
     // Invariants
-    function echidna_diamond_exists() public view returns (bool) {
+    function medusa_diamond_exists() public view returns (bool) {
         return DIAMOND.code.length > 0;
     }
 }
@@ -330,7 +330,7 @@ function fuzz_0_transferOwnership(address newOwner) public {
 }
 
 // Custom invariant
-function echidna_call_count_increases() public view returns (bool) {
+function medusa_call_count_increases() public view returns (bool) {
     return callCount >= 0;
 }
 ```
@@ -341,7 +341,7 @@ Invariants are properties that should always be true:
 
 ```solidity
 // Owner should never be zero address
-function echidna_owner_not_zero() public view returns (bool) {
+function medusa_owner_not_zero() public view returns (bool) {
     (bool success, bytes memory data) = DIAMOND.staticcall(
         abi.encodeWithSelector(0x8da5cb5b) // owner()
     );
@@ -351,7 +351,7 @@ function echidna_owner_not_zero() public view returns (bool) {
 }
 
 // Diamond should always have code
-function echidna_diamond_exists() public view returns (bool) {
+function medusa_diamond_exists() public view returns (bool) {
     return DIAMOND.code.length > 0;
 }
 ```
@@ -531,7 +531,7 @@ medusa fuzz --config medusa.json
 
 - [Medusa Documentation](https://github.com/crytic/medusa)
 - [Trail of Bits Blog](https://blog.trailofbits.com/)
-- [Fuzzing Best Practices](https://github.com/crytic/building-secure-contracts/tree/master/program-analysis/echidna)
+- [Fuzzing Best Practices](https://github.com/crytic/building-secure-contracts/tree/master/program-analysis/medusa)
 - [Solidity Security](https://github.com/crytic/building-secure-contracts)
 
 ---

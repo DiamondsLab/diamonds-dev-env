@@ -217,7 +217,7 @@ function generateInvariants(
      * @notice Invariant: Diamond contract must always exist
      * @dev This ensures the Diamond proxy is never destroyed
      */
-    function echidna_diamond_exists() public view returns (bool) {
+    function medusa_diamond_exists() public view returns (bool) {
         return DIAMOND.code.length > 0;
     }
     
@@ -225,7 +225,7 @@ function generateInvariants(
      * @notice Invariant: Facet addresses must remain valid
      * @dev Checks that key facet contracts still exist
      */
-    function echidna_facets_valid() public view returns (bool) {
+    function medusa_facets_valid() public view returns (bool) {
         ${generateFacetChecks(facetAddresses)}
         return true;
     }
@@ -234,7 +234,7 @@ function generateInvariants(
      * @notice Invariant: Test contract maintains integrity
      * @dev Ensures the test contract itself is not corrupted
      */
-    function echidna_test_integrity() public view returns (bool) {
+    function medusa_test_integrity() public view returns (bool) {
         return address(this).code.length > 0 && DIAMOND != address(0);
     }
     
@@ -242,7 +242,7 @@ function generateInvariants(
      * @notice Property: Not all calls should fail
      * @dev At least some calls should succeed during fuzzing
      */
-    function echidna_some_calls_succeed() public view returns (bool) {
+    function medusa_some_calls_succeed() public view returns (bool) {
         // Allow this to pass if we haven't made many calls yet
         if (totalCalls < 100) return true;
         // Otherwise, require at least 1% success rate
