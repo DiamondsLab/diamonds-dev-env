@@ -50,6 +50,10 @@ diamonds-dev-env/
 - Node.js ≥ 18.0.0
 - Yarn ≥ 4.0.0
 - Git
+- **DevContainer Support**: VS Code with Dev Containers extension (recommended)
+  - Includes all security tools pre-installed (Medusa, Echidna, Vyper, etc.)
+  - Cross-architecture support for ARM64/M1/M2 Macs via QEMU
+  - Automatic environment setup and configuration
 
 ### Installation
 
@@ -638,10 +642,65 @@ yarn test test/specific-test-file.test.ts
 
 ### Security Tools
 
+- **Medusa**: Advanced property-based fuzzing from Trail of Bits (pre-installed in Docker)
+- **Echidna**: Property-based fuzzing for Ethereum smart contracts (pre-installed in Docker)
 - **Slither**: Static analysis for vulnerability detection
+- **Vyper**: Alternative smart contract language compiler for security-focused development
+- **pyevmasm (evmasm)**: EVM assembler/disassembler for low-level contract analysis
+- **crytic-compile**: Multi-language smart contract compilation library
 - **OpenZeppelin Defender**: Production-grade security monitoring
 - **Coverage reports**: Ensure comprehensive testing
 - **Gas optimization**: Efficient contract execution
+
+#### Using Medusa Fuzzer
+
+Medusa is pre-installed in the DevContainer and ready to use immediately:
+
+```bash
+# Run Medusa fuzzing on a Diamond contract
+npx hardhat medusa:fuzz --diamond ExampleDiamond
+
+# Customize fuzzing parameters
+npx hardhat medusa:fuzz --diamond ExampleDiamond --workers 4 --limit 10000 --timeout 300
+```
+
+See [docs/MEDUSA_FUZZING_GUIDE.md](docs/MEDUSA_FUZZING_GUIDE.md) for detailed usage.
+
+#### Using Echidna Fuzzer
+
+Echidna is pre-installed and can be used for property-based testing:
+
+```bash
+# Run Echidna on a contract (requires echidna.yaml config)
+echidna contracts/YourContract.sol --contract YourContract
+
+# Run with specific test mode
+echidna contracts/YourContract.sol --contract YourContract --test-mode assertion
+```
+
+#### Using Vyper
+
+Vyper compiler is available for compiling Vyper smart contracts:
+
+```bash
+# Compile a Vyper contract
+vyper contracts/MyContract.vy
+
+# Get Vyper version
+vyper --version
+```
+
+#### Using EVM Assembler (pyevmasm)
+
+Analyze EVM bytecode with the evmasm tool:
+
+```bash
+# Disassemble bytecode
+echo "60606040" | evmasm -d
+
+# Assemble EVM instructions
+echo "PUSH1 0x60 PUSH1 0x40" | evmasm -a
+```
 
 ## 🚀 Deployment Strategies
 
