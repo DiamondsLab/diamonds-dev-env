@@ -21,7 +21,7 @@ shrinkSequence: true          # Shrink failing sequences to minimal form
 workers: 4                    # Number of parallel workers
 
 # Test mode settings
-testMode: "assertion"         # Test mode: "property", "assertion", or "dapptest"
+testMode: "property"          # Test mode: "property", "assertion", or "dapptest"
 # Use "assertion" to check for assertion violations
 # Use "property" to test echidna_* functions that should return true
 

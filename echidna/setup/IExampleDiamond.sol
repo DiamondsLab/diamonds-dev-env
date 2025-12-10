@@ -16,7 +16,11 @@ interface IExampleDiamond {
     event DiamondCut(IDiamondCut.FacetCut[] _diamondCut, address _init, bytes _calldata);
     event InitLog(address indexed sender, string initializer);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-    event RoleAdminChanged(bytes32 indexed role, bytes32 indexed previousAdminRole, bytes32 indexed newAdminRole);
+    event RoleAdminChanged(
+        bytes32 indexed role,
+        bytes32 indexed previousAdminRole,
+        bytes32 indexed newAdminRole
+    );
     event RoleGranted(bytes32 indexed role, address indexed account, address indexed sender);
     event RoleRevoked(bytes32 indexed role, address indexed account, address indexed sender);
 
@@ -45,7 +49,9 @@ interface IExampleDiamond {
     /// @notice Gets all the function selectors supported by a specific facet
     /// @param _facet The facet address
     /// @return facetFunctionSelectors_
-    function facetFunctionSelectors(address _facet) external view returns (bytes4[] memory facetFunctionSelectors_);
+    function facetFunctionSelectors(
+        address _facet
+    ) external view returns (bytes4[] memory facetFunctionSelectors_);
 
     /// @notice Get all the facet addresses used by a diamond
     /// @return facetAddresses_
@@ -66,15 +72,25 @@ interface IExampleDiamond {
     // ============================================
 
     function DEFAULT_ADMIN_ROLE() external view returns (bytes32);
+
     function UPGRADER_ROLE() external view returns (bytes32);
+
     function getRoleAdmin(bytes32 role) external view returns (bytes32);
+
     function getRoleMember(bytes32 role, uint256 index) external view returns (address);
+
     function getRoleMemberCount(bytes32 role) external view returns (uint256);
+
     function grantRole(bytes32 role, address account) external;
+
     function hasRole(bytes32 role, address account) external view returns (bool);
+
     function owner() external view returns (address owner_);
+
     function renounceRole(bytes32 role, address callerConfirmation) external;
+
     function revokeRole(bytes32 role, address account) external;
+
     function transferOwnership(address newOwner) external;
 
     // ============================================
@@ -82,7 +98,9 @@ interface IExampleDiamond {
     // ============================================
 
     function init(address deployer) external;
+
     function exampleInit(address deployer) external;
+
     function reInit() external;
 
     // ============================================
@@ -97,18 +115,8 @@ interface IExampleDiamond {
     }
 
     function getCurrentVersion() external view returns (uint256);
+
     function getUpgradeHistory() external view returns (UpgradeRecord[] memory);
+
     function setVersion(uint256 newVersion, string memory description) external;
-
-    // ============================================
-    // ExampleConstantsFacet Functions
-    // ============================================
-
-    struct Constants {
-        string name;
-        string version;
-        uint256 chainId;
-    }
-
-    function getConstants() external view returns (Constants memory);
 }
