@@ -1,0 +1,32 @@
+# Semgrep ignore patterns
+
+# Test files - these are test contracts, not facets
+echidna/contracts/
+echidna/setup/
+
+# Test directories - testing code has different rules
+test/
+test-assets/
+
+# Generated files
+typechain-types/
+diamond-typechain-types/
+artifacts/
+cache/
+coverage/
+crytic-export/
+
+# Dependencies
+node_modules/
+lib/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Foundry generated
+flat/
+
+# Documentation
+docs/
