@@ -49,6 +49,10 @@ test/foundry/helpers/DiamondDeployment.sol
 .hardhat-node.pid
 hardhat-node.log
 
+# Echidna fuzzing artifacts
+echidna/corpus/
+echidna/coverage/
+
 
 # Medusa fuzzing artifacts
 medusa.json

@@ -103,5 +103,5 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 9.4 Add usage examples for Echidna fuzzing in documentation
   - [x] 9.5 Document the cross-architecture support for ARM64/M1 Macs
   - [x] 9.6 Update any DevContainer documentation about tool installation process
-  - [ ] 9.7 Commit all changes with descriptive commit message
-  - [ ] 9.8 Create pull request with reference to the PRD document
+  - [x] 9.7 Commit all changes with descriptive commit message
+  - [x] 9.8 Create pull request with reference to the PRD document

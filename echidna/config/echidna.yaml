@@ -1,0 +1,40 @@
+# Echidna Configuration for Diamond Fuzzing Tests
+# Documentation: https://github.com/crytic/echidna
+
+# Test execution settings
+testLimit: 10000              # Number of test sequences to generate
+seqLen: 100                   # Maximum length of each test sequence
+shrinkLimit: 5000             # Number of tries to shrink a failing test
+timeout: 300                  # Test timeout in seconds
+
+# Contract settings
+contractAddr: "0x00a329c0648769A73afAc7F9381E08FB43dBEA72"  # Standard Echidna contract address
+deployer: "0x30000"           # Deployer address
+
+# Coverage and corpus settings
+coverage: true                # Enable coverage tracking
+corpusDir: "echidna/corpus"   # Directory to store test corpus
+coverageFormats: ["txt", "html"]  # Coverage report formats
+
+# Optimization settings
+shrinkSequence: true          # Shrink failing sequences to minimal form
+workers: 4                    # Number of parallel workers
+
+# Test mode settings
+testMode: "assertion"         # Test mode: "property", "assertion", or "dapptest"
+# Use "assertion" to check for assertion violations
+# Use "property" to test echidna_* functions that should return true
+
+# Solidity compiler settings
+cryticArgs: ["--foundry-compile-all"]  # Additional Crytic compile args
+solcArgs: "--via-ir --optimize --optimize-runs 200"  # Solidity compiler arguments
+
+# Output settings
+quiet: false                  # Suppress most output
+format: "text"               # Output format: "text", "json", or "none"
+
+# Gas settings
+estimateGas: false           # Estimate gas usage (may slow down testing)
+
+# Additional options
+allowFFI: false              # Allow FFI (foreign function interface)
