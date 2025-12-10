@@ -48,16 +48,16 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 4.5 Add `echidna:clean` script to remove corpus and coverage artifacts
   - [x] 4.6 Test that `yarn echidna:setup` successfully prepares the environment
 
-- [ ] 5.0 Write comprehensive documentation
-  - [ ] 5.1 Create `echidna/README.md` with overview of Echidna integration
-  - [ ] 5.2 Document prerequisites (Echidna installation in DevContainer)
-  - [ ] 5.3 Write "Getting Started" section with steps to run first test
-  - [ ] 5.4 Document how to write new fuzzing tests with code examples
-  - [ ] 5.5 Explain relationship between `LocalDiamondDeployer`, diamond-abi, and test contracts
-  - [ ] 5.6 Provide examples of different invariant patterns (stateful vs stateless)
-  - [ ] 5.7 Document how to interpret Echidna output (coverage, failing tests, counterexamples)
-  - [ ] 5.8 Add troubleshooting section for common issues
-  - [ ] 5.9 Update main project `README.md` with reference to Echidna testing capability
+- [x] 5.0 Write comprehensive documentation
+  - [x] 5.1 Create `echidna/README.md` with overview of Echidna integration
+  - [x] 5.2 Document prerequisites (Echidna installation in DevContainer)
+  - [x] 5.3 Write "Getting Started" section with steps to run first test
+  - [x] 5.4 Document how to write new fuzzing tests with code examples
+  - [x] 5.5 Explain relationship between `LocalDiamondDeployer`, diamond-abi, and test contracts
+  - [x] 5.6 Provide examples of different invariant patterns (stateful vs stateless)
+  - [x] 5.7 Document how to interpret Echidna output (coverage, failing tests, counterexamples)
+  - [x] 5.8 Add troubleshooting section for common issues
+  - [x] 5.9 Update main project `README.md` with reference to Echidna testing capability
 
 - [ ] 6.0 Test and validate the integration
   - [ ] 6.1 Run `yarn echidna:setup` to ensure environment preparation works

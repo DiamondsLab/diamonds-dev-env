@@ -37,7 +37,7 @@ diamonds-dev-env/
 
 - **🏗️ Yarn Workspaces**: Monorepo structure for managing multiple packages
 - **🧪 Comprehensive Testing**: Unit tests, integration tests, fuzz tests, and coverage reporting
-- **🔍 Advanced Fuzzing**: Medusa and Forge fuzzing frameworks for comprehensive security testing
+- **🔍 Advanced Fuzzing**: Echidna, Medusa, and Forge fuzzing frameworks for comprehensive security testing
 - **🛠️ TypeScript Support**: Full type safety with modern TypeScript features
 - **📋 Code Quality**: ESLint, Prettier, and Husky for code formatting and git hooks
 - **🚀 CI/CD Pipeline**: Automated testing, building, and publishing via GitHub Actions
@@ -534,7 +534,20 @@ yarn coverage
 # Run specific test files
 yarn test test/unit/diamond-abi-generator.test.ts
 yarn test test/integration/defender/DefenderDeployment.test.ts
+
+# Run Echidna property-based fuzzing tests
+yarn echidna:setup  # Prepare environment
+yarn echidna:test   # Run fuzzing tests
+yarn echidna:clean  # Clean artifacts
+
+# Run Forge fuzzing tests
+yarn forge:fuzz
+
+# Run Medusa fuzzing tests
+yarn medusa:fuzz
 ```
+
+For detailed information about Echidna fuzzing, see [echidna/README.md](echidna/README.md).
 
 ## 📁 Project Structure
 
