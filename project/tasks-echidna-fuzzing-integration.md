@@ -31,14 +31,14 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 2.5 Ensure helper can read deployment configuration (hardcoded or from constructor parameters)
   - [x] 2.6 Generate or manually create Solidity interface from diamond-abi JSON for ExampleDiamond
 
-- [ ] 3.0 Implement example Echidna fuzzing test contract
-  - [ ] 3.1 Create `echidna/contracts/DiamondFuzzTest.sol` as the main test contract
-  - [ ] 3.2 Import `DiamondDeploymentHelper` and diamond-abi interface
-  - [ ] 3.3 Deploy Diamond in constructor using deployment helper
-  - [ ] 3.4 Implement `echidna_owner_not_zero()` invariant test (owner != address(0))
-  - [ ] 3.5 Implement `echidna_diamond_has_facets()` invariant test (diamond has at least one facet)
-  - [ ] 3.6 Add comprehensive comments explaining deployment, invariants, and how to add more tests
-  - [ ] 3.7 Test accessing facet functions through the diamond-abi interface
+- [x] 3.0 Implement example Echidna fuzzing test contract
+  - [x] 3.1 Create `echidna/contracts/DiamondFuzzTest.sol` as the main test contract
+  - [x] 3.2 Import `DiamondDeploymentHelper` and diamond-abi interface
+  - [x] 3.3 Deploy Diamond in constructor using deployment helper
+  - [x] 3.4 Implement `echidna_owner_not_zero()` invariant test (owner != address(0))
+  - [x] 3.5 Implement `echidna_diamond_has_facets()` invariant test (diamond has at least one facet)
+  - [x] 3.6 Add comprehensive comments explaining deployment, invariants, and how to add more tests
+  - [x] 3.7 Test accessing facet functions through the diamond-abi interface
 
 - [ ] 4.0 Create npm scripts and tooling
   - [ ] 4.1 Add `echidna:test` script to `package.json` to run Echidna with correct configuration
