@@ -40,13 +40,13 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 3.6 Add comprehensive comments explaining deployment, invariants, and how to add more tests
   - [x] 3.7 Test accessing facet functions through the diamond-abi interface
 
-- [ ] 4.0 Create npm scripts and tooling
-  - [ ] 4.1 Add `echidna:test` script to `package.json` to run Echidna with correct configuration
-  - [ ] 4.2 Add `echidna:setup` script to prepare environment (compile contracts, generate ABIs)
-  - [ ] 4.3 Create `scripts/setup/prepare-echidna.ts` helper script to clean artifacts and prepare test environment
-  - [ ] 4.4 Ensure Echidna script sets correct working directory and references config file
-  - [ ] 4.5 Add `echidna:clean` script to remove corpus and coverage artifacts
-  - [ ] 4.6 Test that `yarn echidna:test` successfully runs the example fuzzing test
+- [x] 4.0 Create npm scripts and tooling
+  - [x] 4.1 Add `echidna:test` script to `package.json` to run Echidna with correct configuration
+  - [x] 4.2 Add `echidna:setup` script to prepare environment (compile contracts, generate ABIs)
+  - [x] 4.3 Create `scripts/setup/prepare-echidna.ts` helper script to clean artifacts and prepare test environment
+  - [x] 4.4 Ensure Echidna script sets correct working directory and references config file
+  - [x] 4.5 Add `echidna:clean` script to remove corpus and coverage artifacts
+  - [x] 4.6 Test that `yarn echidna:setup` successfully prepares the environment
 
 - [ ] 5.0 Write comprehensive documentation
   - [ ] 5.1 Create `echidna/README.md` with overview of Echidna integration
