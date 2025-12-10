@@ -23,13 +23,13 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.5 Create `echidna.yaml` configuration file with sensible defaults (test sequences, corpus directory, coverage settings)
   - [x] 1.6 Add `echidna/corpus/` and `echidna/coverage/` to `.gitignore`
 
-- [ ] 2.0 Create Solidity deployment helper contracts
-  - [ ] 2.1 Analyze `scripts/setup/LocalDiamondDeployer.ts` and `test/deployment/DiamondDeployment.test.ts` to understand deployment logic
-  - [ ] 2.2 Create `echidna/setup/DiamondDeploymentHelper.sol` to handle Diamond deployment in Solidity
-  - [ ] 2.3 Implement constructor logic to deploy Diamond with test configuration
-  - [ ] 2.4 Add methods to retrieve deployed Diamond address and facet addresses
-  - [ ] 2.5 Ensure helper can read deployment configuration (hardcoded or from constructor parameters)
-  - [ ] 2.6 Generate or manually create Solidity interface from diamond-abi JSON for ExampleDiamond
+- [x] 2.0 Create Solidity deployment helper contracts
+  - [x] 2.1 Analyze `scripts/setup/LocalDiamondDeployer.ts` and `test/deployment/DiamondDeployment.test.ts` to understand deployment logic
+  - [x] 2.2 Create `echidna/setup/DiamondDeploymentHelper.sol` to handle Diamond deployment in Solidity
+  - [x] 2.3 Implement constructor logic to deploy Diamond with test configuration
+  - [x] 2.4 Add methods to retrieve deployed Diamond address and facet addresses
+  - [x] 2.5 Ensure helper can read deployment configuration (hardcoded or from constructor parameters)
+  - [x] 2.6 Generate or manually create Solidity interface from diamond-abi JSON for ExampleDiamond
 
 - [ ] 3.0 Implement example Echidna fuzzing test contract
   - [ ] 3.1 Create `echidna/contracts/DiamondFuzzTest.sol` as the main test contract
