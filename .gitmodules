@@ -1,17 +1,20 @@
 [submodule "packages/hardhat-diamonds"]
-	path = packages/hardhat-diamonds
-	url = git@github.com:GeniusVentures/hardhat-diamonds.git
+    path = packages/hardhat-diamonds
+    url = git@github.com:DiamondsLab/hardhat-diamonds.git
 [submodule "packages/diamonds"]
-	path = packages/diamonds
-	url = https://github.com/GeniusVentures/diamonds.git
-	branch = develop
+    path = packages/diamonds
+    url = https://github.com/DiamondsLab/diamonds.git
+    branch = develop
 [submodule ".devcontainer"]
         path = .devcontainer
-        url = https://github.com/GeniusVentures/diamonds-devcontainer.git
-        branch = feature/docker-compose-hashicorp-vault
-[submodule "hardhat-multichain-sub"]
-	path = packages/hardhat-multichain
-	url = https://github.com/DiamondsLab/hardhat-multichain.git
+        url = https://github.com/DiamondsLab/diamonds-devcontainer.git
+        branch = develop
+[submodule "packages/hardhat-multichain"]
+    path = packages/hardhat-multichain
+    url = https://github.com/DiamondsLab/hardhat-multichain.git
+    branch = develop
 [submodule "packages/diamonds-monitor"]
-	path = packages/diamonds-monitor
-	url = https://github.com/DiamondsLab/diamonds-monitor.git
+    path = packages/diamonds-monitor
+    url = https://github.com/DiamondsLab/diamonds-monitor.git
+    branch = develop
+    
