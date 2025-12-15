@@ -81,8 +81,8 @@ Update the file after completing each sub-task, not just after completing an ent
 
 ## Tasks
 
-- [ ] 0.0 Create feature branch
-  - [ ] 0.1 Create and checkout a new branch for this feature (e.g., `git checkout -b feature/diamonds-hardhat-foundry-module`)
+- [x] 0.0 Create feature branch
+  - [x] 0.1 Create and checkout a new branch for this feature (e.g., `git checkout -b feature/diamonds-hardhat-foundry-module`)
 - [ ] 1.0 Core Module Setup
   - [ ] 1.1 Review existing module structure in `packages/diamonds-hardhat-foundry`
   - [ ] 1.2 Update `package.json` with correct metadata (name, description, keywords, peer dependencies)
