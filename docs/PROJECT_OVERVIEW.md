@@ -134,3 +134,9 @@ The Diamonds Dev Env project also includes a Diamonds monitoring module called d
 - 🛠️ **Developer Tools**: Utilities for diamond development and debugging
 - 📈 **Analytics**: Performance metrics and usage analytics
 - 🔧 **Dual Usage**: Works as a Hardhat plugin or standalone library
+
+## Diamonds-Hardhat-Foundry Module
+
+The Diamonds Dev Env project also includes a Diamonds Hardhat Foundry module called diamonds-hardhat-foundry located in `packages/diamonds-hardhat-foundry`. This module provides integration between Hardhat and Foundry for testing and deploying Diamond contracts. It includes tasks to initialize the Foundry environment, deploy diamond contracts using Foundry, generate helper files for Foundry, and run tests using Foundry's Forge framework.
+
+There are tests in the for this module located in `packages/diamonds-hardhat-foundry/test` directory that cover the functionality of the module including framework classes and tasks. There are also tests in the root `test` directory that cover the overall Diamonds Dev Env project functionality including integration tests for the Diamonds-Hardhat-Foundry module and other modules in the project.
