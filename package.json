@@ -97,6 +97,7 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@diamondslab/diamonds": "workspace:*",
+    "@diamondslab/diamonds-hardhat-foundry": "workspace:^",
     "@diamondslab/diamonds-monitor": "workspace:^",
     "@diamondslab/hardhat-diamonds": "workspace:*",
     "@gnus.ai/contracts-upgradeable-diamond": "=4.5.0",

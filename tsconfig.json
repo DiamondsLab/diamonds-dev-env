@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022", "dom"],
-    "module": "CommonJS",
+    "module": "NodeNext",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -21,12 +21,13 @@
     "allowJs": true,
     "checkJs": false,
     "typeRoots": ["node_modules/@types", "./types"],
-    "moduleResolution": "node"
+    "moduleResolution": "nodenext"
   },
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": {
-      "module": "CommonJS"
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext"
     }
   },
   "include": [
