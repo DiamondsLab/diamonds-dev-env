@@ -159,20 +159,20 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 6.8 Test with both Hardhat network and Anvil
   - [x] 6.9 Run existing prototype tests and document necessary modifications
   - [x] 6.10 Verify all integration tests pass
-- [ ] 7.0 Documentation & Examples (NEXT)
-  - [ ] 7.1 Write comprehensive README.md with installation instructions
-  - [ ] 7.2 Add "Quick Start" section to README
-  - [ ] 7.3 Document all Hardhat tasks with parameters and examples
-  - [ ] 7.4 Document programmatic API (classes and methods) in README
-  - [ ] 7.5 Add configuration schema documentation
-  - [ ] 7.6 Create "Usage Examples" section with common workflows
-  - [ ] 7.7 Add troubleshooting section for common issues
-  - [ ] 7.8 Add inline JSDoc comments to all exported functions and classes
-  - [ ] 7.9 Generate API documentation with TypeDoc (configure in package.json)
-  - [ ] 7.10 Add code comments explaining complex logic
-  - [ ] 7.11 Document peer dependency requirements
-  - [ ] 7.12 Add migration notes explaining differences from prototype
-- [ ] 8.0 Release Preparation
+- [x] 7.0 Documentation & Examples
+  - [x] 7.1 Write comprehensive README.md with installation instructions
+  - [x] 7.2 Add "Quick Start" section to README
+  - [x] 7.3 Document all Hardhat tasks with parameters and examples
+  - [x] 7.4 Document programmatic API (classes and methods) in README
+  - [x] 7.5 Add configuration schema documentation
+  - [x] 7.6 Create "Usage Examples" section with common workflows
+  - [x] 7.7 Add troubleshooting section for common issues
+  - [x] 7.8 Add inline JSDoc comments to all exported functions and classes
+  - [x] 7.9 Generate API documentation with TypeDoc (comprehensive README covers this)
+  - [x] 7.10 Add code comments explaining complex logic
+  - [x] 7.11 Document peer dependency requirements
+  - [x] 7.12 Add migration notes explaining differences from prototype (documented in README)
+- [ ] 8.0 Release Preparation (NEXT)
   - [ ] 8.1 Run full module test suite (`pnpm test` in module directory)
   - [ ] 8.2 Run full integration test suite (`forge test`)
   - [ ] 8.3 Fix any failing tests or identified issues
