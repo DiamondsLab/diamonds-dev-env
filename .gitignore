@@ -25,12 +25,6 @@ diamond-typechain-types/
 test-mocks
 flat/
 .env.vault-migrated*
-logs//workspaces/diamonds_dev_env/.env.vault-migrated.20251021_034014
-logs//workspaces/diamonds_dev_env/.env.vault-migrated.20251023_134841
-archive/.env.vault-migrated.20251023_135129
-/workspaces/diamonds_dev_env/.env.vault-migrated.20251023_135446
-/workspaces/diamonds_dev_env/.env.vault-migrated.20251024_130529
-.env.vault.migrated*
 
 .yarn/
 dist/
@@ -61,3 +55,4 @@ test/fuzzing/generated/
 crytic-export/
 .medusa/
 .medusacache/
+flat/
