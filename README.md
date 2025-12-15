@@ -251,8 +251,8 @@ npx hardhat forge:fuzz --diamond ExampleDiamond --network localhost
 # Generate Solidity helpers from existing deployment
 npx hardhat forge:generate-helpers --diamond ExampleDiamond --network localhost
 
-# Or run directly with Forge (after deployment)
-forge test --fork-url http://127.0.0.1:8545 -vv
+# Or run directly with Forge (after deployment) using the correct hardhat port
+forge test --fork-url http://127.0.0.1:${HARDHAT_PORT:-8545} -vv
 ```
 
 Forge fuzzing supports testing against deployed state via chain forking, making it ideal for integration testing.
@@ -360,8 +360,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 Support
 
-- 📫 **Issues**: [GitHub Issues](https://github.com/GeniusVentures/hardhat-diamonds/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/GeniusVentures/hardhat-diamonds/discussions)
+- 📫 **Issues**: [GitHub Issues](https://github.com/diamondlabs/hardhat-diamonds/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/diamondlabs/hardhat-diamonds/discussions)
 - 📖 **Documentation**: [Package Documentation](./packages/hardhat-diamonds/README.md)
 
 ---
@@ -384,7 +384,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ```bash
 # Clone the repository
-git clone https://github.com/GeniusVentures/hardhat-diamonds-dev.git
+git clone https://github.com/diamondlabs/hardhat-diamonds-dev.git
 cd hardhat-diamonds-dev
 
 # Install dependencies
