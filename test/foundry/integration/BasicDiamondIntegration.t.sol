@@ -9,11 +9,12 @@ import "contracts-starter/contracts/facets/DiamondLoupeFacet.sol";
 import "contracts-starter/contracts/interfaces/IDiamondCut.sol";
 import "contracts-starter/contracts/libraries/LibDiamond.sol";
 
-/// @title Example Diamond Integration Test
-/// @notice Demonstrates how to test Diamond pattern contracts with Foundry
-/// @dev Shows deployment, facet addition, and function delegation
-contract ExampleDiamondIntegrationTest is Test {
-    ExampleDiamond diamond;
+/// @title Basic Diamond Integration Test
+/// @notice Tests basic Diamond pattern contracts with Foundry
+/// @dev Deployment, facet addition, and function delegation
+/// @dev requires change of import from ExampleDiamond to actual Diamond Contract
+contract BasicDiamondIntegrationTest is Test {
+    Diamond diamond;
     DiamondCutFacet diamondCutFacet;
     DiamondLoupeFacet diamondLoupeFacet;
     ExampleOwnershipFacet ownershipFacet;
@@ -45,8 +46,8 @@ contract ExampleDiamondIntegrationTest is Test {
         vm.label(address(ownershipFacet), "OwnershipFacet");
 
         // Deploy diamond with DiamondCutFacet
-        diamond = new ExampleDiamond(owner, address(diamondCutFacet));
-        vm.label(address(diamond), "ExampleDiamond");
+        diamond = new Diamond(owner, address(diamondCutFacet));
+        vm.label(address(diamond), "Diamond");
 
         // Prepare facet cuts to add after deployment
         IDiamondCut.FacetCut[] memory cuts = new IDiamondCut.FacetCut[](2);
@@ -162,7 +163,7 @@ contract ExampleDiamondIntegrationTest is Test {
         assertLt(gasUsed, 250_000, "Ownership transfer should use less than 250k gas");
     } /// @notice Test that diamond supports expected interfaces
 
-    function test_SupportsInterface() public view {
+    function test_SupportsInterface() public pure {
         // Diamond should support ERC165
         bytes4 erc165InterfaceId = 0x01ffc9a7;
 

@@ -10,7 +10,7 @@ This repository has been successfully configured as a **hybrid Hardhat + Foundry
 
 - **`foundry.toml`**: Configured Foundry to work alongside Hardhat
   - Solidity version: 0.8.19 (aligned with Hardhat)
-  - Source directory: `contracts/` (shared with Hardhat)
+  - Source directory: `contracts/` (shared with Hardhat or provided by Hardhat-Diamonds)
   - Test directory: `test/foundry/`
   - Cache directory: `cache_forge/` (separate from Hardhat)
   - Optimizer settings: Enabled with 200 runs (matching Hardhat)
