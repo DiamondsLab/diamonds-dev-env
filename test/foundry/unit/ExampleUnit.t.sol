@@ -24,7 +24,7 @@ contract ExampleUnitTest is Test {
 
         console.log("Diamond deployed at:", diamond);
         console.log("Deployed by:", deployer);
-        
+
         // Validate Diamond deployment
         DiamondForgeHelpers.assertValidDiamond(diamond);
     }
@@ -35,7 +35,7 @@ contract ExampleUnitTest is Test {
     function test_DiamondDeployed() public view {
         // Check that Diamond address is not zero
         assertNotEq(diamond, address(0), "Diamond address should not be zero");
-        
+
         // Check that Diamond has code
         address diamondAddr = diamond;
         uint256 codeSize;
@@ -60,7 +60,7 @@ contract ExampleUnitTest is Test {
         // Example:
         // MyDiamond(diamond).someFunction();
         // assertEq(result, expectedValue);
-        
+
         assertTrue(true, "Replace this with actual test");
     }
 }

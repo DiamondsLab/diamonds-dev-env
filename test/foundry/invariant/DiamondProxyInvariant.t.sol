@@ -3,11 +3,17 @@ pragma solidity ^0.8.19;
 
 import "@diamondslab/diamonds-hardhat-foundry/contracts/DiamondFuzzBase.sol";
 import "contracts-starter/contracts/interfaces/IDiamondLoupe.sol";
+import "../helpers/DiamondDeployment.sol";
 
 /// @title DiamondProxyInvariant
 /// @notice Invariant tests for Diamond proxy integrity and consistency
 /// @dev Task 4.15-4.19: Tests critical invariants that must always hold
 contract DiamondProxyInvariant is DiamondFuzzBase {
+    /// @notice Override to load Diamond from deployment
+    function _loadDiamondAddress() internal view override returns (address) {
+        return DiamondDeployment.getDiamondAddress();
+    }
+    
     /// @notice Array of facet addresses loaded during setup
     address[] internal facetAddresses;
 

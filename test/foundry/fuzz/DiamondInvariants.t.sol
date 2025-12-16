@@ -3,11 +3,17 @@ pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
 import "@diamondslab/diamonds-hardhat-foundry/contracts/DiamondFuzzBase.sol";
+import "../helpers/DiamondDeployment.sol";
 
 /// @title DiamondInvariants
 /// @notice Invariant tests for Diamond state consistency
 /// @dev Task 4.21-4.27: State consistency and invariant testing
 contract DiamondInvariants is DiamondFuzzBase {
+    /// @notice Override to load Diamond from deployment
+    function _loadDiamondAddress() internal view override returns (address) {
+        return DiamondDeployment.getDiamondAddress();
+    }
+    
     /// @notice Test accounts for invariant testing
     address[] public testAccounts;
 

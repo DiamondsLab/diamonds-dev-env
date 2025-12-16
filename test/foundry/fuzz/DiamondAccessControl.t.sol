@@ -2,11 +2,17 @@
 pragma solidity ^0.8.19;
 
 import "@diamondslab/diamonds-hardhat-foundry/contracts/DiamondFuzzBase.sol";
+import "../helpers/DiamondDeployment.sol";
 
 /// @title ExampleDiamondAccessControl
 /// @notice Fuzzing tests for Diamond access control mechanisms
 /// @dev Task 4.5-4.9: Tests role granting, revocation, renunciation, and unauthorized access
 contract ExampleDiamondAccessControl is DiamondFuzzBase {
+    /// @notice Override to load Diamond from deployment
+    function _loadDiamondAddress() internal view override returns (address) {
+        return DiamondDeployment.getDiamondAddress();
+    }
+    
     /// @notice Default admin role identifier
     bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
 

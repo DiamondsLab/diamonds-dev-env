@@ -3,11 +3,17 @@ pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
 import "@diamondslab/diamonds-hardhat-foundry/contracts/DiamondFuzzBase.sol";
+import "../helpers/DiamondDeployment.sol";
 
 /// @title DiamondRouting
 /// @notice Tests for Diamond selector routing to facets
 /// @dev Task 4.16-4.20: Validate function selector routing
 contract DiamondRouting is DiamondFuzzBase {
+    /// @notice Override to load Diamond from deployment
+    function _loadDiamondAddress() internal view override returns (address) {
+        return DiamondDeployment.getDiamondAddress();
+    }
+    
     /// @notice Expected facet addresses (loaded from deployment)
     mapping(bytes4 => address) public expectedFacets;
 

@@ -18,7 +18,7 @@ contract ExampleIntegrationTest is Test {
 
     address diamond;
     address deployer;
-    
+
     // Test users
     address user1;
     address user2;
@@ -34,7 +34,7 @@ contract ExampleIntegrationTest is Test {
         // Set up test users
         user1 = makeAddr("user1");
         user2 = makeAddr("user2");
-        
+
         // Fund test users
         vm.deal(user1, 100 ether);
         vm.deal(user2, 100 ether);
@@ -54,11 +54,11 @@ contract ExampleIntegrationTest is Test {
         // 2. Verify state change
         // 3. User2 calls function on Facet B
         // 4. Verify combined state
-        
+
         vm.startPrank(user1);
         // Your test logic here
         vm.stopPrank();
-        
+
         assertTrue(true, "Replace with actual integration test");
     }
 
@@ -67,7 +67,7 @@ contract ExampleIntegrationTest is Test {
      */
     function test_CrossFacetState() public {
         // TODO: Test that state is properly shared/isolated between facets
-        
+
         assertTrue(true, "Replace with actual state test");
     }
 
@@ -77,11 +77,11 @@ contract ExampleIntegrationTest is Test {
     function test_DiamondUpgrade() public {
         // TODO: Test facet addition/replacement/removal
         // This requires diamondCut functionality
-        
+
         vm.startPrank(deployer);
         // Your upgrade logic here
         vm.stopPrank();
-        
+
         assertTrue(true, "Replace with actual upgrade test");
     }
 }

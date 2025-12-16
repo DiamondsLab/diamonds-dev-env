@@ -2,11 +2,17 @@
 pragma solidity ^0.8.19;
 
 import "@diamondslab/diamonds-hardhat-foundry/contracts/DiamondFuzzBase.sol";
+import "../helpers/DiamondDeployment.sol";
 
 /// @title ExampleDiamondOwnership
 /// @notice Fuzzing tests for Diamond ownership mechanisms
 /// @dev Task 4.10-4.12: Tests ownership transfer and constraints
 contract ExampleDiamondOwnership is DiamondFuzzBase {
+    /// @notice Override to load Diamond from deployment
+    function _loadDiamondAddress() internal view override returns (address) {
+        return DiamondDeployment.getDiamondAddress();
+    }
+    
     /// @notice Event emitted when ownership is transferred
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 

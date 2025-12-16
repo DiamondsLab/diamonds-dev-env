@@ -13,7 +13,7 @@ contract AccessControlFuzz is DiamondFuzzBase {
     function _loadDiamondAddress() internal view override returns (address) {
         return DiamondDeployment.getDiamondAddress();
     }
-    
+
     /// @notice Role constants from ExampleAccessControl
     /// @dev Task 4.4: Define role constants
     bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
