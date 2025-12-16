@@ -55,22 +55,21 @@ The deployment callbacks are typescript files that contain functions that are ru
 
 ## LocalDiamondDeployer Class
 
-In our local project we have a LocalDiamondDeployer class in `scripts/setup/LocalDiamondDeployer.ts` which is used for Hardhat nodes and forks. A singleton instance of the LocalDiamondDeployer object is created or retrieved in unit tests. The object creation requires a configuration. This object then runs through the Strategy, deploying (or upgrading) the Diamond contract and all the facets with any additional initialization transaction, performs the DiamondCut with a single initialization function call and then any callbacks that need to be run after deployment.:
+> **Note**: As of the migration to `@diamondslab/hardhat-diamonds`, the `LocalDiamondDeployer` class is now part of the hardhat-diamonds module and should be imported from `@diamondslab/hardhat-diamonds/dist/utils`.
+
+The `LocalDiamondDeployer` class is used for deploying Diamond contracts on Hardhat nodes and forks. A singleton instance of the LocalDiamondDeployer object is created or retrieved in unit tests. The object creation requires a configuration and the Hardhat Runtime Environment (hre). This object then runs through the Strategy, deploying (or upgrading) the Diamond contract and all the facets with any additional initialization transaction, performs the DiamondCut with a single initialization function call and then any callbacks that need to be run after deployment.
 
 ### Example Usage
 
-```bash
+```typescript
 import { Diamond } from '@diamondslab/diamonds';
+import { LocalDiamondDeployer, LocalDiamondDeployerConfig } from '@diamondslab/hardhat-diamonds/dist/utils';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { debug } from 'debug';
 import { JsonRpcProvider } from 'ethers';
 import hre from 'hardhat';
 import { ExampleDiamond } from '../../diamond-typechain-types';
-import {
-	LocalDiamondDeployer,
-	LocalDiamondDeployerConfig,
-} from '../../scripts/setup/LocalDiamondDeployer';
 import { loadDiamondContract } from '../../scripts/utils/loadDiamondArtifact';
 
 let diamond: Diamond;
@@ -86,7 +85,8 @@ const config = {
   writeDeployedDiamondData: false,
   configFilePath: `diamonds/ExampleDiamond/examplediamond.config.json`,
 } as LocalDiamondDeployerConfig;
-const diamondDeployer = await LocalDiamondDeployer.getInstance(config);
+// Pass hre as first parameter to getInstance
+const diamondDeployer = await LocalDiamondDeployer.getInstance(hre, config);
 await diamondDeployer.setVerbose(true);
 diamond = await diamondDeployer.getDiamondDeployed();
 const deployedDiamondData = diamond.getDeployedDiamondData();

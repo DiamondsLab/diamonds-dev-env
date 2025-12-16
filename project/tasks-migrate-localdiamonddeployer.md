@@ -61,14 +61,14 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 3.4 Check `test/integration/diamonds-hardhat-foundry.test.ts` for any LocalDiamondDeployer references that need updating (currently only in comments)
   - [x] 3.5 Verify no other test files reference the old LocalDiamondDeployer path by searching the codebase
 
-- [ ] 4.0 Update documentation
-  - [ ] 4.1 Read current `packages/hardhat-diamonds/README.md` to understand its structure
-  - [ ] 4.2 Add a new section to `packages/hardhat-diamonds/README.md` documenting LocalDiamondDeployer
-  - [ ] 4.3 Include API documentation with constructor parameters, methods, and configuration options
-  - [ ] 4.4 Add a usage example showing how to import and use LocalDiamondDeployer in tests
-  - [ ] 4.5 Update `docs/PROJECT_OVERVIEW.md` to reflect that LocalDiamondDeployer is now part of hardhat-diamonds module
-  - [ ] 4.6 Update the import path in the example usage section of PROJECT_OVERVIEW.md
-  - [ ] 4.7 Add note about the migration to help future developers understand the module structure
+- [x] 4.0 Update documentation
+  - [x] 4.1 Read current `packages/hardhat-diamonds/README.md` to understand its structure
+  - [x] 4.2 Add a new section to `packages/hardhat-diamonds/README.md` documenting LocalDiamondDeployer
+  - [x] 4.3 Include API documentation with constructor parameters, methods, and configuration options
+  - [x] 4.4 Add a usage example showing how to import and use LocalDiamondDeployer in tests
+  - [x] 4.5 Update `docs/PROJECT_OVERVIEW.md` to reflect that LocalDiamondDeployer is now part of hardhat-diamonds module
+  - [x] 4.6 Update the import path in the example usage section of PROJECT_OVERVIEW.md
+  - [x] 4.7 Add note about the migration to help future developers understand the module structure
 
 - [ ] 5.0 Verify tests and create example
   - [ ] 5.1 Run the DiamondDeployment test to verify it passes: `yarn test test/deployment/DiamondDeployment.test.ts`
