@@ -13,7 +13,7 @@ contract DiamondProxyInvariant is DiamondFuzzBase {
     function _loadDiamondAddress() internal view override returns (address) {
         return DiamondDeployment.getDiamondAddress();
     }
-    
+
     /// @notice Array of facet addresses loaded during setup
     address[] internal facetAddresses;
 

@@ -12,7 +12,7 @@ contract ExampleDiamondOwnership is DiamondFuzzBase {
     function _loadDiamondAddress() internal view override returns (address) {
         return DiamondDeployment.getDiamondAddress();
     }
-    
+
     /// @notice Event emitted when ownership is transferred
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 

@@ -12,7 +12,7 @@ contract ExampleDiamondAccessControl is DiamondFuzzBase {
     function _loadDiamondAddress() internal view override returns (address) {
         return DiamondDeployment.getDiamondAddress();
     }
-    
+
     /// @notice Default admin role identifier
     bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
 

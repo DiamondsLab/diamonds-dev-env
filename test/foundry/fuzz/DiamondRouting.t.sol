@@ -13,7 +13,7 @@ contract DiamondRouting is DiamondFuzzBase {
     function _loadDiamondAddress() internal view override returns (address) {
         return DiamondDeployment.getDiamondAddress();
     }
-    
+
     /// @notice Expected facet addresses (loaded from deployment)
     mapping(bytes4 => address) public expectedFacets;
 

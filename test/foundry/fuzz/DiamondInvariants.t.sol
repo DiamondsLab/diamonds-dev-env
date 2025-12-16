@@ -13,7 +13,7 @@ contract DiamondInvariants is DiamondFuzzBase {
     function _loadDiamondAddress() internal view override returns (address) {
         return DiamondDeployment.getDiamondAddress();
     }
-    
+
     /// @notice Test accounts for invariant testing
     address[] public testAccounts;
 
