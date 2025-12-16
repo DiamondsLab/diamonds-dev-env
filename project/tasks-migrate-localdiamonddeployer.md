@@ -70,12 +70,12 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 4.6 Update the import path in the example usage section of PROJECT_OVERVIEW.md
   - [x] 4.7 Add note about the migration to help future developers understand the module structure
 
-- [ ] 5.0 Verify tests and create example
-  - [ ] 5.1 Run the DiamondDeployment test to verify it passes: `yarn test test/deployment/DiamondDeployment.test.ts`
-  - [ ] 5.2 Run the e2e-diamond-monitoring test: `yarn test test/integration/e2e-diamond-monitoring.test.ts`
-  - [ ] 5.3 Run the performance-monitoring test: `yarn test test/integration/performance-monitoring.test.ts`
-  - [ ] 5.4 Run all tests to ensure no regressions: `yarn test`
-  - [ ] 5.5 Verify the singleton pattern still works correctly across multiple test instances
-  - [ ] 5.6 Verify Diamond ABI generation still functions properly
-  - [ ] 5.7 Create or update an example in packages/hardhat-diamonds showing complete LocalDiamondDeployer usage
-  - [ ] 5.8 Document any issues or considerations for future maintainers
+- [x] 5.0 Verify tests and create example
+  - [x] 5.1 Run the DiamondDeployment test to verify it passes: `yarn test test/deployment/DiamondDeployment.test.ts`
+  - [x] 5.2 Run the e2e-diamond-monitoring test: `yarn test test/integration/e2e-diamond-monitoring.test.ts`
+  - [x] 5.3 Run the performance-monitoring test: `yarn test test/integration/performance-monitoring.test.ts`
+  - [x] 5.4 Run all tests to ensure no regressions: `yarn test` (26 tests passing)
+  - [x] 5.5 Verify the singleton pattern still works correctly across multiple test instances
+  - [x] 5.6 Verify Diamond ABI generation still functions properly
+  - [x] 5.7 Create or update an example in packages/hardhat-diamonds showing complete LocalDiamondDeployer usage (documented in README.md)
+  - [x] 5.8 Document any issues or considerations for future maintainers (completed via architectural notes in README)
