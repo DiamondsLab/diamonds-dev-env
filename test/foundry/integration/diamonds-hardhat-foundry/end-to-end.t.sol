@@ -24,7 +24,7 @@ contract EndToEndTest is Test {
     /**
      * @notice Test complete workflow from init to test
      */
-    function test_CompleteWorkflow() public {
+    function test_CompleteWorkflow() public pure {
         console.log("\n=== Testing Complete Workflow ===");
 
         // Step 1: Init would create directory structure
@@ -47,7 +47,7 @@ contract EndToEndTest is Test {
     /**
      * @notice Test programmatic API usage
      */
-    function test_ProgrammaticAPIUsage() public {
+    function test_ProgrammaticAPIUsage() public pure {
         console.log("\n=== Testing Programmatic API ===");
 
         // Would test using DeploymentManager, HelperGenerator, ForgeFuzzingFramework directly
@@ -61,7 +61,7 @@ contract EndToEndTest is Test {
     /**
      * @notice Test redeployment with --force flag
      */
-    function test_ForceRedeployment() public {
+    function test_ForceRedeployment() public pure {
         console.log("\n=== Testing Force Redeployment ===");
 
         // Would test:
@@ -75,7 +75,7 @@ contract EndToEndTest is Test {
     /**
      * @notice Test deployment reuse with --reuse flag
      */
-    function test_DeploymentReuse() public {
+    function test_DeploymentReuse() public pure {
         console.log("\n=== Testing Deployment Reuse ===");
 
         // Would test:
@@ -89,7 +89,7 @@ contract EndToEndTest is Test {
     /**
      * @notice Test example test generation
      */
-    function test_ExampleTestGeneration() public {
+    function test_ExampleTestGeneration() public pure {
         console.log("\n=== Testing Example Test Generation ===");
 
         // Would test that diamonds-forge:init --examples creates:
@@ -103,7 +103,7 @@ contract EndToEndTest is Test {
     /**
      * @notice Test with custom configuration
      */
-    function test_CustomConfiguration() public {
+    function test_CustomConfiguration() public pure {
         console.log("\n=== Testing Custom Configuration ===");
 
         // Would test custom config options:

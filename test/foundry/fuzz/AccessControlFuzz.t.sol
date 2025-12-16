@@ -2,12 +2,18 @@
 pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
-import "../helpers/DiamondFuzzBase.sol";
+import "@diamondslab/diamonds-hardhat-foundry/contracts/DiamondFuzzBase.sol";
+import "../helpers/DiamondDeployment.sol";
 
 /// @title AccessControlFuzz
 /// @notice Fuzzing tests for Diamond access control functionality
 /// @dev Task 4.0: Comprehensive fuzzing tests for ExampleAccessControl
 contract AccessControlFuzz is DiamondFuzzBase {
+    /// @notice Override to load Diamond from deployment
+    function _loadDiamondAddress() internal view override returns (address) {
+        return DiamondDeployment.getDiamondAddress();
+    }
+    
     /// @notice Role constants from ExampleAccessControl
     /// @dev Task 4.4: Define role constants
     bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;

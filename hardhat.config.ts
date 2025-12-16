@@ -1,5 +1,7 @@
+import '@diamondslab/diamonds-hardhat-foundry';
 import '@diamondslab/diamonds-monitor';
 import '@diamondslab/hardhat-diamonds';
+
 import 'hardhat-multichain';
 
 import * as dotenv from 'dotenv';
@@ -11,9 +13,6 @@ import 'hardhat-abi-exporter';
 import 'hardhat-gas-reporter';
 import { HardhatUserConfig } from 'hardhat/config';
 import 'solidity-coverage';
-
-import './scripts/tasks/forge';
-import './scripts/tasks/medusa';
 
 dotenv.config();
 

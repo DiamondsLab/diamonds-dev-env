@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
-import "../helpers/DiamondFuzzBase.sol";
+import "@diamondslab/diamonds-hardhat-foundry/contracts/DiamondFuzzBase.sol";
 
 /// @title DiamondInvariants
 /// @notice Invariant tests for Diamond state consistency

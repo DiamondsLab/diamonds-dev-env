@@ -6,13 +6,13 @@
  */
 
 import type { DeployedDiamondData, Diamond } from '@diamondslab/diamonds';
+import { LocalDiamondDeployer } from '@diamondslab/hardhat-diamonds/dist/utils';
 import { spawn } from 'child_process';
 import debug from 'debug';
 import type { JsonRpcProvider, Provider } from 'ethers';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { generateSolidityHelperLibrary } from '../utils/forgeHelpers';
-import { LocalDiamondDeployer } from './LocalDiamondDeployer';
 
 const log: debug.Debugger = debug('ForgeFuzzingFramework');
 
@@ -127,7 +127,7 @@ export class ForgeFuzzingFramework {
 			configFilePath: this.config.configFilePath,
 		};
 
-		this.diamondDeployer = await LocalDiamondDeployer.getInstance(deployerConfig);
+		this.diamondDeployer = await LocalDiamondDeployer.getInstance(hre, deployerConfig);
 		await this.diamondDeployer.setVerbose(this.verbose);
 		this.diamond = await this.diamondDeployer.getDiamondDeployed();
 
