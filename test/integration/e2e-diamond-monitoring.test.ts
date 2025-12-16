@@ -1,11 +1,11 @@
 import { Diamond } from '@diamondslab/diamonds';
 import { DiamondMonitor, EventHandlers, FacetManager } from '@diamondslab/diamonds-monitor';
-import { expect } from 'chai';
-import hre from 'hardhat';
 import {
 	LocalDiamondDeployer,
 	LocalDiamondDeployerConfig,
-} from '../../scripts/setup/LocalDiamondDeployer';
+} from '@diamondslab/hardhat-diamonds/dist/utils';
+import { expect } from 'chai';
+import hre from 'hardhat';
 
 describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 	this.timeout(600000); // 10 minutes for e2e tests
@@ -15,7 +15,7 @@ describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 	let facetManager: FacetManager;
 	let eventHandlers: EventHandlers;
 	let deployer: LocalDiamondDeployer;
-	let deployedDiamondData: any;
+	let deployedDiamondData: ReturnType<Diamond['getDeployedDiamondData']>;
 
 	before(async function () {
 		// Skip if not in local hardhat network
@@ -36,7 +36,7 @@ describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 			configFilePath: 'diamonds/ExampleDiamond/examplediamond.config.json',
 		};
 
-		deployer = await LocalDiamondDeployer.getInstance(config);
+		deployer = await LocalDiamondDeployer.getInstance(hre, config);
 		await deployer.setVerbose(true);
 		diamond = await deployer.getDiamondDeployed();
 		deployedDiamondData = diamond.getDeployedDiamondData();
@@ -68,8 +68,8 @@ describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 			// Start monitoring
 			const eventEmitter = monitor.trackEvents();
 
-			let facetChangeEvents: any[] = [];
-			let healthIssues: any[] = [];
+			let facetChangeEvents: unknown[] = [];
+			let healthIssues: unknown[] = [];
 
 			eventEmitter.on('facetChanged', (event) => {
 				facetChangeEvents.push(event);

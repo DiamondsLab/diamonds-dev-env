@@ -1,4 +1,8 @@
 import { Diamond } from '@diamondslab/diamonds';
+import {
+	LocalDiamondDeployer,
+	LocalDiamondDeployerConfig,
+} from '@diamondslab/hardhat-diamonds/dist/utils';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { debug } from 'debug';
@@ -6,10 +10,6 @@ import { JsonRpcProvider } from 'ethers';
 import hre from 'hardhat';
 import { multichain } from 'hardhat-multichain';
 import { ExampleDiamond } from '../../diamond-typechain-types';
-import {
-	LocalDiamondDeployer,
-	LocalDiamondDeployerConfig,
-} from '../../scripts/setup/LocalDiamondDeployer';
 import { getInterfaceID } from '../../scripts/utils/helpers';
 import { loadDiamondContract } from '../../scripts/utils/loadDiamondArtifact';
 import { IDiamondCut__factory, IDiamondLoupe__factory } from '../../typechain-types';
@@ -59,7 +59,7 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 					writeDeployedDiamondData: false,
 					configFilePath: `diamonds/ExampleDiamond/examplediamond.config.json`,
 				} as LocalDiamondDeployerConfig;
-				const diamondDeployer = await LocalDiamondDeployer.getInstance(config);
+				const diamondDeployer = await LocalDiamondDeployer.getInstance(hre, config);
 				await diamondDeployer.setVerbose(true);
 				diamond = await diamondDeployer.getDiamondDeployed();
 				const deployedDiamondData = diamond.getDeployedDiamondData();
