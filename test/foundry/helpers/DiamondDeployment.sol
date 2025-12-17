@@ -9,7 +9,7 @@ pragma solidity ^0.8.19;
  *      record and should not be edited manually.
  *
  * Generated from: diamonds/ExampleDiamond/deployments/examplediamond-hardhat-31337.json
- * Generated at: 2025-12-16T22:21:22.737Z
+ * Generated at: 2025-12-17T00:37:43.473Z
  *
  * To regenerate this file:
  *   npx hardhat diamonds-forge:generate-helpers --diamond ExampleDiamond
@@ -20,6 +20,10 @@ library DiamondDeployment {
     /// @notice Address of the deployed ExampleDiamond contract
     /// @dev This is the main Diamond proxy address
     address constant DIAMOND_ADDRESS = 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512;
+
+    /// @notice Address of the deployer account
+    /// @dev Account that deployed the Diamond
+    address constant DEPLOYER_ADDRESS = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
 
     // ========================================
     // Facet Addresses
@@ -46,6 +50,14 @@ library DiamondDeployment {
      */
     function getDiamondAddress() internal pure returns (address) {
         return DIAMOND_ADDRESS;
+    }
+
+    /**
+     * @notice Get the deployer address
+     * @return The address of the deployer account
+     */
+    function getDeployerAddress() internal pure returns (address) {
+        return DEPLOYER_ADDRESS;
     }
 
     /**
