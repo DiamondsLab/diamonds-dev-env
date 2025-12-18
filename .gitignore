@@ -56,3 +56,6 @@ crytic-export/
 .medusa/
 .medusacache/
 flat/
+
+# Foundry test helper artifacts
+test/foundry/helpers/DiamondDeployment.sol
