@@ -234,7 +234,7 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 			// 	const IERC20UpgradeableInterface = IERC20Upgradeable__factory.createInterface();
 			// 	// Generate the ERC20 interface ID by XORing with the base interface ID.
 			// 	const IERC20InterfaceID = getInterfaceID(IERC20UpgradeableInterface);
-			// 	// Assert that the `diamond` contract supports the ERC20 interface.
+			// 	// Assert that the `diamond` contract supports the ERC20 interface.pac
 			// 	// assert(
 			// 	//   await exampleDiamond?.supportsInterface(IERC20InterfaceID.toString(16).padStart(8, '0')),
 			// 	//   "Doesn't support IERC20Upgradeable",
