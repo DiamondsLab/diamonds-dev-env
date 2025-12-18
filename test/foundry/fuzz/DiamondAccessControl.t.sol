@@ -9,7 +9,7 @@ import "../helpers/DiamondDeployment.sol";
 /// @dev Task 4.5-4.9: Tests role granting, revocation, renunciation, and unauthorized access
 contract ExampleDiamondAccessControl is DiamondFuzzBase {
     /// @notice Override to load Diamond from deployment
-    function _loadDiamondAddress() internal view override returns (address) {
+    function _loadDiamondAddress() internal pure override returns (address) {
         return DiamondDeployment.getDiamondAddress();
     }
 

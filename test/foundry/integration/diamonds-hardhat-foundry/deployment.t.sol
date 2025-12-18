@@ -37,14 +37,14 @@ contract DeploymentIntegrationTest is Test {
      */
     function test_DeploymentExists() public {
         // Skip if ABI doesn't exist yet (Diamond not deployed)
-        try vm.readFile(abiPath) returns (string memory abi) {
-            require(bytes(abi).length > 0, "ABI file is empty");
+        try vm.readFile(abiPath) returns (string memory abiJson) {
+            require(bytes(abiJson).length > 0, "ABI file is empty");
 
             console.log("Test: Verify Diamond deployment exists");
-            console.log("ABI loaded successfully, length:", bytes(abi).length);
+            console.log("ABI loaded successfully, length:", bytes(abiJson).length);
 
             // If we can read the ABI, a deployment exists
-            assertTrue(bytes(abi).length > 0, "Diamond deployment exists");
+            assertTrue(bytes(abiJson).length > 0, "Diamond deployment exists");
         } catch {
             console.log("SKIP: Diamond not yet deployed. Run deployment first.");
             vm.skip(true);
@@ -77,7 +77,7 @@ contract DeploymentIntegrationTest is Test {
                 codeSize := extcodesize(diamondAddr)
             }
             console.log("Diamond code size:", codeSize);
-            
+
             // Note: Code size will be 0 if not forking from Hardhat network
             // This is expected - deployment data can be verified without on-chain state
             if (codeSize == 0) {
@@ -156,11 +156,11 @@ contract DeploymentIntegrationTest is Test {
      * @notice Test ABI file generation
      */
     function test_AbiFileGenerated() public {
-        try vm.readFile(abiPath) returns (string memory abi) {
+        try vm.readFile(abiPath) returns (string memory abiJson) {
             console.log("Test: Verify ABI file is generated");
 
             // Verify ABI has functions
-            bytes4[] memory selectors = abi.extractSelectors();
+            bytes4[] memory selectors = abiJson.extractSelectors();
             console.log("Function selectors found:", selectors.length);
 
             assertTrue(selectors.length > 0, "ABI should contain function selectors");

@@ -9,7 +9,7 @@ pragma solidity ^0.8.19;
  *      record and should not be edited manually.
  *
  * Generated from: diamonds/ExampleDiamond/deployments/examplediamond-hardhat-31337.json
- * Generated at: 2025-12-17T00:37:43.473Z
+ * Generated at: 2025-12-18T04:59:57.331Z
  *
  * To regenerate this file:
  *   npx hardhat diamonds-forge:generate-helpers --diamond ExampleDiamond

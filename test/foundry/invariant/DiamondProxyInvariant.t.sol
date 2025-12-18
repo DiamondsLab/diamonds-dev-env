@@ -10,7 +10,7 @@ import "../helpers/DiamondDeployment.sol";
 /// @dev Task 4.15-4.19: Tests critical invariants that must always hold
 contract DiamondProxyInvariant is DiamondFuzzBase {
     /// @notice Override to load Diamond from deployment
-    function _loadDiamondAddress() internal view override returns (address) {
+    function _loadDiamondAddress() internal pure override returns (address) {
         return DiamondDeployment.getDiamondAddress();
     }
 

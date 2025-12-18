@@ -19,7 +19,7 @@ contract DiamondABILoaderTest is Test {
     }
 
     /// @notice Task 1.1 & 1.2: Test loading Diamond ABI file
-    function test_LoadDiamondABI() public {
+    function test_LoadDiamondABI() public view {
         string memory loadedAbi = DiamondABILoader.loadDiamondABI(DIAMOND_ABI_PATH);
 
         // Verify we got data
@@ -30,7 +30,7 @@ contract DiamondABILoaderTest is Test {
     }
 
     /// @notice Task 1.3: Test extracting function selectors
-    function test_ExtractSelectors() public {
+    function test_ExtractSelectors() public view {
         bytes4[] memory selectors = DiamondABILoader.extractSelectors(abiJson);
 
         // Should have multiple functions
@@ -53,7 +53,7 @@ contract DiamondABILoaderTest is Test {
     }
 
     /// @notice Task 1.4: Test extracting function signatures
-    function test_ExtractSignatures() public {
+    function test_ExtractSignatures() public view {
         string[] memory signatures = DiamondABILoader.extractSignatures(abiJson);
 
         // Should have multiple functions
@@ -78,7 +78,7 @@ contract DiamondABILoaderTest is Test {
     }
 
     /// @notice Task 1.3 & 1.4: Test selector-signature correspondence
-    function test_SelectorSignatureCorrespondence() public {
+    function test_SelectorSignatureCorrespondence() public view {
         bytes4[] memory selectors = DiamondABILoader.extractSelectors(abiJson);
         string[] memory signatures = DiamondABILoader.extractSignatures(abiJson);
 
@@ -104,7 +104,7 @@ contract DiamondABILoaderTest is Test {
     }
 
     /// @notice Test getFunctionInfo for known functions
-    function test_GetFunctionInfo_Owner() public {
+    function test_GetFunctionInfo_Owner() public view {
         DiamondABILoader.FunctionInfo memory info = DiamondABILoader.getFunctionInfo(
             abiJson,
             "owner"
@@ -129,7 +129,7 @@ contract DiamondABILoaderTest is Test {
     }
 
     /// @notice Test getFunctionInfo for function with parameters
-    function test_GetFunctionInfo_TransferOwnership() public {
+    function test_GetFunctionInfo_TransferOwnership() public view {
         DiamondABILoader.FunctionInfo memory info = DiamondABILoader.getFunctionInfo(
             abiJson,
             "transferOwnership"
@@ -154,7 +154,7 @@ contract DiamondABILoaderTest is Test {
     }
 
     /// @notice Test getFunctionInfo for access control functions
-    function test_GetFunctionInfo_GrantRole() public {
+    function test_GetFunctionInfo_GrantRole() public view {
         DiamondABILoader.FunctionInfo memory info = DiamondABILoader.getFunctionInfo(
             abiJson,
             "grantRole"
@@ -176,7 +176,7 @@ contract DiamondABILoaderTest is Test {
     }
 
     /// @notice Test getFunctionInfo for non-existent function
-    function test_GetFunctionInfo_NonExistent() public {
+    function test_GetFunctionInfo_NonExistent() public view {
         DiamondABILoader.FunctionInfo memory info = DiamondABILoader.getFunctionInfo(
             abiJson,
             "nonExistentFunction"
@@ -189,7 +189,7 @@ contract DiamondABILoaderTest is Test {
     }
 
     /// @notice Task 1.5: Test verifySelectorsMatch with matching selectors
-    function test_VerifySelectorsMatch_Success() public {
+    function test_VerifySelectorsMatch_Success() public pure {
         bytes4[] memory extracted = new bytes4[](3);
         extracted[0] = bytes4(keccak256("owner()"));
         extracted[1] = bytes4(keccak256("transferOwnership(address)"));
@@ -209,7 +209,7 @@ contract DiamondABILoaderTest is Test {
     }
 
     /// @notice Task 1.5: Test verifySelectorsMatch with missing selectors
-    function test_VerifySelectorsMatch_Failure() public {
+    function test_VerifySelectorsMatch_Failure() public pure {
         bytes4[] memory extracted = new bytes4[](3);
         extracted[0] = bytes4(keccak256("owner()"));
         extracted[1] = bytes4(keccak256("nonExistentFunction()"));
@@ -227,7 +227,7 @@ contract DiamondABILoaderTest is Test {
     }
 
     /// @notice Test comprehensive ABI extraction
-    function test_ComprehensiveABIExtraction() public {
+    function test_ComprehensiveABIExtraction() public view {
         bytes4[] memory selectors = DiamondABILoader.extractSelectors(abiJson);
         string[] memory signatures = DiamondABILoader.extractSignatures(abiJson);
 

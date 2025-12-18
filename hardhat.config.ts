@@ -99,6 +99,12 @@ const config: HardhatUserConfig = {
 		outDir: 'typechain-types', // Ensure this matches your expected output folder
 		target: 'ethers-v6', // Match the version of Ethers.js you're using
 	},
+	paths: {
+		artifacts: './artifacts',
+		cache: './cache',
+		sources: './contracts',
+		tests: './test',
+	},
 	solidity: {
 		version: '0.8.19',
 		settings: {

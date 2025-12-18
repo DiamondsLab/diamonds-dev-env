@@ -165,12 +165,10 @@ contract BasicDiamondIntegrationTest is Test {
 
     function test_SupportsInterface() public pure {
         // Diamond should support ERC165
-        bytes4 erc165InterfaceId = 0x01ffc9a7;
-
+        // bytes4 erc165InterfaceId = 0x01ffc9a7;
         // Note: This test assumes diamond implements ERC165 via a facet
         // You may need to add an ERC165 facet for this to work
         // For now, this is a placeholder showing the pattern
-
         // Example:
         // IERC165 diamond165 = IERC165(address(diamond));
         // assertTrue(diamond165.supportsInterface(erc165InterfaceId), "Should support ERC165");

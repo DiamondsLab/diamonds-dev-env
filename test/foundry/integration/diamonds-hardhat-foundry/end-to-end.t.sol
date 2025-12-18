@@ -12,7 +12,7 @@ import "forge-std/console.sol";
 contract EndToEndTest is Test {
     address diamond;
 
-    function setUp() public {
+    function setUp() public pure {
         console.log("=== End-to-End Integration Test Setup ===");
         console.log("This test suite verifies the complete workflow:");
         console.log("1. Initialize (diamonds-forge:init)");

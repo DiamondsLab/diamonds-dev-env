@@ -29,7 +29,7 @@ contract HelperGenerationTest is Test {
      * @notice Test that DiamondDeployment.sol was generated and compiles
      * @dev If this test runs, the file exists and compiles successfully
      */
-    function test_DiamondDeploymentGenerated() public view {
+    function test_DiamondDeploymentGenerated() public pure {
         console.log("Test: Verify DiamondDeployment.sol was generated and compiles");
 
         // If we got here, the import worked and file compiles
@@ -70,7 +70,7 @@ contract HelperGenerationTest is Test {
         }
 
         console.log("Diamond code size:", codeSize);
-        
+
         // Note: Code size will be 0 if not forking from Hardhat network
         // Helper generation still works correctly - it uses deployment data
         if (codeSize == 0) {

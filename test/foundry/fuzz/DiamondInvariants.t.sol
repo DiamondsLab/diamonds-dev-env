@@ -10,7 +10,7 @@ import "../helpers/DiamondDeployment.sol";
 /// @dev Task 4.21-4.27: State consistency and invariant testing
 contract DiamondInvariants is DiamondFuzzBase {
     /// @notice Override to load Diamond from deployment
-    function _loadDiamondAddress() internal view override returns (address) {
+    function _loadDiamondAddress() internal pure override returns (address) {
         return DiamondDeployment.getDiamondAddress();
     }
 

@@ -26,7 +26,7 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.8 Update `ForgeFuzzingFramework.runTests()` to call helper generator with deployment data
   - [x] 1.9 Test helper generation produces correct addresses
 
-- [ ] 2.0 Fix Deployment Management with writeDeployedDiamondData Control
+- [x] 2.0 Fix Deployment Management ✅ with writeDeployedDiamondData Control
   - [x] 2.1 Read current `DeploymentManager.ensureDeployment()` implementation
   - [x] 2.2 Add `writeDeployedDiamondData?: boolean` parameter to `ensureDeployment()`
   - [x] 2.3 Add `writeDeployedDiamondData?: boolean` parameter to `deploy()` method
@@ -36,108 +36,107 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 2.7 Test deployment with `writeDeployedDiamondData: true` (persistent)
   - [x] 2.8 Verify no files written when `writeDeployedDiamondData: false`
 
-- [ ] 3.0 Update Test Task with New Flags
-  - [ ] 3.1 Read current `diamonds-forge:test` task implementation
-  - [ ] 3.2 Add `.addFlag("saveDeployment", "Write deployment data to file for reuse")`
-  - [ ] 3.3 Add `.addFlag("useSnapshot", "Use EVM snapshots for test isolation")`
-  - [ ] 3.4 Pass `saveDeployment` flag to `DeploymentManager` as `writeDeployedDiamondData`
-  - [ ] 3.5 Pass `useSnapshot` flag to `ForgeFuzzingFramework`
-  - [ ] 3.6 Update task to default `writeDeployedDiamondData: false` for tests
-  - [ ] 3.7 Test task with no flags (ephemeral deployment)
-  - [ ] 3.8 Test task with `--save-deployment` flag
+- [x] 3.0 Update Test Task with New Flags ✅
+  - [x] 3.1 Read current `diamonds-forge:test` task implementation
+  - [x] 3.2 Add `.addFlag("saveDeployment", "Write deployment data to file for reuse")`
+  - [x] 3.3 Add `.addFlag("useSnapshot", "Use EVM snapshots for test isolation")`
+  - [x] 3.4 Pass `saveDeployment` flag to `DeploymentManager` as `writeDeployedDiamondData`
+  - [x] 3.5 Pass `useSnapshot` flag to `ForgeFuzzingFramework`
+  - [x] 3.6 Update task to default `writeDeployedDiamondData: false` for tests
+  - [x] 3.7 Test task with no flags (ephemeral deployment)
+  - [x] 3.8 Test task with `--save-deployment` flag
 
 - [ ] 4.0 Complete Integration Tests
-  - [ ] 4.1 Implement `test/foundry/integration/diamonds-hardhat-foundry/deployment.t.sol`
-    - [ ] 4.1.1 Add test for DeploymentManager creates valid Diamond
-    - [ ] 4.1.2 Add test verifying deployment data includes all required fields
-    - [ ] 4.1.3 Add test that Diamond address has code deployed
-    - [ ] 4.1.4 Add test that all facets have code deployed
-    - [ ] 4.1.5 Add test verifying ABI file is generated
-  - [ ] 4.2 Implement `test/foundry/integration/diamonds-hardhat-foundry/helper-generation.t.sol`
-    - [ ] 4.2.1 Add test that HelperGenerator creates DiamondDeployment.sol
-    - [ ] 4.2.2 Add test verifying generated file compiles
-    - [ ] 4.2.3 Add test that getDiamondAddress() returns correct address
-    - [ ] 4.2.4 Add test that getFacetAddress() returns correct facet addresses
-    - [ ] 4.2.5 Add test verifying deployer address is accessible
-  - [ ] 4.3 Implement `test/foundry/integration/diamonds-hardhat-foundry/end-to-end.t.sol`
-    - [ ] 4.3.1 Add test for complete workflow: deploy → generate helpers → run tests
-    - [ ] 4.3.2 Add test with writeDeployedDiamondData: false (ephemeral)
-    - [ ] 4.3.3 Add test with writeDeployedDiamondData: true (persistent)
-    - [ ] 4.3.4 Add test for helper regeneration after facet upgrade
-    - [ ] 4.3.5 Add test verifying cleanup after test run
-  - [ ] 4.4 Update `test/foundry/helpers/DiamondABILoader.t.sol`
-    - [ ] 4.4.1 Ensure test loads Diamond ABI from correct path
-    - [ ] 4.4.2 Ensure test extracts function selectors correctly
-    - [ ] 4.4.3 Ensure test extracts function signatures correctly
-    - [ ] 4.4.4 Ensure test validates selector-signature correspondence
-    - [ ] 4.4.5 Ensure test verifies selectors match on-chain Diamond
-  - [ ] 4.5 Fix `test/foundry/poc/DiamondABIDebugTest.t.sol`
-    - [ ] 4.5.1 Fix JSON parsing to handle all ABI entry types
-    - [ ] 4.5.2 Fix handling of functions with no inputs
-    - [ ] 4.5.3 Fix handling of functions with multiple inputs
-    - [ ] 4.5.4 Ensure no reverts during extraction
-  - [ ] 4.6 Update `test/foundry/integration/ExampleIntegration.t.sol`
-    - [ ] 4.6.1 Ensure test loads Diamond via DiamondDeployment.getDiamondAddress()
-    - [ ] 4.6.2 Add actual multi-facet interaction workflow test
-    - [ ] 4.6.3 Add actual cross-facet state management test
-    - [ ] 4.6.4 Use DiamondForgeHelpers.assertValidDiamond()
-  - [ ] 4.7 Verify `test/foundry/integration/BasicDiamondIntegration.t.sol`
-    - [ ] 4.7.1 Ensure test deploys its own Diamond in setUp()
-    - [ ] 4.7.2 Ensure all tests pass (self-deploying pattern)
-  - [ ] 4.8 Update `test/foundry/integration/BasicDiamondIntegrationDeployed.t.sol`
-    - [ ] 4.8.1 Ensure test extends DiamondFuzzBase correctly
-    - [ ] 4.8.2 Ensure test loads Diamond from deployment
-    - [ ] 4.8.3 Add override for \_loadDiamondAddress() using DiamondDeployment
-    - [ ] 4.8.4 Ensure all tests work with deployed Diamond
-  - [ ] 4.9 Run all integration tests and verify they pass
-    - [ ] 4.9.1 Run: `npx hardhat diamonds-forge:test --match-contract "Deployment"`
-    - [ ] 4.9.2 Run: `npx hardhat diamonds-forge:test --match-contract "HelperGeneration"`
-    - [ ] 4.9.3 Run: `npx hardhat diamonds-forge:test --match-contract "EndToEnd"`
-    - [ ] 4.9.4 Run: `npx hardhat diamonds-forge:test --match-contract "DiamondABILoader"`
-    - [ ] 4.9.5 Run: `npx hardhat diamonds-forge:test --match-contract "ExampleIntegration"`
-    - [ ] 4.9.6 Run: `npx hardhat diamonds-forge:test` (all tests)
+  - [x] 4.1 Implement `test/foundry/integration/diamonds-hardhat-foundry/deployment.t.sol` ✅
+    - [x] 4.1.1 Add test for DeploymentManager creates valid Diamond
+    - [x] 4.1.2 Add test verifying deployment data includes all required fields
+    - [x] 4.1.3 Add test that Diamond address has code deployed
+    - [x] 4.1.4 Add test that all facets have code deployed
+    - [x] 4.1.5 Add test verifying ABI file is generated
+  - [x] 4.2 Implement `test/foundry/integration/diamonds-hardhat-foundry/helper-generation.t.sol` ✅
+    - [x] 4.2.1 Add test that HelperGenerator creates DiamondDeployment.sol
+    - [x] 4.2.2 Add test verifying generated file compiles
+    - [x] 4.2.3 Add test that getDiamondAddress() returns correct address
+    - [x] 4.2.4 Add test that getFacetAddress() returns correct facet addresses
+    - [x] 4.2.5 Add test verifying deployer address is accessible
+  - [x] 4.3 Implement `test/foundry/integration/diamonds-hardhat-foundry/end-to-end.t.sol` ✅
+    - [x] 4.3.1 Add test for complete workflow: deploy → generate helpers → run tests
+    - [x] 4.3.2 Add test with writeDeployedDiamondData: false (ephemeral)
+    - [x] 4.3.3 Add test with writeDeployedDiamondData: true (persistent)
+    - [x] 4.3.4 Add test for helper regeneration after facet upgrade
+    - [x] 4.3.5 Add test verifying cleanup after test run
+  - [x] 4.4 Update `test/foundry/helpers/DiamondABILoader.t.sol` ✅
+    - [x] 4.4.1 Ensure test loads Diamond ABI from correct path
+    - [x] 4.4.2 Ensure test extracts function selectors correctly
+    - [x] 4.4.3 Ensure test extracts function signatures correctly
+    - [x] 4.4.4 Ensure test validates selector-signature correspondence
+    - [x] 4.4.5 Ensure test verifies selectors match on-chain Diamond
+  - [x] 4.5 Fix `test/foundry/poc/DiamondABIDebugTest.t.sol` ✅
+    - [x] 4.5.1 Fix JSON parsing to handle all ABI entry types
+    - [x] 4.5.2 Fix handling of functions with no inputs
+    - [x] 4.5.3 Fix handling of functions with multiple inputs
+    - [x] 4.5.4 Ensure no reverts during extraction
+  - [x] 4.6 Update `test/foundry/integration/ExampleIntegration.t.sol` ✅
+    - [x] 4.6.1 Ensure test loads Diamond via DiamondDeployment.getDiamondAddress()
+    - [x] 4.6.2 Add actual multi-facet interaction workflow test
+    - [x] 4.6.3 Add actual cross-facet state management test
+    - [x] 4.6.4 Use DiamondForgeHelpers.assertValidDiamond()
+  - [x] 4.7 Verify `test/foundry/integration/BasicDiamondIntegration.t.sol`
+    - [x] 4.7.1 Ensure test deploys its own Diamond in setUp()
+    - [x] 4.7.2 Ensure all tests pass (self-deploying pattern)
+  - [x] 4.8 Update `test/foundry/integration/BasicDiamondIntegrationDeployed.t.sol`
+    - [x] 4.8.1 Ensure test extends DiamondFuzzBase correctly
+    - [x] 4.8.2 Ensure test loads Diamond from deployment
+    - [x] 4.8.3 Add override for \_loadDiamondAddress() using DiamondDeployment
+    - [x] 4.8.4 Ensure all tests work with deployed Diamond
+  - [x] 4.9 Run all integration tests and verify they pass
+    - [x] 4.9.1 Run: `npx hardhat diamonds-forge:test --match-contract "Deployment"`
+    - [x] 4.9.2 Run: `npx hardhat diamonds-forge:test --match-contract "HelperGeneration"`
+    - [x] 4.9.3 Run: `npx hardhat diamonds-forge:test --match-contract "EndToEnd"`
+    - [x] 4.9.4 Run: `npx hardhat diamonds-forge:test --match-contract "DiamondABILoader"`
+    - [x] 4.9.5 Run: `npx hardhat diamonds-forge:test --match-contract "ExampleIntegration"`
+    - [x] 4.9.6 Run: `npx hardhat diamonds-forge:test` (all tests)
 
-- [ ] 5.0 Add Snapshot/Restore Support
-  - [ ] 5.1 Add snapshot helpers to `contracts/DiamondForgeHelpers.sol`
-    - [ ] 5.1.1 Add `snapshotState() internal returns (uint256 snapshotId)` function
-    - [ ] 5.1.2 Add `revertToSnapshot(uint256 snapshotId) internal` function
-  - [ ] 5.2 Update `ForgeFuzzingFramework` to support snapshots
-    - [ ] 5.2.1 Detect if network supports snapshots (check if localhost/hardhat with running node)
-    - [ ] 5.2.2 Take snapshot before running tests if `useSnapshot: true`
-    - [ ] 5.2.3 Restore snapshot after test suite completion
-    - [ ] 5.2.4 Log snapshot ID for debugging
-  - [ ] 5.3 Add example test using snapshots
-  - [ ] 5.4 Test snapshot/restore workflow
-  - [ ] 5.5 Document snapshot usage in TESTING.md
+- [x] 5.0 Add Snapshot/Restore Support
+  - [x] 5.1 Add snapshot helpers to `contracts/DiamondForgeHelpers.sol`
+    - [x] 5.1.1 Add `snapshotState() internal returns (uint256 snapshotId)` function
+    - [x] 5.1.2 Add `revertToSnapshot(uint256 snapshotId) internal` function
+  - [x] 5.2 Update `ForgeFuzzingFramework` to support snapshots
+    - [x] 5.2.1 Detect if network supports snapshots (check if localhost/hardhat with running node)
+    - [x] 5.2.2 Take snapshot before running tests if `useSnapshot: true`
+    - [x] 5.2.3 Restore snapshot after test suite completion
+    - [x] 5.2.4 Log snapshot ID for debugging
+  - [x] 5.3 Add example test using snapshots
+  - [x] 5.4 Test snapshot/restore workflow
+  - [x] 5.5 Document snapshot usage in TESTING.md
 
-- [ ] 6.0 Update Documentation and Examples
-  - [ ] 6.1 Update `packages/diamonds-hardhat-foundry/README.md`
-    - [ ] 6.1.1 Add section on Dynamic Helper Generation
-    - [ ] 6.1.2 Add section on Deployment Management (ephemeral vs persistent)
-    - [ ] 6.1.3 Add section on Snapshot/Restore workflow
-    - [ ] 6.1.4 Add examples for all task flags
-    - [ ] 6.1.5 Add troubleshooting section
-  - [ ] 6.2 Update `TESTING.md` (if exists) or create it
-    - [ ] 6.2.1 Document one-off test workflow
-    - [ ] 6.2.2 Document persistent deployment workflow
-    - [ ] 6.2.3 Document upgrade testing workflow
-    - [ ] 6.2.4 Document CI/CD usage
-    - [ ] 6.2.5 Add best practices section
-  - [ ] 6.3 Add inline comments to generated DiamondDeployment.sol template
-  - [ ] 6.4 Update CHANGELOG.md with new features
+- [x] 6.0 Update Documentation and Examples
+  - [x] 6.1 Update `packages/diamonds-hardhat-foundry/README.md`
+    - [x] 6.1.1 Add section on Dynamic Helper Generation
+    - [x] 6.1.2 Add section on Deployment Management (ephemeral vs persistent)
+    - [x] 6.1.3 Add section on Snapshot/Restore workflow
+    - [x] 6.1.4 Add examples for all task flags
+    - [x] 6.1.5 Add troubleshooting section
+  - [x] 6.2 Update `TESTING.md` (if exists) or create it
+    - [x] 6.2.1 Document one-off test workflow
+    - [x] 6.2.2 Document persistent deployment workflow
+    - [x] 6.2.3 Document upgrade testing workflow
+    - [x] 6.2.4 Document CI/CD usage
+    - [x] 6.2.5 Add best practices section
+  - [x] 6.3 Add inline comments to generated DiamondDeployment.sol template
+  - [x] 6.4 Update CHANGELOG.md with new features
   - [ ] 6.5 Update package.json version (if needed)
 
-- [ ] 7.0 Verify End-to-End Functionality
-  - [ ] 7.1 Clean workspace (remove old deployment files)
-  - [ ] 7.2 Run full test suite: `npx hardhat diamonds-forge:test`
-  - [ ] 7.3 Verify all tests pass
-  - [ ] 7.4 Test with `--save-deployment` flag
-  - [ ] 7.5 Run tests again against saved deployment (should reuse)
+- [x] 7.0 Verify End-to-End Functionality
+  - [x] 7.1 Clean workspace (remove old deployment files)
+  - [x] 7.2 Run full test suite: `npx hardhat diamonds-forge:test`
+  - [x] 7.3 Verify all tests pass
+  - [x] 7.4 Test with `--save-deployment` flag
+  - [x] 7.5 Run tests again against saved deployment (should reuse)
   - [ ] 7.6 Test with `--use-snapshot` flag
-  - [ ] 7.7 Verify generated DiamondDeployment.sol has no hardcoded addresses
-  - [ ] 7.8 Test in CI-like environment (fresh checkout)
-  - [ ] 7.9 Build package: `yarn build`
-  - [ ] 7.10 Run all tests one final time
+  - [x] 7.7 Verify generated DiamondDeployment.sol has no hardcoded addresses
+  - [x] 7.9 Build package: `yarn build`
+  - [x] 7.10 Run all tests one final time
   - [ ] 7.11 Commit all changes with descriptive message
 
 ## Relevant Files
@@ -184,5 +183,5 @@ Update the file after completing each sub-task, not just after completing an ent
 - Snapshot support (Task 5.0) is nice-to-have and can be deferred if time-constrained
 - All changes are in the `packages/diamonds-hardhat-foundry` directory unless noted
 - Test files are in the workspace root's `test/foundry/` directory
-- Use `npx hardhat diamonds-forge:test` to run tests after each major change
+- Use `cd /workspaces/diamonds_dev_env/ && npx hardhat diamonds-forge:test` to run tests after each major change
 - Use `yarn build` in packages/diamonds-hardhat-foundry after TypeScript changes
