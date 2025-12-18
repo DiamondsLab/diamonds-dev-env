@@ -20,11 +20,13 @@ import hre from 'hardhat';
  * - Health check response times (<500ms target)
  * - Event processing latency (<100ms target)
  *
- * Run with:
- * yarn hardhat test test/integration/performance-monitoring.test.ts
+ * ⚠️  IMPORTANT: These tests are SKIPPED by default due to their long runtime.
+ *
+ * To run performance tests:
+ * RUN_PERFORMANCE_TESTS=true yarn hardhat test test/integration/performance-monitoring.test.ts
  *
  * For extended tests:
- * LONG_RUNNING_TEST=true yarn hardhat test test/integration/performance-monitoring.test.ts
+ * RUN_PERFORMANCE_TESTS=true LONG_RUNNING_TEST=true yarn hardhat test test/integration/performance-monitoring.test.ts
  */
 
 interface PerformanceMetrics {
@@ -75,6 +77,14 @@ describe('⚡ Performance and Stress Testing', function () {
 	};
 
 	before(async function () {
+		// Skip if performance tests are not explicitly enabled
+		if (!process.env.RUN_PERFORMANCE_TESTS) {
+			console.log(
+				'⚠️  Skipping performance tests - set RUN_PERFORMANCE_TESTS=true to enable',
+			);
+			this.skip();
+		}
+
 		// Skip if not in local hardhat network
 		if (hre.network.name !== 'hardhat') {
 			console.log('⚠️  Skipping performance tests - not on hardhat network');
