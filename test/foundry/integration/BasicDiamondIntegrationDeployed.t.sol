@@ -109,12 +109,12 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
             // Get facet address - skip if not deployed
             bytes memory callData = abi.encodeWithSignature("facetAddress(bytes4)", selectors[i]);
             (bool success, bytes memory facetData) = diamond.staticcall(callData);
-            
+
             if (!success) continue;
-            
+
             address facetAddr = abi.decode(facetData, (address));
-            if (facetAddr == address(0)) continue;  // Skip undeployed selectors
-            
+            if (facetAddr == address(0)) continue; // Skip undeployed selectors
+
             assertTrue(facetAddr.code.length > 0, "Facet should have code");
             testCount++;
         }
@@ -179,12 +179,15 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
                 abi.encodeWithSelector(facetAddressSelector, selector)
             );
 
-            if (!success) continue;  // Skip selectors that fail
+            if (!success) continue; // Skip selectors that fail
 
             address facetAddr = abi.decode(returnData, (address));
-            if (facetAddr == address(0)) continue;  // Skip undeployed selectors
-            
-            assertTrue(facetAddr.code.length > 0, "Deployed selector should have valid facet with code");
+            if (facetAddr == address(0)) continue; // Skip undeployed selectors
+
+            assertTrue(
+                facetAddr.code.length > 0,
+                "Deployed selector should have valid facet with code"
+            );
             validCount++;
         }
 

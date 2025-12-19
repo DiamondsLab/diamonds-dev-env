@@ -36,13 +36,13 @@ contract AccessControlFuzz is DiamondFuzzBase {
         console.log("Diamond:", diamond);
         console.log("Owner:", owner);
         console.log("Test account:", testAccount);
-        
+
         // Check who has DEFAULT_ADMIN_ROLE - should be the deployer from initialization
         address deployer = DiamondDeployment.getDeployerAddress();
         console.log("Deployer:", deployer);
         console.log("Deployer has admin role:", _hasRole(DEFAULT_ADMIN_ROLE, deployer));
         console.log("Owner has admin role:", _hasRole(DEFAULT_ADMIN_ROLE, owner));
-        
+
         // If no one has admin role, the Diamond wasn't initialized - initialize it now
         if (!_hasRole(DEFAULT_ADMIN_ROLE, deployer) && !_hasRole(DEFAULT_ADMIN_ROLE, owner)) {
             console.log("Diamond not initialized - calling diamondInitialize000()");
@@ -52,7 +52,7 @@ contract AccessControlFuzz is DiamondFuzzBase {
             require(success, "Diamond initialization failed");
             console.log("Diamond initialized successfully");
         }
-        
+
         // Now grant DEFAULT_ADMIN_ROLE to test contract
         // Use whoever has the admin role (should be deployer after init)
         address adminAccount = _hasRole(DEFAULT_ADMIN_ROLE, deployer) ? deployer : owner;
@@ -149,7 +149,7 @@ contract AccessControlFuzz is DiamondFuzzBase {
         uint256 roleIndex
     ) public {
         address deployer = DiamondDeployment.getDeployerAddress();
-        
+
         vm.assume(unauthorized != address(0));
         vm.assume(unauthorized != owner);
         vm.assume(unauthorized != deployer);
@@ -157,14 +157,14 @@ contract AccessControlFuzz is DiamondFuzzBase {
         vm.assume(unauthorized.code.length == 0);
         vm.assume(account != address(0));
         vm.assume(account.code.length == 0);
-        
+
         bytes32 role = roleIndex % 2 == 0 ? DEFAULT_ADMIN_ROLE : UPGRADER_ROLE;
-        
+
         // Skip if unauthorized somehow has admin role (shouldn't happen with above assumes)
         if (_hasRole(DEFAULT_ADMIN_ROLE, unauthorized)) {
             return;
         }
-        
+
         // Skip if account already has the role (would make the test assertion incorrect)
         if (_hasRole(role, account)) {
             return;

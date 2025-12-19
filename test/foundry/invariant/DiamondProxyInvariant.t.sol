@@ -79,7 +79,7 @@ contract DiamondProxyInvariant is DiamondFuzzBase {
 
         // Test deployed selectors (skip those not on chain)
         uint256 testedCount = 0;
-        uint256 targetCount = 10;  // Test at least 10 deployed selectors
+        uint256 targetCount = 10; // Test at least 10 deployed selectors
 
         for (uint256 i = 0; i < selectors.length && testedCount < targetCount; i++) {
             bytes4 selector = selectors[i];
@@ -90,20 +90,20 @@ contract DiamondProxyInvariant is DiamondFuzzBase {
                 abi.encodeWithSelector(facetAddressSelector, selector)
             );
 
-            if (!success) continue;  // Skip selectors that fail
+            if (!success) continue; // Skip selectors that fail
 
             address facetAddr = abi.decode(returnData, (address));
-            
+
             // Skip undeployed selectors (those that return address(0))
             if (facetAddr == address(0)) continue;
-            
+
             // This selector is deployed - verify it routes correctly
             assertTrue(facetAddr != address(0), "Selector must route to valid facet");
             assertTrue(facetAddr.code.length > 0, "Facet must have code");
-            
+
             testedCount++;
         }
-        
+
         // Ensure we tested at least some selectors
         assertTrue(testedCount > 0, "Should have tested at least one selector");
     }

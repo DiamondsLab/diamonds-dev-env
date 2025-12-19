@@ -26,7 +26,7 @@ contract DiamondInvariants is DiamondFuzzBase {
 
         address owner = _getDiamondOwner();
         address deployer = DiamondDeployment.getDeployerAddress();
-        
+
         // If no one has admin role, the Diamond wasn't initialized - initialize it now
         bytes32 DEFAULT_ADMIN_ROLE = 0x00;
         if (!_hasRole(DEFAULT_ADMIN_ROLE, deployer) && !_hasRole(DEFAULT_ADMIN_ROLE, owner)) {
@@ -46,7 +46,7 @@ contract DiamondInvariants is DiamondFuzzBase {
         for (uint256 i = 0; i < 5; i++) {
             testAccounts.push(address(uint160(0x1000 + i)));
         }
-        
+
         console.log("Test contract has admin role:", _hasRole(DEFAULT_ADMIN_ROLE, address(this)));
     }
 
@@ -93,23 +93,25 @@ contract DiamondInvariants is DiamondFuzzBase {
     function test_FacetAddressesValid() public view {
         // Get actual deployed facets from Diamond
         bytes4 facetsSelector = bytes4(keccak256("facets()"));
-        (bool success, bytes memory returnData) = diamond.staticcall(abi.encodeWithSelector(facetsSelector));
+        (bool success, bytes memory returnData) = diamond.staticcall(
+            abi.encodeWithSelector(facetsSelector)
+        );
         require(success, "facets() call failed");
-        
+
         // Decode facets array (array of Facet structs with facetAddress and functionSelectors)
         // Skip decoding, just verify we can call it
-        
+
         // Verify each selector in our ABI that's actually deployed
         for (uint256 i = 0; i < diamondSelectors.length; i++) {
             bytes4 selector = diamondSelectors[i];
-            
+
             // Get facet for this selector - skip if not deployed
             bytes memory callData = abi.encodeWithSignature("facetAddress(bytes4)", selector);
             (bool callSuccess, bytes memory facetData) = diamond.staticcall(callData);
-            
+
             if (callSuccess) {
                 address facet = abi.decode(facetData, (address));
-                
+
                 // Only check if selector is actually deployed (has a facet)
                 if (facet != address(0)) {
                     // Facet must have code
@@ -154,13 +156,16 @@ contract DiamondInvariants is DiamondFuzzBase {
 
         for (uint256 i = 0; i < diamondSelectors.length; i++) {
             // Get facet address - skip if not deployed
-            bytes memory callData = abi.encodeWithSignature("facetAddress(bytes4)", diamondSelectors[i]);
+            bytes memory callData = abi.encodeWithSignature(
+                "facetAddress(bytes4)",
+                diamondSelectors[i]
+            );
             (bool success, bytes memory facetData) = diamond.staticcall(callData);
-            
+
             if (!success) continue;
-            
+
             address facet = abi.decode(facetData, (address));
-            if (facet == address(0)) continue;  // Skip undeployed selectors
+            if (facet == address(0)) continue; // Skip undeployed selectors
 
             // Check if facet is unique
             bool found = false;
@@ -191,17 +196,17 @@ contract DiamondInvariants is DiamondFuzzBase {
 
             // Get facet address - skip if not deployed
             bytes memory callData = abi.encodeWithSignature("facetAddress(bytes4)", selector);
-            
+
             (bool success1, bytes memory facetData1) = diamond.staticcall(callData);
             if (!success1) continue;
-            
+
             address facet1 = abi.decode(facetData1, (address));
-            if (facet1 == address(0)) continue;  // Skip undeployed selectors
-            
+            if (facet1 == address(0)) continue; // Skip undeployed selectors
+
             (bool success2, bytes memory facetData2) = diamond.staticcall(callData);
             if (!success2) continue;
             address facet2 = abi.decode(facetData2, (address));
-            
+
             (bool success3, bytes memory facetData3) = diamond.staticcall(callData);
             if (!success3) continue;
             address facet3 = abi.decode(facetData3, (address));
@@ -358,13 +363,16 @@ contract DiamondInvariants is DiamondFuzzBase {
 
         for (uint256 i = 0; i < diamondSelectors.length; i++) {
             // Get facet address - skip if not deployed
-            bytes memory callData = abi.encodeWithSignature("facetAddress(bytes4)", diamondSelectors[i]);
+            bytes memory callData = abi.encodeWithSignature(
+                "facetAddress(bytes4)",
+                diamondSelectors[i]
+            );
             (bool success, bytes memory facetData) = diamond.staticcall(callData);
-            
+
             if (!success) continue;
-            
+
             address facet = abi.decode(facetData, (address));
-            if (facet == address(0)) continue;  // Skip undeployed selectors
+            if (facet == address(0)) continue; // Skip undeployed selectors
 
             bool found = false;
             for (uint256 j = 0; j < count; j++) {
@@ -385,11 +393,14 @@ contract DiamondInvariants is DiamondFuzzBase {
             uint256 selectorCount = 0;
 
             for (uint256 j = 0; j < diamondSelectors.length; j++) {
-                bytes memory callData = abi.encodeWithSignature("facetAddress(bytes4)", diamondSelectors[j]);
+                bytes memory callData = abi.encodeWithSignature(
+                    "facetAddress(bytes4)",
+                    diamondSelectors[j]
+                );
                 (bool success, bytes memory facetData) = diamond.staticcall(callData);
-                
+
                 if (!success) continue;
-                
+
                 address facet = abi.decode(facetData, (address));
                 if (facet == facets[i]) {
                     selectorCount++;

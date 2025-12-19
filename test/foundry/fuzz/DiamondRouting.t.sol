@@ -37,15 +37,15 @@ contract DiamondRouting is DiamondFuzzBase {
     function _loadFacetAddresses() internal {
         for (uint256 i = 0; i < diamondSelectors.length; i++) {
             bytes4 selector = diamondSelectors[i];
-            
+
             // Get facet address - skip if not deployed
             bytes memory callData = abi.encodeWithSignature("facetAddress(bytes4)", selector);
             (bool success, bytes memory facetData) = diamond.staticcall(callData);
-            
+
             if (!success) continue;
-            
+
             address facet = abi.decode(facetData, (address));
-            if (facet == address(0)) continue;  // Skip undeployed selectors
+            if (facet == address(0)) continue; // Skip undeployed selectors
 
             expectedFacets[selector] = facet;
 
@@ -75,11 +75,11 @@ contract DiamondRouting is DiamondFuzzBase {
             // Get facet address - skip if not deployed
             bytes memory callData = abi.encodeWithSignature("facetAddress(bytes4)", selector);
             (bool success, bytes memory facetData) = diamond.staticcall(callData);
-            
+
             if (!success) continue;
-            
+
             address facet = abi.decode(facetData, (address));
-            if (facet == address(0)) continue;  // Skip undeployed selectors
+            if (facet == address(0)) continue; // Skip undeployed selectors
 
             // Should have code
             assertTrue(
@@ -150,15 +150,15 @@ contract DiamondRouting is DiamondFuzzBase {
             bytes memory callData = abi.encodePacked(facetAddressSelector, data);
             (bool success, bytes memory returnData) = diamond.staticcall(callData);
 
-            if (!success) continue;  // Skip selectors that fail
+            if (!success) continue; // Skip selectors that fail
 
             address facet = abi.decode(returnData, (address));
-            if (facet == address(0)) continue;  // Skip undeployed selectors
-            
+            if (facet == address(0)) continue; // Skip undeployed selectors
+
             assertTrue(facet.code.length > 0, "Facet should have code");
             testedCount++;
         }
-        
+
         assertTrue(testedCount > 0, "Should have tested at least one selector");
         console.log("All facetAddress queries succeeded, tested:", testedCount);
     }
@@ -230,11 +230,11 @@ contract DiamondRouting is DiamondFuzzBase {
         // Get facet address - skip if not deployed
         bytes memory callData = abi.encodeWithSignature("facetAddress(bytes4)", selector);
         (bool success, bytes memory facetData) = diamond.staticcall(callData);
-        
-        if (!success) return;  // Skip selectors that fail
-        
+
+        if (!success) return; // Skip selectors that fail
+
         address facet1 = abi.decode(facetData, (address));
-        if (facet1 == address(0)) return;  // Skip undeployed selectors
+        if (facet1 == address(0)) return; // Skip undeployed selectors
 
         // Query multiple times for consistency
         for (uint256 i = 0; i < 5; i++) {

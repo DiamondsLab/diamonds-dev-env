@@ -28,7 +28,7 @@ contract ExampleDiamondAccessControl is DiamondFuzzBase {
 
         address owner = _getDiamondOwner();
         address deployer = DiamondDeployment.getDeployerAddress();
-        
+
         // If no one has admin role, the Diamond wasn't initialized - initialize it now
         if (!_hasRole(DEFAULT_ADMIN_ROLE, deployer) && !_hasRole(DEFAULT_ADMIN_ROLE, owner)) {
             console.log("Diamond not initialized - calling diamondInitialize000()");
@@ -58,7 +58,7 @@ contract ExampleDiamondAccessControl is DiamondFuzzBase {
         bytes32 role = roleIndex % 3 == 0 ? TEST_ROLE : roleIndex % 3 == 1
             ? MINTER_ROLE
             : DEFAULT_ADMIN_ROLE;
-        
+
         // Skip if recipient already has the role (e.g., owner has DEFAULT_ADMIN_ROLE from init)
         if (_hasRole(role, recipient)) {
             return;
@@ -221,7 +221,7 @@ contract ExampleDiamondAccessControl is DiamondFuzzBase {
         // Constrain inputs
         vm.assume(user != address(0));
         vm.assume(user != address(this));
-        vm.assume(user != _getDiamondOwner()); // Owner may have superAdmin protection  
+        vm.assume(user != _getDiamondOwner()); // Owner may have superAdmin protection
         vm.assume(user != DiamondDeployment.getDeployerAddress()); // Deployer may have superAdmin protection
         vm.assume(user.code.length == 0);
 
