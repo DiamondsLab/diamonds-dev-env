@@ -9,7 +9,7 @@ import "../helpers/DiamondDeployment.sol";
 /// @dev Task 4.10-4.12: Tests ownership transfer and constraints
 contract ExampleDiamondOwnership is DiamondFuzzBase {
     /// @notice Override to load Diamond from deployment
-    function _loadDiamondAddress() internal view override returns (address) {
+    function _loadDiamondAddress() internal pure override returns (address) {
         return DiamondDeployment.getDiamondAddress();
     }
 

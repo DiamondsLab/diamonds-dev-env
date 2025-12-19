@@ -22,7 +22,7 @@ contract JSONParseTest is Test {
         }
     }
 
-    function test_ParseArrayWithElement() public {
+    function test_ParseArrayWithElement() public pure {
         string memory json = '{"inputs": [{"type": "address"}]}';
 
         // Try to parse the inputs array
