@@ -9,12 +9,13 @@ import "../helpers/DiamondDeployment.sol";
 /// @notice Fuzzing tests for Diamond access control functionality
 /// @dev Task 4.0: Comprehensive fuzzing tests for ExampleAccessControl
 contract AccessControlFuzz is DiamondFuzzBase {
-    /// @notice Override to load Diamond from deployment
-    function _loadDiamondAddress() internal pure override returns (address) {
-        return DiamondDeployment.getDiamondAddress();
-    }
+    // /// @notice Override to load Diamond from deployment
+    // function _loadDiamondAddress() internal pure override returns (address) {
+    //     return DiamondDeployment.getDiamondAddress();
+    // }
 
-    /// @notice Override to load Diamond ABI path from deployment
+    // This is an example
+    // /// @notice Override to load Diamond ABI path from deployment
     // function _getDiamondABIPath() internal pure override returns (string memory) {
     //     return DiamondDeployment.getDiamondABIPath();
     // }
@@ -53,7 +54,7 @@ contract AccessControlFuzz is DiamondFuzzBase {
             console.log("Diamond not initialized - calling diamondInitialize000()");
             vm.prank(deployer);
             bytes4 selector = bytes4(keccak256("diamondInitialize000()"));
-            (bool success, bytes memory returnData) = _callDiamond(selector, "");
+            (bool success, ) = _callDiamond(selector, "");
             require(success, "Diamond initialization failed");
             console.log("Diamond initialized successfully");
         }
