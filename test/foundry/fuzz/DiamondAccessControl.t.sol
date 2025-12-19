@@ -26,8 +26,21 @@ contract ExampleDiamondAccessControl is DiamondFuzzBase {
     function setUp() public override {
         super.setUp();
 
-        // Grant TEST_ROLE to this contract for testing purposes
-        vm.prank(_getDiamondOwner());
+        address owner = _getDiamondOwner();
+        address deployer = DiamondDeployment.getDeployerAddress();
+        
+        // If no one has admin role, the Diamond wasn't initialized - initialize it now
+        if (!_hasRole(DEFAULT_ADMIN_ROLE, deployer) && !_hasRole(DEFAULT_ADMIN_ROLE, owner)) {
+            console.log("Diamond not initialized - calling diamondInitialize000()");
+            vm.prank(deployer);
+            bytes4 selector = bytes4(keccak256("diamondInitialize000()"));
+            (bool success, ) = _callDiamond(selector, "");
+            require(success, "Diamond initialization failed");
+        }
+
+        // Grant DEFAULT_ADMIN_ROLE to this contract for testing purposes
+        address adminAccount = _hasRole(DEFAULT_ADMIN_ROLE, deployer) ? deployer : owner;
+        vm.prank(adminAccount);
         _grantRole(DEFAULT_ADMIN_ROLE, address(this));
     }
 
@@ -45,6 +58,11 @@ contract ExampleDiamondAccessControl is DiamondFuzzBase {
         bytes32 role = roleIndex % 3 == 0 ? TEST_ROLE : roleIndex % 3 == 1
             ? MINTER_ROLE
             : DEFAULT_ADMIN_ROLE;
+        
+        // Skip if recipient already has the role (e.g., owner has DEFAULT_ADMIN_ROLE from init)
+        if (_hasRole(role, recipient)) {
+            return;
+        }
 
         // Verify recipient doesn't have role initially
         assertFalse(_hasRole(role, recipient), "Recipient should not have role initially");
@@ -69,6 +87,8 @@ contract ExampleDiamondAccessControl is DiamondFuzzBase {
         // Constrain inputs
         vm.assume(recipient != address(0));
         vm.assume(recipient != address(this));
+        vm.assume(recipient != _getDiamondOwner()); // Owner may have superAdmin protection
+        vm.assume(recipient != DiamondDeployment.getDeployerAddress()); // Deployer may have superAdmin protection
         vm.assume(recipient.code.length == 0);
 
         // Select role
@@ -98,6 +118,8 @@ contract ExampleDiamondAccessControl is DiamondFuzzBase {
         // Constrain inputs
         vm.assume(user != address(0));
         vm.assume(user != address(this));
+        vm.assume(user != _getDiamondOwner()); // Owner may have superAdmin protection
+        vm.assume(user != DiamondDeployment.getDeployerAddress()); // Deployer may have superAdmin protection
         vm.assume(user.code.length == 0);
 
         // Grant TEST_ROLE to user
@@ -199,6 +221,8 @@ contract ExampleDiamondAccessControl is DiamondFuzzBase {
         // Constrain inputs
         vm.assume(user != address(0));
         vm.assume(user != address(this));
+        vm.assume(user != _getDiamondOwner()); // Owner may have superAdmin protection  
+        vm.assume(user != DiamondDeployment.getDeployerAddress()); // Deployer may have superAdmin protection
         vm.assume(user.code.length == 0);
 
         // Grant multiple roles

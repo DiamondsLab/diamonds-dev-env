@@ -36,6 +36,30 @@ contract AccessControlFuzz is DiamondFuzzBase {
         console.log("Diamond:", diamond);
         console.log("Owner:", owner);
         console.log("Test account:", testAccount);
+        
+        // Check who has DEFAULT_ADMIN_ROLE - should be the deployer from initialization
+        address deployer = DiamondDeployment.getDeployerAddress();
+        console.log("Deployer:", deployer);
+        console.log("Deployer has admin role:", _hasRole(DEFAULT_ADMIN_ROLE, deployer));
+        console.log("Owner has admin role:", _hasRole(DEFAULT_ADMIN_ROLE, owner));
+        
+        // If no one has admin role, the Diamond wasn't initialized - initialize it now
+        if (!_hasRole(DEFAULT_ADMIN_ROLE, deployer) && !_hasRole(DEFAULT_ADMIN_ROLE, owner)) {
+            console.log("Diamond not initialized - calling diamondInitialize000()");
+            vm.prank(deployer);
+            bytes4 selector = bytes4(keccak256("diamondInitialize000()"));
+            (bool success, bytes memory returnData) = _callDiamond(selector, "");
+            require(success, "Diamond initialization failed");
+            console.log("Diamond initialized successfully");
+        }
+        
+        // Now grant DEFAULT_ADMIN_ROLE to test contract
+        // Use whoever has the admin role (should be deployer after init)
+        address adminAccount = _hasRole(DEFAULT_ADMIN_ROLE, deployer) ? deployer : owner;
+        vm.prank(adminAccount);
+        _grantRole(DEFAULT_ADMIN_ROLE, address(this));
+
+        console.log("Test contract has admin role:", _hasRole(DEFAULT_ADMIN_ROLE, address(this)));
     }
 
     /// @notice Fuzz test for granting roles
@@ -124,13 +148,27 @@ contract AccessControlFuzz is DiamondFuzzBase {
         address account,
         uint256 roleIndex
     ) public {
+        address deployer = DiamondDeployment.getDeployerAddress();
+        
         vm.assume(unauthorized != address(0));
         vm.assume(unauthorized != owner);
+        vm.assume(unauthorized != deployer);
+        vm.assume(unauthorized != address(this)); // Test contract has admin role
         vm.assume(unauthorized.code.length == 0);
         vm.assume(account != address(0));
         vm.assume(account.code.length == 0);
-
+        
         bytes32 role = roleIndex % 2 == 0 ? DEFAULT_ADMIN_ROLE : UPGRADER_ROLE;
+        
+        // Skip if unauthorized somehow has admin role (shouldn't happen with above assumes)
+        if (_hasRole(DEFAULT_ADMIN_ROLE, unauthorized)) {
+            return;
+        }
+        
+        // Skip if account already has the role (would make the test assertion incorrect)
+        if (_hasRole(role, account)) {
+            return;
+        }
 
         // Try to grant role as unauthorized account
         vm.prank(unauthorized);
@@ -216,8 +254,7 @@ contract AccessControlFuzz is DiamondFuzzBase {
     function test_GasProfile_GrantRole() public {
         address account = address(0x9999);
 
-        vm.prank(owner);
-
+        // Test contract has DEFAULT_ADMIN_ROLE from setUp(), no need to prank
         bytes4 selector = bytes4(keccak256("grantRole(bytes32,address)"));
         bytes memory data = abi.encode(UPGRADER_ROLE, account);
 
@@ -235,13 +272,10 @@ contract AccessControlFuzz is DiamondFuzzBase {
     function test_GasProfile_RevokeRole() public {
         address account = address(0x9999);
 
-        // Grant first
-        vm.prank(owner);
+        // Grant first (test contract has DEFAULT_ADMIN_ROLE from setUp())
         _grantRole(UPGRADER_ROLE, account);
 
         // Measure revoke gas
-        vm.prank(owner);
-
         bytes4 selector = bytes4(keccak256("revokeRole(bytes32,address)"));
         bytes memory data = abi.encode(UPGRADER_ROLE, account);
 

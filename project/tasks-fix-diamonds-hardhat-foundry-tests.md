@@ -81,25 +81,25 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.6 Verify DiamondForgeHelpers.sol has necessary utility functions
   - [x] 1.7 Test base contract changes compile successfully with `forge build`
 
-- [ ] 2.0 Fix Access Control Test Suites
-  - [ ] 2.1 Fix AccessControlFuzz.t.sol setUp() to grant DEFAULT_ADMIN_ROLE
-    - [ ] 2.1.1 Read current setUp() implementation
-    - [ ] 2.1.2 Add role granting after super.setUp()
-    - [ ] 2.1.3 Test pattern: `vm.prank(owner); _grantRole(DEFAULT_ADMIN_ROLE, address(this));`
-  - [ ] 2.2 Fix testFuzz_GrantRole - ensure test has admin role before granting to others
-  - [ ] 2.3 Fix testFuzz_RevokeRole - ensure test has admin role before revoking from others
-  - [ ] 2.4 Fix testFuzz_RenounceRole - ensure account has role before renouncing
-  - [ ] 2.5 Fix testFuzz_UnauthorizedGrantRole - verify unauthorized calls properly revert
-  - [ ] 2.6 Fix testFuzz_OnlyRoleModifier - verify modifier enforcement works
-  - [ ] 2.7 Fix testFuzz_HasRole - ensure role checking works correctly
-  - [ ] 2.8 Fix testFuzz_RoleEnumeration - ensure role enumeration functions work
-  - [ ] 2.9 Fix test_CannotRevokeSuperAdmin - verify superAdmin protection works
-  - [ ] 2.10 Fix test_GasProfile_GrantRole - ensure gas profiling test has admin role
-  - [ ] 2.11 Fix test_GasProfile_RevokeRole - ensure gas profiling test has admin role
-  - [ ] 2.12 Fix testFuzz_GrantRevokeCycle - ensure test can grant and revoke repeatedly
-  - [ ] 2.13 Fix DiamondAccessControl.t.sol setUp() - grant DEFAULT_ADMIN_ROLE to test contract
-  - [ ] 2.14 Run access control tests: `npx hardhat diamonds-forge:test --network localhost --match-contract AccessControl`
-  - [ ] 2.15 Verify all access control tests pass (target: 0 failures in access control tests)
+- [x] 2.0 Fix Access Control Test Suites
+  - [x] 2.1 Fix AccessControlFuzz.t.sol setUp() to grant DEFAULT_ADMIN_ROLE
+    - [x] 2.1.1 Read current setUp() implementation
+    - [x] 2.1.2 Add role granting after super.setUp()
+    - [x] 2.1.3 Test pattern: `vm.prank(owner); _grantRole(DEFAULT_ADMIN_ROLE, address(this));`
+  - [x] 2.2 Fix testFuzz_GrantRole - ensure test has admin role before granting to others
+  - [x] 2.3 Fix testFuzz_RevokeRole - ensure test has admin role before revoking from others
+  - [x] 2.4 Fix testFuzz_RenounceRole - ensure account has role before renouncing
+  - [x] 2.5 Fix testFuzz_UnauthorizedGrantRole - verify unauthorized calls properly revert
+  - [x] 2.6 Fix testFuzz_OnlyRoleModifier - verify modifier enforcement works
+  - [x] 2.7 Fix testFuzz_HasRole - ensure role checking works correctly
+  - [x] 2.8 Fix testFuzz_RoleEnumeration - ensure role enumeration functions work
+  - [x] 2.9 Fix test_CannotRevokeSuperAdmin - verify superAdmin protection works
+  - [x] 2.10 Fix test_GasProfile_GrantRole - ensure gas profiling test has admin role
+  - [x] 2.11 Fix test_GasProfile_RevokeRole - ensure gas profiling test has admin role
+  - [x] 2.12 Fix testFuzz_GrantRevokeCycle - ensure test can grant and revoke repeatedly
+  - [x] 2.13 Fix DiamondAccessControl.t.sol setUp() - grant DEFAULT_ADMIN_ROLE to test contract
+  - [x] 2.14 Run access control tests: `npx hardhat diamonds-forge:test --network localhost --match-contract AccessControl`
+  - [x] 2.15 Verify all access control tests pass (target: 0 failures in access control tests) - 19/19 PASSING!
 
 - [ ] 3.0 Fix Invariant Test Suites
   - [ ] 3.1 Fix DiamondInvariants.t.sol
