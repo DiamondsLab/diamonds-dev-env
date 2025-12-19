@@ -20,7 +20,7 @@ contract ExampleUnitTest is Test {
     function setUp() public {
         // Load Diamond deployment data
         diamond = DiamondDeployment.getDiamondAddress();
-        // deployer = DiamondDeployment.getDeployerAddress(); // TODO: Add deployer to generated file
+        deployer = DiamondDeployment.getDeployerAddress();
 
         console.log("Diamond deployed at:", diamond);
         console.log("Deployed by:", deployer);

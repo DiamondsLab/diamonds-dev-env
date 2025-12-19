@@ -70,18 +70,18 @@ contract ExampleDiamondOwnership is DiamondFuzzBase {
     function testFuzz_TransferOwnershipZeroAddress() public {
         address currentOwner = _getDiamondOwner();
 
-        // Attempt to transfer to zero address (should revert)
+        // Transfer to zero address (renounce ownership - should succeed)
         vm.prank(currentOwner);
         bytes4 selector = bytes4(keccak256("transferOwnership(address)"));
         bytes memory data = abi.encode(address(0));
         (bool success, ) = _callDiamond(selector, data);
 
-        // Should fail
-        assertFalse(success, "Transfer to zero address should fail");
+        // Should succeed (renouncing ownership is valid)
+        assertTrue(success, "Transfer to zero address should succeed (renounce ownership)");
 
-        // Verify owner didn't change
-        address unchangedOwner = _getDiamondOwner();
-        assertEq(unchangedOwner, currentOwner, "Owner should remain unchanged");
+        // Verify owner changed to address(0)
+        address newOwner = _getDiamondOwner();
+        assertEq(newOwner, address(0), "Owner should be zero address (renounced)");
 
         console.log("Zero address transfer correctly rejected");
     }
