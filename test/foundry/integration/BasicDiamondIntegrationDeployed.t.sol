@@ -15,6 +15,11 @@ contract ExampleDiamondIntegrationDeployed is DiamondFuzzBase {
         return DiamondDeployment.getDiamondAddress();
     }
 
+    /// @notice Override to load Diamond ABI path from deployment
+    function _getDiamondABIPath() internal pure override returns (string memory) {
+        return DiamondDeployment.getDiamondABIPath();
+    }
+
     /// @notice Override setUp to handle fork-aware testing
     /// @dev Only load Diamond ABI when actually deployed (forking)
     function setUp() public override {

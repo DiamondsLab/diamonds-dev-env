@@ -14,6 +14,11 @@ contract DiamondRouting is DiamondFuzzBase {
         return DiamondDeployment.getDiamondAddress();
     }
 
+    /// @notice Override to load Diamond ABI path from deployment
+    function _getDiamondABIPath() internal pure override returns (string memory) {
+        return DiamondDeployment.getDiamondABIPath();
+    }
+
     /// @notice Expected facet addresses (loaded from deployment)
     mapping(bytes4 => address) public expectedFacets;
 

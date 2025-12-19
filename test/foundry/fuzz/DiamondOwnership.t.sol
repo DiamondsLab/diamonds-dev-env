@@ -13,6 +13,11 @@ contract ExampleDiamondOwnership is DiamondFuzzBase {
         return DiamondDeployment.getDiamondAddress();
     }
 
+    /// @notice Override to load Diamond ABI path from deployment
+    function _getDiamondABIPath() internal pure override returns (string memory) {
+        return DiamondDeployment.getDiamondABIPath();
+    }
+
     /// @notice Event emitted when ownership is transferred
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 

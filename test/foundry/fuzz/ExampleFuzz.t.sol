@@ -20,6 +20,11 @@ contract ExampleFuzzTest is DiamondFuzzBase {
         return DiamondDeployment.getDiamondAddress();
     }
 
+    /// @notice Override to load Diamond ABI path from deployment
+    function _getDiamondABIPath() internal pure override returns (string memory) {
+        return DiamondDeployment.getDiamondABIPath();
+    }
+
     function setUp() public override {
         super.setUp();
 

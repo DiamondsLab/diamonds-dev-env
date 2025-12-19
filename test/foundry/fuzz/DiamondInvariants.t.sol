@@ -14,6 +14,11 @@ contract DiamondInvariants is DiamondFuzzBase {
         return DiamondDeployment.getDiamondAddress();
     }
 
+    /// @notice Override to load Diamond ABI path from deployment
+    function _getDiamondABIPath() internal pure override returns (string memory) {
+        return DiamondDeployment.getDiamondABIPath();
+    }
+
     /// @notice Test accounts for role testing
     address[] internal testAccounts;
 
@@ -93,9 +98,7 @@ contract DiamondInvariants is DiamondFuzzBase {
     function test_FacetAddressesValid() public view {
         // Get actual deployed facets from Diamond
         bytes4 facetsSelector = bytes4(keccak256("facets()"));
-        (bool success, bytes memory returnData) = diamond.staticcall(
-            abi.encodeWithSelector(facetsSelector)
-        );
+        (bool success, ) = diamond.staticcall(abi.encodeWithSelector(facetsSelector));
         require(success, "facets() call failed");
 
         // Decode facets array (array of Facet structs with facetAddress and functionSelectors)

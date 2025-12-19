@@ -13,6 +13,11 @@ contract ExampleDiamondAccessControl is DiamondFuzzBase {
         return DiamondDeployment.getDiamondAddress();
     }
 
+    /// @notice Override to load Diamond ABI path from deployment
+    function _getDiamondABIPath() internal pure override returns (string memory) {
+        return DiamondDeployment.getDiamondABIPath();
+    }
+
     /// @notice Default admin role identifier
     bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
 
