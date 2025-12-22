@@ -59,7 +59,7 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 					writeDeployedDiamondData: false,
 					configFilePath: `diamonds/ExampleDiamond/examplediamond.config.json`,
 				} as LocalDiamondDeployerConfig;
-				const diamondDeployer = await LocalDiamondDeployer.getInstance(hre as any, config);
+				const diamondDeployer = await LocalDiamondDeployer.getInstance(hre, config);
 				await diamondDeployer.setVerbose(true);
 				diamond = await diamondDeployer.getDiamondDeployed();
 				const deployedDiamondData = diamond.getDeployedDiamondData();
