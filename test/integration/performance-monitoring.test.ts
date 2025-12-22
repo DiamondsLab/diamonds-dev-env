@@ -1,8 +1,8 @@
 import { Diamond } from '@diamondslab/diamonds';
 import { DiamondMonitor, FacetManager } from '@diamondslab/diamonds-monitor';
 import {
-	LocalDiamondDeployer,
-	LocalDiamondDeployerConfig,
+  LocalDiamondDeployer,
+  LocalDiamondDeployerConfig,
 } from '@diamondslab/hardhat-diamonds/dist/utils';
 import { expect } from 'chai';
 import hre from 'hardhat';
@@ -103,7 +103,7 @@ describe('⚡ Performance and Stress Testing', function () {
 			configFilePath: 'diamonds/ExampleDiamond/examplediamond.config.json',
 		};
 
-		deployer = await LocalDiamondDeployer.getInstance(hre, config);
+		deployer = await LocalDiamondDeployer.getInstance(hre as any, config);
 		await deployer.setVerbose(false); // Reduce noise in performance tests
 		diamond = await deployer.getDiamondDeployed();
 
@@ -259,7 +259,7 @@ describe('⚡ Performance and Stress Testing', function () {
 					configFilePath: 'diamonds/ExampleDiamond/examplediamond.config.json',
 				};
 
-				const localDeployer = await LocalDiamondDeployer.getInstance(hre, config);
+				const localDeployer = await LocalDiamondDeployer.getInstance(hre as any, config);
 				await localDeployer.setVerbose(false);
 				const localDiamond = await localDeployer.getDiamondDeployed();
 				diamonds.push(localDiamond);

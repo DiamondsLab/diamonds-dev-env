@@ -1,8 +1,8 @@
 import { Diamond } from '@diamondslab/diamonds';
 import { DiamondMonitor, EventHandlers, FacetManager } from '@diamondslab/diamonds-monitor';
 import {
-	LocalDiamondDeployer,
-	LocalDiamondDeployerConfig,
+  LocalDiamondDeployer,
+  LocalDiamondDeployerConfig,
 } from '@diamondslab/hardhat-diamonds/dist/utils';
 import { expect } from 'chai';
 import hre from 'hardhat';
@@ -36,7 +36,7 @@ describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 			configFilePath: 'diamonds/ExampleDiamond/examplediamond.config.json',
 		};
 
-		deployer = await LocalDiamondDeployer.getInstance(hre, config);
+		deployer = await LocalDiamondDeployer.getInstance(hre as any, config);
 		await deployer.setVerbose(true);
 		diamond = await deployer.getDiamondDeployed();
 		deployedDiamondData = diamond.getDeployedDiamondData();
