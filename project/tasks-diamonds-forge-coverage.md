@@ -111,24 +111,24 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 4.8 Write "Understanding Coverage Output" section explaining how to interpret coverage metrics
   - [x] 4.9 Write "Troubleshooting" section for common coverage issues
   - [x] 4.10 Write "Best Practices" section for measuring and improving coverage
-  - [ ] 4.11 Open file `packages/diamonds-hardhat-foundry/README.md`
-  - [ ] 4.12 Add "Coverage Testing" section to README features list
-  - [ ] 4.13 Add coverage quick start example to README
-  - [ ] 4.14 Add link to FOUNDRY_FORGE_DIAMONDS_COVERAGE.md guide
-  - [ ] 4.15 Open file `packages/diamonds-hardhat-foundry/TROUBLESHOOTING.md`
-  - [ ] 4.16 Add "Coverage Task Issues" section with common problems and solutions
-  - [ ] 4.17 Add "Report Generation Problems" subsection
-  - [ ] 4.18 Add "LCOV Format Issues" subsection
-  - [ ] 4.19 Open file `packages/diamonds-hardhat-foundry/CHANGELOG.md`
-  - [ ] 4.20 Add new `[2.2.0]` section at top of changelog
-  - [ ] 4.21 Document coverage task addition under "Added" category
-  - [ ] 4.22 Document ForgeCoverageFramework class under "Added" category
-  - [ ] 4.23 Document new coverage types under "Added" category
-  - [ ] 4.24 Document documentation additions under "Added" category
-  - [ ] 4.25 Open file `packages/diamonds-hardhat-foundry/RELEASE_SUMMARY.md`
-  - [ ] 4.26 Add "Version 2.2.0 - Coverage Feature" section
-  - [ ] 4.27 Summarize key coverage capabilities and benefits
-  - [ ] 4.28 Add usage examples for coverage feature
+  - [x] 4.11 Open file `packages/diamonds-hardhat-foundry/README.md`
+  - [x] 4.12 Add "Coverage Testing" section to README features list
+  - [x] 4.13 Add coverage quick start example to README
+  - [x] 4.14 Add link to FOUNDRY_FORGE_DIAMONDS_COVERAGE.md guide
+  - [x] 4.15 Open file `packages/diamonds-hardhat-foundry/TROUBLESHOOTING.md`
+  - [x] 4.16 Add "Coverage Task Issues" section with common problems and solutions
+  - [x] 4.17 Add "Report Generation Problems" subsection
+  - [x] 4.18 Add "LCOV Format Issues" subsection
+  - [x] 4.19 Open file `packages/diamonds-hardhat-foundry/CHANGELOG.md`
+  - [x] 4.20 Add new `[2.2.0]` section at top of changelog
+  - [x] 4.21 Document coverage task addition under "Added" category
+  - [x] 4.22 Document ForgeCoverageFramework class under "Added" category
+  - [x] 4.23 Document new coverage types under "Added" category
+  - [x] 4.24 Document documentation additions under "Added" category
+  - [x] 4.25 Open file `packages/diamonds-hardhat-foundry/RELEASE_SUMMARY.md`
+  - [x] 4.26 Add "Version 2.2.0 - Coverage Feature" section
+  - [x] 4.27 Summarize key coverage capabilities and benefits
+  - [x] 4.28 Add usage examples for coverage feature
 
 - [ ] 5.0 Implement test suite for coverage functionality
   - [ ] 5.1 Create file `packages/diamonds-hardhat-foundry/test/coverage/coverage-task.test.ts`
