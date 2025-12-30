@@ -52,65 +52,65 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 0.1 Create and checkout a new branch named `feature/diamonds-forge-coverage`
   - [x] 0.2 Verify branch is created and active with `git branch --show-current`
 
-- [ ] 1.0 Create ForgeCoverageFramework class
-  - [ ] 1.1 Create file `packages/diamonds-hardhat-foundry/src/framework/ForgeCoverageFramework.ts`
-  - [ ] 1.2 Read `ForgeFuzzingFramework.ts` to understand forge command construction patterns
-  - [ ] 1.3 Implement class constructor accepting HardhatRuntimeEnvironment
-  - [ ] 1.4 Implement `buildReportOptions()` private method for --report, --report-file, --lcov-version, --include-libs, --exclude-tests, --ir-minimum flags
-  - [ ] 1.5 Implement `buildFilterOptions()` private method for --match-test, --no-match-test, --match-contract, --no-match-contract, --match-path, --no-match-path, --no-match-coverage flags
-  - [ ] 1.6 Implement `buildDisplayOptions()` private method for -v, --quiet, --json, --md, --color flags
-  - [ ] 1.7 Implement `buildTestOptions()` private method for --threads, --fuzz-runs, --fuzz-seed, --fail-fast, --allow-failure flags
-  - [ ] 1.8 Implement `buildEvmOptions()` private method for --fork-block-number, --initial-balance, --sender, --ffi flags
-  - [ ] 1.9 Implement `buildBuildOptions()` private method for --force, --no-cache, --optimize, --optimizer-runs, --via-ir flags
-  - [ ] 1.10 Implement main `runCoverage()` public method that constructs and executes forge coverage command
-  - [ ] 1.11 Add error handling for forge execution failures
-  - [ ] 1.12 Add JSDoc comments for all public methods and class
-  - [ ] 1.13 Add logging for coverage execution start/completion
+- [x] 1.0 Create ForgeCoverageFramework class
+  - [x] 1.1 Create file `packages/diamonds-hardhat-foundry/src/framework/ForgeCoverageFramework.ts`
+  - [x] 1.2 Read `ForgeFuzzingFramework.ts` to understand forge command construction patterns
+  - [x] 1.3 Implement class constructor accepting HardhatRuntimeEnvironment
+  - [x] 1.4 Implement `buildReportOptions()` private method for --report, --report-file, --lcov-version, --include-libs, --exclude-tests, --ir-minimum flags
+  - [x] 1.5 Implement `buildFilterOptions()` private method for --match-test, --no-match-test, --match-contract, --no-match-contract, --match-path, --no-match-path, --no-match-coverage flags
+  - [x] 1.6 Implement `buildDisplayOptions()` private method for -v, --quiet, --json, --md, --color flags
+  - [x] 1.7 Implement `buildTestOptions()` private method for --threads, --fuzz-runs, --fuzz-seed, --fail-fast, --allow-failure flags
+  - [x] 1.8 Implement `buildEvmOptions()` private method for --fork-block-number, --initial-balance, --sender, --ffi flags
+  - [x] 1.9 Implement `buildBuildOptions()` private method for --force, --no-cache, --optimize, --optimizer-runs, --via-ir flags
+  - [x] 1.10 Implement main `runCoverage()` public method that constructs and executes forge coverage command
+  - [x] 1.11 Add error handling for forge execution failures
+  - [x] 1.12 Add JSDoc comments for all public methods and class
+  - [x] 1.13 Add logging for coverage execution start/completion
 
-- [ ] 2.0 Implement diamonds-forge:coverage Hardhat task
-  - [ ] 2.1 Create file `packages/diamonds-hardhat-foundry/src/tasks/coverage.ts`
-  - [ ] 2.2 Read `test.ts` to understand task structure and deployment integration patterns
-  - [ ] 2.3 Define task with `task("diamonds-forge:coverage", "Run forge coverage for Diamond contracts")`
-  - [ ] 2.4 Add required parameter `--diamond-name` with description
-  - [ ] 2.5 Add optional parameter `--network` with default "localhost"
-  - [ ] 2.6 Add optional parameters for all report options (--report, --report-file, --lcov-version, --include-libs, --exclude-tests, --ir-minimum)
-  - [ ] 2.7 Add optional parameters for all test filtering options (--match-test, --no-match-test, --match-contract, --no-match-contract, --match-path, --no-match-path, --no-match-coverage)
-  - [ ] 2.8 Add optional parameters for display options (-v/--verbosity, --quiet, --json, --md, --color)
-  - [ ] 2.9 Add optional parameters for test execution options (--threads, --fuzz-runs, --fuzz-seed, --fail-fast, --allow-failure)
-  - [ ] 2.10 Add optional parameters for EVM options (--fork-block-number, --initial-balance, --sender, --ffi)
-  - [ ] 2.11 Add optional parameters for build options (--force, --no-cache, --optimize, --optimizer-runs, --via-ir)
-  - [ ] 2.12 Implement task action: validate inputs using validation utils
-  - [ ] 2.13 Implement task action: create DeploymentManager instance
-  - [ ] 2.14 Implement task action: check if Diamond is deployed (or force redeploy with --force flag)
-  - [ ] 2.15 Implement task action: deploy Diamond if needed using DeploymentManager
-  - [ ] 2.16 Implement task action: generate DiamondDeployment.sol helper using HelperGenerator
-  - [ ] 2.17 Implement task action: construct fork URL based on network configuration
-  - [ ] 2.18 Implement task action: create ForgeCoverageFramework instance and call runCoverage()
-  - [ ] 2.19 Implement task action: handle errors and provide clear error messages
-  - [ ] 2.20 Add comprehensive JSDoc comments for task and all parameters
+- [x] 2.0 Implement diamonds-forge:coverage Hardhat task
+  - [x] 2.1 Create file `packages/diamonds-hardhat-foundry/src/tasks/coverage.ts`
+  - [x] 2.2 Read `test.ts` to understand task structure and deployment integration patterns
+  - [x] 2.3 Define task with `task("diamonds-forge:coverage", "Run forge coverage for Diamond contracts")`
+  - [x] 2.4 Add required parameter `--diamond-name` with description
+  - [x] 2.5 Add optional parameter `--network` with default "localhost"
+  - [x] 2.6 Add optional parameters for all report options (--report, --report-file, --lcov-version, --include-libs, --exclude-tests, --ir-minimum)
+  - [x] 2.7 Add optional parameters for all test filtering options (--match-test, --no-match-test, --match-contract, --no-match-contract, --match-path, --no-match-path, --no-match-coverage)
+  - [x] 2.8 Add optional parameters for display options (-v/--verbosity, --quiet, --json, --md, --color)
+  - [x] 2.9 Add optional parameters for test execution options (--threads, --fuzz-runs, --fuzz-seed, --fail-fast, --allow-failure)
+  - [x] 2.10 Add optional parameters for EVM options (--fork-block-number, --initial-balance, --sender, --ffi)
+  - [x] 2.11 Add optional parameters for build options (--force, --no-cache, --optimize, --optimizer-runs, --via-ir)
+  - [x] 2.12 Implement task action: validate inputs using validation utils
+  - [x] 2.13 Implement task action: create DeploymentManager instance
+  - [x] 2.14 Implement task action: check if Diamond is deployed (or force redeploy with --force flag)
+  - [x] 2.15 Implement task action: deploy Diamond if needed using DeploymentManager
+  - [x] 2.16 Implement task action: generate DiamondDeployment.sol helper using HelperGenerator
+  - [x] 2.17 Implement task action: construct fork URL based on network configuration
+  - [x] 2.18 Implement task action: create ForgeCoverageFramework instance and call runCoverage()
+  - [x] 2.19 Implement task action: handle errors and provide clear error messages
+  - [x] 2.20 Add comprehensive JSDoc comments for task and all parameters
 
-- [ ] 3.0 Add TypeScript type definitions for coverage options
-  - [ ] 3.1 Open file `packages/diamonds-hardhat-foundry/src/types/config.ts`
-  - [ ] 3.2 Create `CoverageOptions` interface with all forge coverage options as typed properties
-  - [ ] 3.3 Add JSDoc comments for each option explaining its purpose
-  - [ ] 3.4 Create `CoverageReportType` type union for 'summary' | 'lcov' | 'debug' | 'bytecode'
-  - [ ] 3.5 Create `ColorMode` type union for 'auto' | 'always' | 'never'
-  - [ ] 3.6 Export all new types from config.ts
-  - [ ] 3.7 Open file `packages/diamonds-hardhat-foundry/src/index.ts`
-  - [ ] 3.8 Export ForgeCoverageFramework class from index.ts
-  - [ ] 3.9 Export CoverageOptions and related types from index.ts
+- [x] 3.0 Add TypeScript type definitions for coverage options
+  - [x] 3.1 Open file `packages/diamonds-hardhat-foundry/src/types/config.ts`
+  - [x] 3.2 Create `CoverageOptions` interface with all forge coverage options as typed properties
+  - [x] 3.3 Add JSDoc comments for each option explaining its purpose
+  - [x] 3.4 Create `CoverageReportType` type union for 'summary' | 'lcov' | 'debug' | 'bytecode'
+  - [x] 3.5 Create `ColorMode` type union for 'auto' | 'always' | 'never'
+  - [x] 3.6 Export all new types from config.ts
+  - [x] 3.7 Open file `packages/diamonds-hardhat-foundry/src/index.ts`
+  - [x] 3.8 Export ForgeCoverageFramework class from index.ts
+  - [x] 3.9 Export CoverageOptions and related types from index.ts
 
-- [ ] 4.0 Create comprehensive documentation
-  - [ ] 4.1 Create file `docs/FOUNDRY_FORGE_DIAMONDS_COVERAGE.md`
-  - [ ] 4.2 Write overview section explaining coverage feature and benefits
-  - [ ] 4.3 Write "Getting Started" section with basic usage example
-  - [ ] 4.4 Write "Command Options" section documenting all available flags organized by category
-  - [ ] 4.5 Write "Report Formats" section explaining summary, LCOV, debug, and bytecode formats
-  - [ ] 4.6 Write "Common Use Cases" section with examples (basic coverage, LCOV for CI, filtering tests, multiple reports)
-  - [ ] 4.7 Write "CI/CD Integration" section with GitHub Actions and GitLab CI examples
-  - [ ] 4.8 Write "Understanding Coverage Output" section explaining how to interpret coverage metrics
-  - [ ] 4.9 Write "Troubleshooting" section for common coverage issues
-  - [ ] 4.10 Write "Best Practices" section for measuring and improving coverage
+- [x] 4.0 Create comprehensive documentation
+  - [x] 4.1 Create file `docs/FOUNDRY_FORGE_DIAMONDS_COVERAGE.md`
+  - [x] 4.2 Write overview section explaining coverage feature and benefits
+  - [x] 4.3 Write "Getting Started" section with basic usage example
+  - [x] 4.4 Write "Command Options" section documenting all available flags organized by category
+  - [x] 4.5 Write "Report Formats" section explaining summary, LCOV, debug, and bytecode formats
+  - [x] 4.6 Write "Common Use Cases" section with examples (basic coverage, LCOV for CI, filtering tests, multiple reports)
+  - [x] 4.7 Write "CI/CD Integration" section with GitHub Actions and GitLab CI examples
+  - [x] 4.8 Write "Understanding Coverage Output" section explaining how to interpret coverage metrics
+  - [x] 4.9 Write "Troubleshooting" section for common coverage issues
+  - [x] 4.10 Write "Best Practices" section for measuring and improving coverage
   - [ ] 4.11 Open file `packages/diamonds-hardhat-foundry/README.md`
   - [ ] 4.12 Add "Coverage Testing" section to README features list
   - [ ] 4.13 Add coverage quick start example to README
