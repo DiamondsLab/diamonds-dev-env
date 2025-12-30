@@ -1,8 +1,8 @@
 import { Diamond } from '@diamondslab/diamonds';
 import { DiamondMonitor, FacetManager } from '@diamondslab/diamonds-monitor';
 import {
-  LocalDiamondDeployer,
-  LocalDiamondDeployerConfig,
+	LocalDiamondDeployer,
+	LocalDiamondDeployerConfig,
 } from '@diamondslab/hardhat-diamonds/dist/utils';
 import { expect } from 'chai';
 import hre from 'hardhat';

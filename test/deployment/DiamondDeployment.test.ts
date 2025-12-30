@@ -1,7 +1,7 @@
 import { Diamond } from '@diamondslab/diamonds';
 import {
-  LocalDiamondDeployer,
-  LocalDiamondDeployerConfig,
+	LocalDiamondDeployer,
+	LocalDiamondDeployerConfig,
 } from '@diamondslab/hardhat-diamonds/dist/utils';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import { expect } from 'chai';
@@ -59,7 +59,7 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 					writeDeployedDiamondData: false,
 					configFilePath: `diamonds/ExampleDiamond/examplediamond.config.json`,
 				} as LocalDiamondDeployerConfig;
-				const diamondDeployer = await LocalDiamondDeployer.getInstance(hre, config);
+				const diamondDeployer = await LocalDiamondDeployer.getInstance(hre as any, config);
 				await diamondDeployer.setVerbose(true);
 				diamond = await diamondDeployer.getDiamondDeployed();
 				const deployedDiamondData = diamond.getDeployedDiamondData();
