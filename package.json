@@ -11,7 +11,7 @@
     "test": "npx hardhat test",
     "test-multichain": "npx hardhat test-multichain",
     "clean": "rm -rf artifacts/* cache/* diamond-abi/* typechain-types/* diamond-typechain-types/*",
-    "build": "yarn clean-compile && npx tsc",
+    "build": "npx tsc",
     "compile": "npx hardhat compile && yarn diamond:generate-abi-typechain",
     "diamonds-clean": "rm -rf diamond-typechain-types diamond-abi && npx hardhat clean",
     "coverage": "npx hardhat coverage",
