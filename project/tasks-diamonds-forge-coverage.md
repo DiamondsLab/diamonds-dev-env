@@ -164,15 +164,15 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 6.7 Test coverage task with LCOV report (DONE - tested successfully in previous session)
   - [x] 6.8 Test coverage task with test filtering (DONE - tested successfully in previous session)
   - [x] 6.9 Test coverage task with --force flag (DONE - tested successfully in previous session)
-  - [ ] 6.10 Verify all existing tests still pass: `cd /workspaces/diamonds_dev_env && yarn test`
-  - [ ] 6.11 Run full Foundry test suite: `cd /workspaces/diamonds_dev_env && npx hardhat diamonds-forge:test --diamond-name ExampleDiamond --network localhost`
-  - [ ] 6.12 Verify 141/141 tests still passing
-  - [ ] 6.13 Run ESLint: `cd /workspaces/diamonds_dev_env && yarn lint`
-  - [ ] 6.14 Fix any linting errors
-  - [ ] 6.15 Stage all changes: `git add packages/diamonds-hardhat-foundry/ docs/`
-  - [ ] 6.16 Commit changes with conventional commit message: `git commit -m "feat(coverage): add diamonds-forge:coverage task for test coverage analysis" -m "- Implement ForgeCoverageFramework for forge coverage integration" -m "- Add diamonds-forge:coverage Hardhat task with full option pass-through" -m "- Support all forge coverage report formats (summary, LCOV, debug, bytecode)" -m "- Add comprehensive documentation and test suite" -m "- Update to version 2.3.0"`
-  - [ ] 6.17 Review commit and verify all files are included
-  - [ ] 6.18 Push feature branch to remote: `git push origin feature/diamonds-forge-coverage`
+  - [x] 6.10 Verify all existing tests still pass: `cd /workspaces/diamonds_dev_env && yarn test`
+  - [x] 6.11 Run full Foundry test suite: `cd /workspaces/diamonds_dev_env && npx hardhat diamonds-forge:test --diamond-name ExampleDiamond --network localhost`
+  - [x] 6.12 Verify 141/141 tests still passing
+  - [x] 6.13 Run ESLint: `cd /workspaces/diamonds_dev_env && yarn lint`
+  - [x] 6.14 Fix any linting errors
+  - [x] 6.15 Stage all changes: `git add packages/diamonds-hardhat-foundry/ docs/`
+  - [x] 6.16 Commit changes with conventional commit message: `git commit -m "feat(coverage): add diamonds-forge:coverage task for test coverage analysis" -m "- Implement ForgeCoverageFramework for forge coverage integration" -m "- Add diamonds-forge:coverage Hardhat task with full option pass-through" -m "- Support all forge coverage report formats (summary, LCOV, debug, bytecode)" -m "- Add comprehensive documentation and test suite" -m "- Update to version 2.3.0"`
+  - [x] 6.17 Review commit and verify all files are included
+  - [x] 6.18 Push feature branch to remote: `git push origin feature/diamonds-forge-coverage`
 
 ---
 
