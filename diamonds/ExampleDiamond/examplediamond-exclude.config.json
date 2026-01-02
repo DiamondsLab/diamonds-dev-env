@@ -34,18 +34,12 @@
         }
       }
     },
-    "ExampleTestDeployExcludeFacet": {
+    "ExampleTestDeployExclude": {
       "priority": 50,
       "versions": {
         "1.0": {
-          "deployExclude": "testDeployExclude()"
+          "deployExclude": ["testDeployExclude()"]
         }
-      }
-    },
-    "ExampleTestDeployIncludeFacet": {
-      "priority": 60,
-      "versions": {
-        "0.0": {}
       }
     }
   }

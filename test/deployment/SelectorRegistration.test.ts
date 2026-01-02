@@ -41,7 +41,7 @@ describe('🧪 Function Selector Registration Unit Tests', function () {
 			// Load the exclude config file
 			const configPath = path.join(
 				__dirname,
-				'../../diamonds/ExampleDiamond/examplediamond-exlcude.config .json',
+				'../../diamonds/ExampleDiamond/examplediamond-exclude.config .json',
 			);
 
 			expect(fs.existsSync(configPath), `Config file should exist at ${configPath}`).to.be
@@ -95,7 +95,7 @@ describe('🧪 Function Selector Registration Unit Tests', function () {
 			// Load both config files
 			const excludeConfigPath = path.join(
 				__dirname,
-				'../../diamonds/ExampleDiamond/examplediamond-exlcude.config .json',
+				'../../diamonds/ExampleDiamond/examplediamond-exclude.config .json',
 			);
 			const includeConfigPath = path.join(
 				__dirname,

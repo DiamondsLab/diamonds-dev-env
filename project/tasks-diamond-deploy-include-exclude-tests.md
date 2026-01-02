@@ -57,17 +57,17 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 2.5 Add test case: Load `examplediamond-include.config.json` and verify `deployInclude` array is correctly parsed
   - [x] 2.6 Run `yarn test test/deployment/SelectorRegistration.test.ts` and verify all unit tests pass
 
-- [ ] 3.0 Create integration tests for deployExclude behavior
-  - [ ] 3.1 Create `test/deployment/DeployIncludeExclude.test.ts` based on `DiamondDeployment.test.ts` template
-  - [ ] 3.2 Set up multichain test loop with provider management (follow DiamondDeployment.test.ts pattern)
-  - [ ] 3.3 Add `before` hook to deploy Diamond using `examplediamond-exclude.config.json` with LocalDiamondDeployer
-  - [ ] 3.4 Add `before` hook to load Diamond contract using `loadDiamondContract<ExampleDiamond>()`
-  - [ ] 3.5 Set up signers and owner following existing pattern
-  - [ ] 3.6 Add `beforeEach` and `afterEach` hooks for snapshot management
-  - [ ] 3.7 Add test case: Verify `testDeployExclude()` selector (0xdc38f9ab) is NOT registered with ExampleTestDeployExcludeFacet
-  - [ ] 3.8 Add test case: Verify `testDeployExclude()` selector (0xdc38f9ab) IS registered with ExampleTestDeployIncludeFacet
-  - [ ] 3.9 Add test case: Verify `testDeployInclude()` selector (0x7f0c610c) IS registered with ExampleTestDeployIncludeFacet (default behavior)
-  - [ ] 3.10 Run `yarn test test/deployment/DeployIncludeExclude.test.ts` and verify deployExclude tests pass
+- [x] 3.0 Create integration tests for deployExclude behavior
+  - [x] 3.1 Create `test/deployment/DeployIncludeExclude.test.ts` based on `DiamondDeployment.test.ts` template
+  - [x] 3.2 Set up multichain test loop with provider management (follow DiamondDeployment.test.ts pattern)
+  - [x] 3.3 Add `before` hook to deploy Diamond using `examplediamond-exclude.config.json` with LocalDiamondDeployer
+  - [x] 3.4 Add `before` hook to load Diamond contract using `loadDiamondContract<ExampleDiamond>()`
+  - [x] 3.5 Set up signers and owner following existing pattern
+  - [x] 3.6 Add `beforeEach` and `afterEach` hooks for snapshot management
+  - [x] 3.7 Add test case: Verify `testDeployExclude()` selector (0xdc38f9ab) is NOT registered with ExampleTestDeployExclude
+  - [x] 3.8 Add test case: Verify `testDeployExclude() selector (0xdc38f9ab) IS registered with ExampleTestDeployInclude
+  - [x] 3.9 Add test case: Verify `testDeployInclude()` selector (0x7f0c610c) IS registered with ExampleTestDeployInclude (default behavior)
+  - [x] 3.10 Run `yarn test test/deployment/DeployIncludeExclude.test.ts` - **TESTS FAIL - Bug discovered in BaseDeploymentStrategy!**
 
 - [ ] 4.0 Create integration tests for deployInclude behavior
   - [ ] 4.1 Add new describe block in `DeployIncludeExclude.test.ts` for deployInclude tests
