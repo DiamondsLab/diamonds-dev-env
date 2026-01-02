@@ -55,7 +55,9 @@ describe('🧪 Diamond Deployment Include/Exclude Tests', async function () {
 					configFilePath: `diamonds/ExampleDiamond/examplediamond-exclude.config.json`,
 				} as LocalDiamondDeployerConfig;
 
-				// CRITICAL: Pass hre as first parameter to avoid HH9 circular dependency			// eslint-disable-next-line @typescript-eslint/no-explicit-any				const diamondDeployer = await LocalDiamondDeployer.getInstance(hre as any, config);
+				// CRITICAL: Pass hre as first parameter to avoid HH9 circular dependency
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const diamondDeployer = await LocalDiamondDeployer.getInstance(hre as any, config);
 				await diamondDeployer.setVerbose(true);
 				diamond = await diamondDeployer.getDiamondDeployed();
 				const deployedDiamondData = diamond.getDeployedDiamondData();

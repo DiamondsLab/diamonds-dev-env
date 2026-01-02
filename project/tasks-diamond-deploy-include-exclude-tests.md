@@ -100,16 +100,20 @@ Update the file after completing each sub-task, not just after completing an ent
   - [ ] 7.3 Analyze failure patterns to identify root cause (e.g., selector registration logic, config parsing, etc.)
   - [ ] 7.4 Create a summary of discovered bugs with specific line numbers in BaseDeploymentStrategy.ts if applicable
 
-- [ ] 8.0 Fix bugs in BaseDeploymentStrategy (if discovered)
-  - [ ] 8.1 Read `packages/diamonds/src/strategies/BaseDeploymentStrategy.ts` focusing on `updateFunctionSelectorRegistryTasks()` method
-  - [ ] 8.2 Analyze how `deployExclude` configuration is currently processed
-  - [ ] 8.3 Analyze how `deployInclude` configuration is currently processed
-  - [ ] 8.4 Identify the bug causing test failures (incorrect selector assignment, missing config handling, etc.)
-  - [ ] 8.5 Implement fix for deployExclude logic ensuring selectors are excluded from higher-priority facets
-  - [ ] 8.6 Implement fix for deployInclude logic ensuring selectors are explicitly included in configured facets
-  - [ ] 8.7 Run `yarn workspace @diamondslab/diamonds build` to compile the diamonds package
-  - [ ] 8.8 Run `yarn test test/deployment/DeployIncludeExclude.test.ts` to verify fixes work
-  - [ ] 8.9 If tests still fail, repeat steps 8.2-8.8 until all tests pass
+- [x] 8.0 Fix bugs in BaseDeploymentStrategy
+  - [x] 8.1 Read BaseDeploymentStrategy.ts lines 217-361 to understand updateFunctionSelectorRegistryTasks()
+  - [x] 8.2 Analyze exclusion filter logic for deployExclude processing
+  - [x] 8.3 Analyze inclusion override logic for deployInclude processing
+  - [x] 8.4 Identify bugs causing deployExclude to not work
+  - [x] 8.5 **CRITICAL BUG FOUND:** Version key mismatch - config uses string keys like "1.0" but code converts to numbers (1) then tries to access facetConfig.versions[1] which doesn't exist
+  - [x] 8.6 Fix version key lookup by finding original string key that matches numeric version
+  - [x] 8.7 Update all references to use `upgradeVersionKey` instead of `upgradeVersion` for config access
+  - [x] 8.8 Add deployExclude filter in deployFacets() to remove selectors BEFORE storing in newFacetData
+  - [x] 8.9 Remove duplicate conditional blocks and fix 'in' operator usage (arrays use includes(), Maps use has())
+  - [x] 8.10 Compile diamonds package: `yarn workspace @diamondslab/diamonds build`
+  - [x] 8.11 Run integration tests: `yarn test test/deployment/DeployIncludeExclude.test.ts` - **ALL PASS!**
+  - [x] 8.12 Fix SelectorRegistration.test.ts to match updated config files and facet names
+  - [x] 8.13 Run all deployment tests: `yarn test test/deployment/*.test.ts` - **16 PASSING, 0 FAILING!** (if discovered)
 
 - [ ] 9.0 Final validation and cleanup
   - [ ] 9.1 Run `yarn test` to execute full test suite and ensure no regressions

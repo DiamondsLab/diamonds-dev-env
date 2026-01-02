@@ -41,7 +41,7 @@ describe('🧪 Function Selector Registration Unit Tests', function () {
 			// Load the exclude config file
 			const configPath = path.join(
 				__dirname,
-				'../../diamonds/ExampleDiamond/examplediamond-exclude.config .json',
+				'../../diamonds/ExampleDiamond/examplediamond-exclude.config.json',
 			);
 
 			expect(fs.existsSync(configPath), `Config file should exist at ${configPath}`).to.be
@@ -52,16 +52,17 @@ describe('🧪 Function Selector Registration Unit Tests', function () {
 
 			// Verify the config structure
 			expect(config).to.have.property('facets');
-			expect(config.facets).to.have.property('ExampleTestDeployExcludeFacet');
+			expect(config.facets).to.have.property('ExampleTestDeployExclude');
 
-			const excludeFacet = config.facets.ExampleTestDeployExcludeFacet;
+			const excludeFacet = config.facets.ExampleTestDeployExclude;
 			expect(excludeFacet).to.have.property('priority', 50);
 			expect(excludeFacet).to.have.property('versions');
 			expect(excludeFacet.versions).to.have.property('1.0');
 
 			const version = excludeFacet.versions['1.0'];
 			expect(version).to.have.property('deployExclude');
-			expect(version.deployExclude).to.equal('testDeployExclude()');
+			expect(version.deployExclude).to.be.an('array');
+			expect(version.deployExclude).to.include('testDeployExclude()');
 		});
 
 		it('should correctly parse deployInclude from examplediamond-include.config.json', function () {
@@ -79,23 +80,24 @@ describe('🧪 Function Selector Registration Unit Tests', function () {
 
 			// Verify the config structure
 			expect(config).to.have.property('facets');
-			expect(config.facets).to.have.property('ExampleTestDeployIncludeFacet');
+			expect(config.facets).to.have.property('ExampleTestDeployInclude');
 
-			const includeFacet = config.facets.ExampleTestDeployIncludeFacet;
+			const includeFacet = config.facets.ExampleTestDeployInclude;
 			expect(includeFacet).to.have.property('priority', 60);
 			expect(includeFacet).to.have.property('versions');
 			expect(includeFacet.versions).to.have.property('0.0');
 
 			const version = includeFacet.versions['0.0'];
 			expect(version).to.have.property('deployInclude');
-			expect(version.deployInclude).to.equal('testDeployInclude()');
+			expect(version.deployInclude).to.be.an('array');
+			expect(version.deployInclude).to.include('testDeployInclude()');
 		});
 
-		it('should verify facet priority ordering (ExampleTestDeployExcludeFacet has higher priority)', function () {
+		it('should verify facet priority ordering (ExampleTestDeployExclude has higher priority)', function () {
 			// Load both config files
 			const excludeConfigPath = path.join(
 				__dirname,
-				'../../diamonds/ExampleDiamond/examplediamond-exclude.config .json',
+				'../../diamonds/ExampleDiamond/examplediamond-exclude.config.json',
 			);
 			const includeConfigPath = path.join(
 				__dirname,
@@ -106,17 +108,15 @@ describe('🧪 Function Selector Registration Unit Tests', function () {
 			const includeConfig = JSON.parse(fs.readFileSync(includeConfigPath, 'utf8'));
 
 			// In both configs, verify the priorities
-			const excludeFacetPriority =
-				excludeConfig.facets.ExampleTestDeployExcludeFacet.priority;
-			const includeFacetPriority =
-				includeConfig.facets.ExampleTestDeployIncludeFacet.priority;
+			const excludeFacetPriority = excludeConfig.facets.ExampleTestDeployExclude.priority;
+			const includeFacetPriority = includeConfig.facets.ExampleTestDeployInclude.priority;
 
 			// Lower priority number = higher priority
 			expect(excludeFacetPriority).to.equal(50);
 			expect(includeFacetPriority).to.equal(60);
 			expect(excludeFacetPriority).to.be.lessThan(
 				includeFacetPriority,
-				'ExampleTestDeployExcludeFacet should have higher priority (lower number) than ExampleTestDeployIncludeFacet',
+				'ExampleTestDeployExclude should have higher priority (lower number) than ExampleTestDeployInclude',
 			);
 		});
 	});
