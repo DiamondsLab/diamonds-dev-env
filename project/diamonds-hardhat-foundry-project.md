@@ -90,7 +90,7 @@ import { debug } from "debug";
 import { JsonRpcProvider } from "ethers";
 import hre from "hardhat";
 import { ExampleDiamond } from "../../diamond-typechain-types";
-import { loadDiamondContract } from "../../scripts/utils/loadDiamondArtifact";
+import { loadDiamondContract } from "@diamondslab/hardhat-diamonds/dist/lib";
 
 let diamond: Diamond;
 let owner: string;
@@ -117,6 +117,7 @@ let exampleDiamondPlain: ExampleDiamond;
 const exampleDiamondContract = await loadDiamondContract<ExampleDiamond>(
   diamond,
   deployedDiamondData.DiamondAddress ?? "",
+  hre.ethers,
 );
 exampleDiamond = exampleDiamondContract;
 
@@ -138,7 +139,7 @@ ownerDiamond = exampleDiamond.connect(ownerSigner);
 
 ### Loading the Diamond Artifact
 
-In the example above we use the `loadDiamondContract` utility function to load the Diamond contract artifact using the Diamond address from the deployed diamond data. This allows us to interact with the Diamond contract and its facets using the Typechain types generated for the Diamond contract. This is a helper function that is not currently part of the Diamonds module but is provided as a utility in the Diamonds Dev Env project.
+In the example above we use the `loadDiamondContract` utility function to load the Diamond contract artifact using the Diamond address from the deployed diamond data. This allows us to interact with the Diamond contract and its facets using the Typechain types generated for the Diamond contract. This helper function is part of the `@diamondslab/hardhat-diamonds` package and can be imported from `@diamondslab/hardhat-diamonds/dist/lib`.
 
 ## Hardhat-Multichain Extension
 

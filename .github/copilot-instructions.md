@@ -121,13 +121,15 @@ const diamond = await deployer.getDiamondDeployed();
 ### Loading Deployed Diamonds
 
 ```typescript
-import { loadDiamondContract } from "../../scripts/utils/loadDiamondArtifact";
+import { loadDiamondContract } from "@diamondslab/hardhat-diamonds/dist/lib";
 import { ExampleDiamond } from "../../diamond-typechain-types";
+import hre from "hardhat";
 
 const deployedData = diamond.getDeployedDiamondData();
 const exampleDiamond = await loadDiamondContract<ExampleDiamond>(
   diamond,
   deployedData.DiamondAddress ?? "",
+  hre.ethers,
 );
 ```
 

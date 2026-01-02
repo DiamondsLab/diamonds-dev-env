@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "dom"],
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
     "module": "NodeNext",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -20,7 +23,10 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": false,
-    "typeRoots": ["node_modules/@types", "./types"],
+    "typeRoots": [
+      "node_modules/@types",
+      "./types"
+    ],
     "moduleResolution": "nodenext"
   },
   "ts-node": {
@@ -35,10 +41,11 @@
     "./test",
     "./typechain-types",
     "./diamond-typechain-types",
-    "test-suites/",
-    "./tasks"
+    "test-suites/"
   ],
-  "files": ["./hardhat.config.ts"],
+  "files": [
+    "./hardhat.config.ts"
+  ],
   "exclude": [
     "./notes/**/*",
     "./node_modules",
