@@ -36,18 +36,18 @@ Update the file after completing each sub-task, not just after completing an ent
 
 ## Tasks
 
-- [ ] 0.0 Verify feature branch setup
-  - [ ] 0.1 Run `git branch --show-current` to verify we're on `feature/diamond-include-exclude-tests`
-  - [ ] 0.2 Run `git status` to verify previous commit for contracts and configs
+- [x] 0.0 Verify feature branch setup
+  - [x] 0.1 Run `git branch --show-current` to verify we're on `feature/diamond-include-exclude-tests`
+  - [x] 0.2 Run `git status` to verify previous commit for contracts and configs
 
-- [ ] 1.0 Verify and compile test infrastructure
-  - [ ] 1.1 Verify `contracts/examplediamond/ExampleTestDeployExclude.sol` exists with `testDeployExclude()` and `testDeployInclude()` functions
-  - [ ] 1.2 Verify `contracts/examplediamond/ExampleTestDeployInclude.sol` exists with `testDeployExclude()` and `testDeployInclude()` functions
-  - [ ] 1.3 Verify `diamonds/ExampleDiamond/examplediamond-exclude.config.json` has `ExampleTestDeployExcludeFacet` with `deployExclude: "testDeployExclude()"`
-  - [ ] 1.4 Verify `diamonds/ExampleDiamond/examplediamond-include.config.json` has `ExampleTestDeployIncludeFacet` with `deployInclude: "testDeployInclude()"`
-  - [ ] 1.5 Verify facet priorities: ExampleTestDeployExcludeFacet (50), ExampleTestDeployIncludeFacet (60)
-  - [ ] 1.6 Run `yarn compile` to compile contracts
-  - [ ] 1.7 Run `yarn diamond:generate-abi-typechain --diamond-name ExampleDiamond` to regenerate Diamond ABI and TypeChain types
+- [x] 1.0 Verify and compile test infrastructure
+  - [x] 1.1 Verify `contracts/examplediamond/ExampleTestDeployExclude.sol` exists with `testDeployExclude()` and `testDeployInclude()` functions
+  - [x] 1.2 Verify `contracts/examplediamond/ExampleTestDeployInclude.sol` exists with `testDeployExclude()` and `testDeployInclude()` functions
+  - [x] 1.3 Verify `diamonds/ExampleDiamond/examplediamond-exclude.config.json` has `ExampleTestDeployExcludeFacet` with `deployExclude: "testDeployExclude()"`
+  - [x] 1.4 Verify `diamonds/ExampleDiamond/examplediamond-include.config.json` has `ExampleTestDeployIncludeFacet` with `deployInclude: "testDeployInclude()"`
+  - [x] 1.5 Verify facet priorities: ExampleTestDeployExcludeFacet (50), ExampleTestDeployIncludeFacet (60)
+  - [x] 1.6 Run `yarn compile` to compile contracts
+  - [x] 1.7 Run `yarn diamond:generate-abi-typechain --diamond-name ExampleDiamond` to regenerate Diamond ABI and TypeChain types
 
 - [ ] 2.0 Create unit tests for selector calculation and configuration parsing
   - [ ] 2.1 Create `test/deployment/SelectorRegistration.test.ts` with basic test structure
