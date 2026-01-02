@@ -49,13 +49,13 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.6 Run `yarn compile` to compile contracts
   - [x] 1.7 Run `yarn diamond:generate-abi-typechain --diamond-name ExampleDiamond` to regenerate Diamond ABI and TypeChain types
 
-- [ ] 2.0 Create unit tests for selector calculation and configuration parsing
-  - [ ] 2.1 Create `test/deployment/SelectorRegistration.test.ts` with basic test structure
-  - [ ] 2.2 Add test case: Calculate selector for `testDeployExclude()` and verify it equals `0xdc38f9ab`
-  - [ ] 2.3 Add test case: Calculate selector for `testDeployInclude()` and verify it equals `0x7f0c610c`
-  - [ ] 2.4 Add test case: Load `examplediamond-exclude.config.json` and verify `deployExclude` array is correctly parsed
-  - [ ] 2.5 Add test case: Load `examplediamond-include.config.json` and verify `deployInclude` array is correctly parsed
-  - [ ] 2.6 Run `yarn test test/deployment/SelectorRegistration.test.ts` and verify all unit tests pass
+- [x] 2.0 Create unit tests for selector calculation and configuration parsing
+  - [x] 2.1 Create `test/deployment/SelectorRegistration.test.ts` with basic test structure
+  - [x] 2.2 Add test case: Calculate selector for `testDeployExclude()` and verify it equals `0xdc38f9ab`
+  - [x] 2.3 Add test case: Calculate selector for `testDeployInclude()` and verify it equals `0x7f0c610c`
+  - [x] 2.4 Add test case: Load `examplediamond-exclude.config.json` and verify `deployExclude` array is correctly parsed
+  - [x] 2.5 Add test case: Load `examplediamond-include.config.json` and verify `deployInclude` array is correctly parsed
+  - [x] 2.6 Run `yarn test test/deployment/SelectorRegistration.test.ts` and verify all unit tests pass
 
 - [ ] 3.0 Create integration tests for deployExclude behavior
   - [ ] 3.1 Create `test/deployment/DeployIncludeExclude.test.ts` based on `DiamondDeployment.test.ts` template
