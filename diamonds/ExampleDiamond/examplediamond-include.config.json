@@ -43,7 +43,7 @@
     "ExampleTestDeployInclude": {
       "priority": 60,
       "versions": {
-        "0.0": {
+        "1.0": {
           "deployInclude": ["testDeployInclude()"]
         }
       }

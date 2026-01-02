@@ -53,6 +53,7 @@ describe('🧪 Diamond Deployment Include/Exclude Tests', async function () {
 					chainId: (await provider.getNetwork()).chainId,
 					writeDeployedDiamondData: false,
 					configFilePath: `diamonds/ExampleDiamond/examplediamond-exclude.config.json`,
+					localDiamondDeployerKey: `${diamondName}-${networkName}-exclude-config`,
 				} as LocalDiamondDeployerConfig;
 
 				// CRITICAL: Pass hre as first parameter to avoid HH9 circular dependency
@@ -160,6 +161,145 @@ describe('🧪 Diamond Deployment Include/Exclude Tests', async function () {
 				}
 
 				log(`✓ Function selector registry state documented`);
+			});
+		});
+
+		describe(`🔗 Chain: ${networkName} - deployInclude Tests`, function () {
+			let diamond: Diamond;
+			let exampleDiamond: ExampleDiamond;
+			let owner: string;
+			let ownerSigner: SignerWithAddress;
+			let ownerDiamond: ExampleDiamond;
+			let snapshotId: string;
+			let ethersMultichain: typeof hre.ethers;
+
+			before(async function () {
+				const config: LocalDiamondDeployerConfig = {
+					diamondName: diamondName,
+					networkName: networkName,
+					provider: provider,
+					chainId: (await provider.getNetwork()).chainId,
+					writeDeployedDiamondData: false,
+					configFilePath: 'diamonds/ExampleDiamond/examplediamond-include.config.json',
+					localDiamondDeployerKey: `${diamondName}-${networkName}-include-config`,
+				};
+
+				// CRITICAL: Pass hre as first parameter to avoid HH9 circular dependency
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const deployer = await LocalDiamondDeployer.getInstance(hre as any, config);
+				diamond = await deployer.getDiamondDeployed();
+
+				const deployedDiamondData = diamond.getDeployedDiamondData();
+
+				exampleDiamond = await loadDiamondContract<ExampleDiamond>(
+					diamond,
+					deployedDiamondData.DiamondAddress ?? '',
+					hre.ethers,
+				);
+
+				ethersMultichain = hre.ethers;
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				ethersMultichain.provider = provider as any;
+
+				// Get the signer for the owner
+				owner = diamond.getDeployedDiamondData().DeployerAddress ?? '';
+				if (!owner) {
+					throw new Error('Owner address not found in deployed diamond data');
+				}
+				ownerSigner = await ethersMultichain.getSigner(owner);
+				ownerDiamond = exampleDiamond.connect(ownerSigner) as ExampleDiamond;
+
+				log(`Diamond deployed at ${deployedDiamondData.DiamondAddress}`);
+			});
+
+			beforeEach(async function () {
+				snapshotId = await ethersMultichain.provider.send('evm_snapshot', []);
+			});
+
+			afterEach(async () => {
+				await ethersMultichain.provider.send('evm_revert', [snapshotId]);
+			});
+
+			it(`should verify Diamond deployment with include config on ${networkName}`, async function () {
+				const deployedData = diamond.getDeployedDiamondData();
+				expect(deployedData.DiamondAddress).to.not.be.undefined;
+				expect(deployedData.DeployedFacets).to.have.property('DiamondCutFacet');
+				expect(deployedData.DeployedFacets).to.have.property('DiamondLoupeFacet');
+				expect(deployedData.DeployedFacets).to.have.property('ExampleTestDeployInclude');
+				log(`Diamond verified at ${deployedData.DiamondAddress}`);
+			});
+
+			it(`should verify testDeployInclude() selector (0x7f0c610c) IS registered with ExampleTestDeployInclude on ${networkName}`, async function () {
+				const targetSelector = '0x7f0c610c';
+				const deployedData = diamond.getDeployedDiamondData();
+
+				// Check if ExampleTestDeployInclude was deployed
+				expect(deployedData.DeployedFacets).to.have.property('ExampleTestDeployInclude');
+
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				const includeFacet = deployedData.DeployedFacets!['ExampleTestDeployInclude'];
+				const includeFacetSelectors = includeFacet.funcSelectors ?? [];
+
+				// The selector SHOULD be in this facet's list (it should be included)
+				expect(includeFacetSelectors).to.include(
+					targetSelector,
+					'testDeployInclude() selector 0x7f0c610c should be registered with ExampleTestDeployInclude due to deployInclude configuration',
+				);
+
+				log(
+					`✓ testDeployInclude() selector correctly included in ExampleTestDeployInclude`,
+				);
+			});
+
+			it(`should successfully call testDeployInclude() through Diamond proxy on ${networkName}`, async function () {
+				// Call the function through the Diamond proxy using the contract interface
+				const testFacet = await hre.ethers.getContractAt(
+					'ExampleTestDeployInclude',
+					exampleDiamond.target as string,
+				);
+				const result = await testFacet.testDeployInclude();
+
+				// Verify the function executed successfully
+				expect(result).to.be.true;
+
+				log(`✓ testDeployInclude() executed successfully through Diamond proxy`);
+			});
+
+			it(`should successfully call testDeployExclude() through Diamond proxy on ${networkName}`, async function () {
+				// Both functions should be available in ExampleTestDeployExclude facet
+				const testFacet = await hre.ethers.getContractAt(
+					'ExampleTestDeployExclude',
+					exampleDiamond.target as string,
+				);
+				const result = await testFacet.testDeployExclude();
+
+				// Verify the function executed successfully
+				expect(result).to.be.true;
+
+				log(`✓ testDeployExclude() executed successfully through Diamond proxy`);
+			});
+
+			it(`should verify ExampleTestDeployExclude facet is deployed with include config on ${networkName}`, async function () {
+				const deployedData = diamond.getDeployedDiamondData();
+
+				// ExampleTestDeployExclude SHOULD be in the deployed facets since it's in the include config
+				expect(
+					deployedData.DeployedFacets,
+					'ExampleTestDeployExclude should be deployed when using include config',
+				).to.have.property('ExampleTestDeployExclude');
+
+				// Verify it has only one selector (testDeployExclude)
+				// testDeployInclude selector is overridden by ExampleTestDeployInclude due to deployInclude
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				const excludeFacet = deployedData.DeployedFacets!['ExampleTestDeployExclude'];
+				const excludeFacetSelectors = excludeFacet.funcSelectors ?? [];
+
+				// Should only have testDeployExclude selector (0xdc38f9ab)
+				// testDeployInclude selector (0x7f0c610c) is taken by ExampleTestDeployInclude due to deployInclude override
+				expect(excludeFacetSelectors).to.have.lengthOf(1);
+				expect(excludeFacetSelectors).to.include('0xdc38f9ab');
+
+				log(`✓ ExampleTestDeployExclude correctly deployed with include config`);
 			});
 		});
 	}

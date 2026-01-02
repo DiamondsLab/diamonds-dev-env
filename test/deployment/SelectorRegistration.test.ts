@@ -85,9 +85,9 @@ describe('🧪 Function Selector Registration Unit Tests', function () {
 			const includeFacet = config.facets.ExampleTestDeployInclude;
 			expect(includeFacet).to.have.property('priority', 60);
 			expect(includeFacet).to.have.property('versions');
-			expect(includeFacet.versions).to.have.property('0.0');
+			expect(includeFacet.versions).to.have.property('1.0');
 
-			const version = includeFacet.versions['0.0'];
+			const version = includeFacet.versions['1.0'];
 			expect(version).to.have.property('deployInclude');
 			expect(version.deployInclude).to.be.an('array');
 			expect(version.deployInclude).to.include('testDeployInclude()');
