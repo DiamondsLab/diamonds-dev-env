@@ -30,7 +30,9 @@
         "1.0": {
           "deployInit": "diamondInitialize100()",
           "upgradeInit": "diamondUpgrade100()",
-          "fromVersions": [0.0]
+          "fromVersions": [
+            0.0
+          ]
         }
       }
     },
@@ -44,7 +46,9 @@
       "priority": 60,
       "versions": {
         "1.0": {
-          "deployInclude": ["testDeployInclude()"]
+          "deployInclude": [
+            "testDeployInclude()"
+          ]
         }
       }
     }

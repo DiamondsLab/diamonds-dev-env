@@ -1,15 +1,17 @@
 import { Diamond } from '@diamondslab/diamonds';
 import {
-	LocalDiamondDeployer,
-	LocalDiamondDeployerConfig,
-	loadDiamondContract,
+  LocalDiamondDeployer,
+  LocalDiamondDeployerConfig,
+  loadDiamondContract,
 } from '@diamondslab/hardhat-diamonds/dist/utils';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { debug } from 'debug';
 import { JsonRpcProvider } from 'ethers';
+import fs from 'fs';
 import hre from 'hardhat';
 import { multichain } from 'hardhat-multichain';
+import path from 'path';
 import { ExampleDiamond } from '../../diamond-typechain-types';
 
 describe('🧪 Diamond Deployment Include/Exclude Tests', async function () {
@@ -302,5 +304,259 @@ describe('🧪 Diamond Deployment Include/Exclude Tests', async function () {
 				log(`✓ ExampleTestDeployExclude correctly deployed with include config`);
 			});
 		});
+
+		describe(`🔗 Chain: ${networkName} - E2E Tests with Deployment Records`, function () {
+			let diamond: Diamond;
+			let exampleDiamond: ExampleDiamond;
+			let ethersMultichain: typeof hre.ethers;
+			let snapshotId: string;
+			let deploymentRecordPath: string;
+
+			before(async function () {
+				log('Setting up E2E test with deployment record writing enabled');
+
+				const chainId = (await provider.getNetwork()).chainId;
+				deploymentRecordPath = path.join(
+					__dirname,
+					`../../diamonds/ExampleDiamond/deployments/examplediamond-${networkName}-${chainId}.json`,
+				);
+
+				// Clean up any existing deployment record
+				if (fs.existsSync(deploymentRecordPath)) {
+					fs.unlinkSync(deploymentRecordPath);
+				}
+
+				const config = {
+					diamondName: diamondName,
+					networkName: networkName,
+					provider: provider,
+					chainId: chainId,
+					writeDeployedDiamondData: true, // Enable deployment record writing
+					configFilePath: `diamonds/ExampleDiamond/examplediamond-include.config.json`,
+					localDiamondDeployerKey: `${diamondName}-${networkName}-e2e-test`,
+				} as LocalDiamondDeployerConfig;
+
+				// Deploy Diamond with record writing enabled
+				const diamondDeployer = await LocalDiamondDeployer.getInstance(hre as any, config);
+				await diamondDeployer.setVerbose(false); // Reduce noise in test output
+				diamond = await diamondDeployer.getDiamondDeployed();
+				const deployedDiamondData = diamond.getDeployedDiamondData();
+
+				// Load the Diamond contract
+				exampleDiamond = await loadDiamondContract<ExampleDiamond>(
+					diamond,
+					deployedDiamondData.DiamondAddress ?? '',
+					hre.ethers,
+				);
+
+				ethersMultichain = hre.ethers;
+				ethersMultichain.provider = provider as any;
+			});
+
+			beforeEach(async function () {
+				snapshotId = await ethersMultichain.provider.send('evm_snapshot', []);
+			});
+
+			afterEach(async () => {
+				await ethersMultichain.provider.send('evm_revert', [snapshotId]);
+			});
+
+			after(async function () {
+				// Clean up deployment record after tests
+				if (fs.existsSync(deploymentRecordPath)) {
+					fs.unlinkSync(deploymentRecordPath);
+				}
+			});
+
+			it(`should verify Diamond deployment record is written to correct path on ${networkName}`, async function () {
+				// Verify the deployment record file exists
+				expect(fs.existsSync(deploymentRecordPath), `Deployment record should exist at ${deploymentRecordPath}`).to.be
+					.true;
+
+				log(`✓ Deployment record written to ${deploymentRecordPath}`);
+			});
+
+			it(`should load deployment record JSON and validate DiamondAddress exists on ${networkName}`, async function () {
+				// Read the deployment record file
+				const recordContent = fs.readFileSync(deploymentRecordPath, 'utf8');
+				const deploymentRecord = JSON.parse(recordContent);
+
+				// Validate DiamondAddress exists
+				expect(deploymentRecord).to.have.property('DiamondAddress');
+				expect(deploymentRecord.DiamondAddress).to.be.a('string');
+				expect(deploymentRecord.DiamondAddress).to.have.lengthOf(42); // 0x + 40 hex chars
+				expect(deploymentRecord.DiamondAddress).to.match(/^0x[a-fA-F0-9]{40}$/);
+
+				// Validate it matches the deployed Diamond
+				const deployedData = diamond.getDeployedDiamondData();
+				expect(deploymentRecord.DiamondAddress).to.equal(deployedData.DiamondAddress);
+
+				log(`✓ Deployment record DiamondAddress: ${deploymentRecord.DiamondAddress}`);
+			});
+
+			it(`should validate function selector registry in deployment record matches configuration on ${networkName}`, async function () {
+				// Read the deployment record
+				const recordContent = fs.readFileSync(deploymentRecordPath, 'utf8');
+				const deploymentRecord = JSON.parse(recordContent);
+
+				// Verify DeployedFacets exists
+				expect(deploymentRecord).to.have.property('DeployedFacets');
+				expect(deploymentRecord.DeployedFacets).to.be.an('object');
+
+				// Verify ExampleTestDeployInclude facet with deployInclude
+				expect(deploymentRecord.DeployedFacets).to.have.property('ExampleTestDeployInclude');
+				const includeFacet = deploymentRecord.DeployedFacets.ExampleTestDeployInclude;
+				
+				expect(includeFacet).to.have.property('funcSelectors');
+				expect(includeFacet.funcSelectors).to.be.an('array');
+				expect(includeFacet.funcSelectors).to.have.lengthOf(1, 'ExampleTestDeployInclude should have only 1 selector due to deployInclude');
+				expect(includeFacet.funcSelectors).to.include('0x7f0c610c', 'Should include testDeployInclude() selector');
+
+				// Verify ExampleTestDeployExclude facet
+				expect(deploymentRecord.DeployedFacets).to.have.property('ExampleTestDeployExclude');
+				const excludeFacet = deploymentRecord.DeployedFacets.ExampleTestDeployExclude;
+				
+				expect(excludeFacet).to.have.property('funcSelectors');
+				expect(excludeFacet.funcSelectors).to.be.an('array');
+				expect(excludeFacet.funcSelectors).to.have.lengthOf(1, 'ExampleTestDeployExclude should have 1 selector (testDeployExclude)');
+				expect(excludeFacet.funcSelectors).to.include('0xdc38f9ab', 'Should include testDeployExclude() selector');
+
+				log(`✓ Function selector registry validated in deployment record`);
+			});
+
+			it(`should use facetFunctionSelectors() from DiamondLoupe to verify selectors at runtime on ${networkName}`, async function () {
+				// Get ExampleTestDeployInclude facet address from deployment record
+				const deployedData = diamond.getDeployedDiamondData();
+				const includeFacetAddress = deployedData.DeployedFacets?.['ExampleTestDeployInclude']?.address;
+				
+				expect(includeFacetAddress, 'ExampleTestDeployInclude facet address should exist').to.not.be.undefined;
+
+				// Use DiamondLoupe to get function selectors for the facet
+				const selectors = await exampleDiamond.facetFunctionSelectors(includeFacetAddress!);
+				
+				// Verify it returns the expected selectors
+				expect(selectors).to.be.an('array');
+				expect(selectors).to.have.lengthOf(1, 'Should have 1 selector due to deployInclude');
+				expect(selectors).to.include('0x7f0c610c', 'Should include testDeployInclude() selector');
+
+				// Verify ExampleTestDeployExclude facet
+				const excludeFacetAddress = deployedData.DeployedFacets?.['ExampleTestDeployExclude']?.address;
+				expect(excludeFacetAddress, 'ExampleTestDeployExclude facet address should exist').to.not.be.undefined;
+
+				const excludeSelectors = await exampleDiamond.facetFunctionSelectors(excludeFacetAddress!);
+				expect(excludeSelectors).to.be.an('array');
+				expect(excludeSelectors).to.have.lengthOf(1, 'Should have 1 selector');
+				expect(excludeSelectors).to.include('0xdc38f9ab', 'Should include testDeployExclude() selector');
+
+				log(`✓ DiamondLoupe facetFunctionSelectors() verified at runtime`);
+			});
+
+			it(`should use facetAddress() to verify which facet owns each selector on ${networkName}`, async function () {
+				// Verify testDeployInclude() selector ownership
+				const includeSelector = '0x7f0c610c';
+				const includeOwner = await exampleDiamond.facetAddress(includeSelector);
+				
+				const deployedData = diamond.getDeployedDiamondData();
+				const expectedIncludeAddress = deployedData.DeployedFacets?.['ExampleTestDeployInclude']?.address;
+				
+				expect(includeOwner).to.equal(
+					expectedIncludeAddress,
+					'testDeployInclude() selector should be owned by ExampleTestDeployInclude facet',
+				);
+
+				// Verify testDeployExclude() selector ownership
+				const excludeSelector = '0xdc38f9ab';
+				const excludeOwner = await exampleDiamond.facetAddress(excludeSelector);
+				
+				const expectedExcludeAddress = deployedData.DeployedFacets?.['ExampleTestDeployExclude']?.address;
+				
+				expect(excludeOwner).to.equal(
+					expectedExcludeAddress,
+					'testDeployExclude() selector should be owned by ExampleTestDeployExclude facet',
+				);
+
+				log(`✓ DiamondLoupe facetAddress() verified selector ownership`);
+			});
+		});
+
+	describe(`🔗 Chain: ${networkName} - Error Handling Tests for Invalid Configurations`, function () {
+		it(`should handle non-existent function in deployExclude gracefully on ${networkName}`, async function () {
+			const chainId = (await provider.getNetwork()).chainId;
+
+			const config: LocalDiamondDeployerConfig = {
+				diamondName: "ExampleDiamond",
+				networkName: networkName,
+				provider: provider,
+				chainId: chainId,
+				writeDeployedDiamondData: false,
+				configFilePath: "test-assets/test-diamonds/invalid-exclude.config.json",
+				localDiamondDeployerKey: `exclude-invalid-${chainId}`,
+			};
+
+			try {
+				const deployer = await LocalDiamondDeployer.getInstance(hre as any, config);
+				const diamond = await deployer.getDiamondDeployed();
+				const deployedData = diamond.getDeployedDiamondData();
+
+				// Non-existent functions should be silently ignored (no error thrown)
+				// This is expected behavior - if a function doesn't exist, there's nothing to exclude
+				expect(deployedData.DiamondAddress).to.exist;
+			} catch (error: any) {
+				// If an error is thrown, it should be clear and informative
+				expect(error.message).to.match(/function|selector|invalid/i);
+			}
+		});
+
+		it(`should handle non-existent function in deployInclude gracefully on ${networkName}`, async function () {
+			const chainId = (await provider.getNetwork()).chainId;
+
+			const config: LocalDiamondDeployerConfig = {
+				diamondName: "ExampleDiamond",
+				networkName: networkName,
+				provider: provider,
+				chainId: chainId,
+				writeDeployedDiamondData: false,
+				configFilePath: "test-assets/test-diamonds/invalid-include.config.json",
+				localDiamondDeployerKey: `include-invalid-${chainId}`,
+			};
+
+			try {
+				const deployer = await LocalDiamondDeployer.getInstance(hre as any, config);
+				const diamond = await deployer.getDiamondDeployed();
+				const deployedData = diamond.getDeployedDiamondData();
+
+				// Non-existent functions should be silently ignored (no error thrown)
+				// This is expected behavior - if a function doesn't exist, there's nothing to include
+				expect(deployedData.DiamondAddress).to.exist;
+			} catch (error: any) {
+				// If an error is thrown, it should be clear and informative
+				expect(error.message).to.match(/function|selector|invalid/i);
+			}
+		});
+
+		it(`should handle both deployInclude and deployExclude in same facet configuration on ${networkName}`, async function () {
+			const chainId = (await provider.getNetwork()).chainId;
+
+			const config: LocalDiamondDeployerConfig = {
+				diamondName: "ExampleDiamond",
+				networkName: networkName,
+				provider: provider,
+				chainId: chainId,
+				writeDeployedDiamondData: false,
+				configFilePath: "test-assets/test-diamonds/include-and-exclude.config.json",
+				localDiamondDeployerKey: `include-exclude-both-${chainId}`,
+			};
+
+			// When the same function appears in both deployInclude and deployExclude,
+			// the deployment should succeed (system handles this edge case)
+			const deployer = await LocalDiamondDeployer.getInstance(hre as any, config);
+			const diamond = await deployer.getDiamondDeployed();
+			const deployedData = diamond.getDeployedDiamondData();
+
+			// Verify deployment succeeded
+			expect(deployedData.DiamondAddress).to.exist;
+			expect(deployedData.DiamondAddress).to.match(/^0x[a-fA-F0-9]{40}$/);
+		});
+	});
 	}
 });

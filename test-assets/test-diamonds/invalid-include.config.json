@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "protocolVersion": 1,
+  "facets": {
+    "DiamondLoupeFacet": {
+      "priority": 0,
+      "enabled": true,
+      "version": "1.0"
+    },
+    "ExampleOwnershipFacet": {
+      "priority": 1,
+      "enabled": true,
+      "version": "1.0"
+    },
+    "ExampleInitFacet": {
+      "priority": 2,
+      "enabled": true,
+      "version": "1.0"
+    },
+    "ExampleTestDeployInclude": {
+      "priority": 60,
+      "enabled": true,
+      "version": "1.0",
+      "deployInclude": [
+        "nonExistentFunction()",
+        "anotherInvalidFunction(uint256)"
+      ]
+    }
+  }
+}
