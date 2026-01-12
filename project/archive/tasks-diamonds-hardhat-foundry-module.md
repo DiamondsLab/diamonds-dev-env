@@ -94,7 +94,6 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.7 Implement basic Hardhat plugin registration in `src/index.ts`
   - [x] 1.8 Create colored logger utility in `src/utils/logger.ts`
   - [x] 1.9 Verify build works (`pnpm build` in module directory)
-  
 - [x] 1.0 Core Module Setup
 - [ ] 2.0 Configuration System
   - [x] 2.1 Define TypeScript interfaces for `DiamondsFoundryConfig` in `src/types/config.ts`
@@ -104,7 +103,6 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 2.5 Add Foundry installation check in `src/utils/validation.ts`
   - [x] 2.6 Add peer dependency validation in `src/utils/validation.ts`
   - [x] 2.7 Create unit tests for validation utilities
-  
 - [x] 2.0 Configuration System
 - [x] 3.0 Programmatic API Implementation
   - [x] 3.1 Create `src/framework/DeploymentManager.ts` skeleton

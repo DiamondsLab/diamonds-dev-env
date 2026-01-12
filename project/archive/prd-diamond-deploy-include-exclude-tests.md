@@ -70,12 +70,12 @@ This feature will implement a test-driven development approach to:
 - `ExampleTestDeployExclude.sol` with functions: `testDeployExclude()` and `testDeployInclude()`
 - `ExampleTestDeployInclude.sol` with functions: `testDeployExclude()` and `testDeployInclude()`
 
-1.2. Verify two test configuration files:
+  1.2. Verify two test configuration files:
 
 - `examplediamond-exclude.config.json` (protocolVersion 1.0) with `ExampleTestDeployExcludeFacet` having `deployExclude: "testDeployExclude()"`
 - `examplediamond-include.config.json` (protocolVersion 2.0) with `ExampleTestDeployIncludeFacet` having `deployInclude: "testDeployInclude()"`
 
-1.3. Verify facet priorities:
+  1.3. Verify facet priorities:
 
 - `ExampleTestDeployExcludeFacet`: priority 50
 - `ExampleTestDeployIncludeFacet`: priority 60 (lower priority)
@@ -87,7 +87,7 @@ This feature will implement a test-driven development approach to:
 - Verify `testDeployExclude()` computes to selector `0xdc38f9ab`
 - Verify `testDeployInclude()` computes to selector `0x7f0c610c`
 
-2.2. Test configuration parsing:
+  2.2. Test configuration parsing:
 
 - Verify `deployExclude` arrays are correctly parsed from config files
 - Verify `deployInclude` arrays are correctly parsed from config files
@@ -102,13 +102,13 @@ This feature will implement a test-driven development approach to:
 - Verify `testDeployExclude()` selector IS in `ExampleTestDeployIncludeFacet`'s registered selectors
 - Verify `testDeployInclude()` selector IS in `ExampleTestDeployIncludeFacet`'s registered selectors (default behavior)
 
-3.2. Test `deployInclude` behavior:
+  3.2. Test `deployInclude` behavior:
 
 - Deploy Diamond using `examplediamond-include.config.json`
 - Verify `testDeployInclude()` selector IS in `ExampleTestDeployIncludeFacet`'s registered selectors
 - Verify both functions from both facets work correctly after deployment
 
-3.3. Test priority-based registration:
+  3.3. Test priority-based registration:
 
 - When a function exists in multiple facets without `deployInclude`/`deployExclude`
 - Verify selector is registered with the facet having higher priority (lower priority number)
@@ -123,7 +123,7 @@ This feature will implement a test-driven development approach to:
 - Deploy Diamond with include configuration
 - Call `testDeployInclude()` via Diamond proxy and verify it executes from correct facet
 
-4.2. Create test template based on `DiamondDeployment.test.ts`:
+  4.2. Create test template based on `DiamondDeployment.test.ts`:
 
 - Follow existing test structure pattern from [test/deployment/DiamondDeployment.test.ts](../test/deployment/DiamondDeployment.test.ts)
 - Use multichain test loop with `hardhat-multichain` provider management
@@ -143,7 +143,7 @@ This feature will implement a test-driven development approach to:
 - Verify deployment fails with descriptive error message
 - Error should indicate: function name, facet name, and that function wasn't found
 
-5.2. Invalid `deployInclude` configuration:
+  5.2. Invalid `deployInclude` configuration:
 
 - Configure `deployInclude` with non-existent function name
 - Verify deployment fails with descriptive error message
@@ -156,7 +156,7 @@ This feature will implement a test-driven development approach to:
 - Fix selector registration to respect configuration overrides
 - Ensure priority-based fallback works when no overrides specified
 
-6.2. If tests reveal bugs in `getFacetCuts()`:
+  6.2. If tests reveal bugs in `getFacetCuts()`:
 
 - Verify facet cut operations correctly reflect configured selectors
 - Ensure no orphaned selectors remain
