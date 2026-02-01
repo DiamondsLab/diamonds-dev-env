@@ -1,0 +1,402 @@
+# Task List: Solidity Source Flattening Engine (Epic 3)
+
+## Relevant Files
+
+### Source Files
+
+- `src/lib/SourceResolver.ts` - Loads Solidity source files and resolves imports (local and node_modules)
+- `src/lib/DependencyGraph.ts` - Builds dependency graph, detects circular dependencies, performs topological sort
+- `src/lib/DiamondFlattener.ts` - Existing file from Epic 2, will add deduplication methods
+
+### Test Files
+
+- `test/unit/lib/SourceResolver.test.ts` - Unit tests for SourceResolver class
+- `test/unit/lib/DependencyGraph.test.ts` - Unit tests for DependencyGraph class
+- `test/unit/lib/DiamondFlattener.test.ts` - Existing file, will add deduplication tests
+- `test/integration/lib/FlatteningEngine.integration.test.ts` - Integration tests for end-to-end flattening
+
+### Test Fixtures
+
+- `test/fixtures/flattening/SimpleContract.sol` - Basic contract for testing
+- `test/fixtures/flattening/ContractWithImports.sol` - Contract with relative imports
+- `test/fixtures/flattening/ContractWithNodeModules.sol` - Contract importing from node_modules
+- `test/fixtures/flattening/CircularA.sol` - Contract A in circular dependency
+- `test/fixtures/flattening/CircularB.sol` - Contract B in circular dependency
+- `test/fixtures/flattening/DuplicateContract.sol` - Contract appearing multiple times
+
+### Notes
+
+- Tests use Mocha + Chai (matching Epic 1 and Epic 2 testing framework)
+- All async operations use `async/await` syntax
+- Mock Hardhat Runtime Environment (HRE) used for testing
+- Test coverage target: ≥95% for all new code
+- Integration tests should test with real OpenZeppelin contracts
+
+## Instructions for Completing Tasks
+
+**IMPORTANT:** As you complete each task, you must check it off in this markdown file by changing `- [ ]` to `- [x]`. This helps track progress and ensures you don't skip any steps.
+
+Example:
+
+- `- [ ] 1.1 Read file` → `- [x] 1.1 Read file` (after completing)
+
+Update the file after completing each sub-task, not just after completing an entire parent task.
+
+## Tasks
+
+- [x] 0.0 Create feature branch
+  - [x] 0.1 Ensure working directory is clean (check `git status`)
+  - [x] 0.2 Checkout develop/main branch and pull latest changes
+  - [x] 0.3 Create and checkout new branch: `git checkout -b feature/flatten-engine-epic3`
+  - [x] 0.4 Verify branch created successfully: `git branch --show-current`
+
+- [x] 1.0 Source File Resolution & Loading (Feature E3-F1)
+  - [x] 1.1 Create `src/lib/SourceResolver.ts` file with TypeScript interfaces
+    - [x] 1.1.1 Define `LoadedSource` interface (name, path, content, imports)
+    - [x] 1.1.2 Define `ImportInfo` interface (statement, path, isNodeModule, start, end)
+    - [x] 1.1.3 Add JSDoc documentation for interfaces
+  - [x] 1.2 Implement SourceResolver class constructor
+    - [x] 1.2.1 Accept HardhatRuntimeEnvironment parameter
+    - [x] 1.2.2 Initialize source cache (Map<string, LoadedSource>)
+    - [x] 1.2.3 Store HRE reference for path resolution
+    - [x] 1.2.4 Add verbose logging flag
+  - [x] 1.3 Implement loadSource() public method
+    - [x] 1.3.1 Accept sourcePath parameter (string)
+    - [x] 1.3.2 Check cache first, return if already loaded
+    - [x] 1.3.3 Resolve absolute path from HRE root
+    - [x] 1.3.4 Read file using fs/promises
+    - [x] 1.3.5 Extract contract name from path
+    - [x] 1.3.6 Parse imports using parseImports()
+    - [x] 1.3.7 Create LoadedSource object
+    - [x] 1.3.8 Store in cache
+    - [x] 1.3.9 Add verbose logging
+    - [x] 1.3.10 Return LoadedSource
+  - [x] 1.4 Implement parseImports() private method
+    - [x] 1.4.1 Use regex to find all import statements in source
+    - [x] 1.4.2 Support: `import "./Relative.sol";`
+    - [x] 1.4.3 Support: `import "../Parent.sol";`
+    - [x] 1.4.4 Support: `import { Contract } from "./Named.sol";`
+    - [x] 1.4.5 Support: `import { A, B } from "./Multiple.sol";`
+    - [x] 1.4.6 Support: `import * as Lib from "./Library.sol";`
+    - [x] 1.4.7 Support: `import "@openzeppelin/contracts/token/ERC20/ERC20.sol";`
+    - [x] 1.4.8 Extract import path from each statement
+    - [x] 1.4.9 Determine if node_modules import (starts with @)
+    - [x] 1.4.10 Track start/end position in source
+    - [x] 1.4.11 Return array of ImportInfo objects
+  - [x] 1.5 Implement resolveImportPath() private method
+    - [x] 1.5.1 Accept importPath and sourceFilePath parameters
+    - [x] 1.5.2 Check if node_modules import (starts with @)
+    - [x] 1.5.3 If node_modules, call resolveNodeModulesPath()
+    - [x] 1.5.4 If local import, resolve relative to sourceFilePath
+    - [x] 1.5.5 Use path.resolve() for absolute path
+    - [x] 1.5.6 Verify file exists using fs.access()
+    - [x] 1.5.7 Return resolved absolute path
+    - [x] 1.5.8 Throw descriptive error if file not found
+  - [x] 1.6 Implement resolveNodeModulesPath() private method
+    - [x] 1.6.1 Accept importPath parameter
+    - [x] 1.6.2 Use HRE's configured paths for resolution order
+    - [x] 1.6.3 Check HRE root + "node_modules/" + importPath
+    - [x] 1.6.4 Check parent directories recursively
+    - [x] 1.6.5 Follow Hardhat's remappings if configured
+    - [x] 1.6.6 Return absolute path when found
+    - [x] 1.6.7 Throw error with helpful message if not found
+    - [x] 1.6.8 Include suggestions (check package installation)
+  - [x] 1.7 Add error handling for SourceResolver
+    - [x] 1.7.1 Create custom error for file not found
+    - [x] 1.7.2 Include import statement in error
+    - [x] 1.7.3 Include source file that had the import
+    - [x] 1.7.4 Include paths that were searched
+    - [x] 1.7.5 Add suggestion to check node_modules
+  - [x] 1.8 Create unit test file `test/unit/lib/SourceResolver.test.ts`
+    - [x] 1.8.1 Set up test environment with mock HRE
+    - [x] 1.8.2 Create test fixtures directory structure
+    - [x] 1.8.3 Test loadSource() with simple local file
+    - [x] 1.8.4 Test loadSource() caching (same file twice)
+    - [x] 1.8.5 Test resolveImportPath() with relative imports (./)
+    - [x] 1.8.6 Test resolveImportPath() with parent imports (../)
+    - [x] 1.8.7 Test resolveNodeModulesPath() with @openzeppelin
+    - [x] 1.8.8 Test parseImports() with all syntax variants
+    - [x] 1.8.9 Test error handling for missing files
+    - [x] 1.8.10 Test contract name extraction
+    - [x] 1.8.11 Verify verbose logging output
+  - [x] 1.9 Create test fixtures for SourceResolver
+    - [x] 1.9.1 Create `test/fixtures/flattening/SimpleContract.sol`
+    - [x] 1.9.2 Create `test/fixtures/flattening/ContractWithImports.sol` (with relative imports)
+    - [x] 1.9.3 Create `test/fixtures/flattening/Library.sol` (imported by other contract)
+    - [x] 1.9.4 Create `test/fixtures/flattening/NamedImports.sol` (uses named imports)
+  - [x] 1.10 Run tests and verify SourceResolver works
+    - [x] 1.10.1 Run `npm test -- test/unit/lib/SourceResolver.test.ts`
+    - [x] 1.10.2 Verify all tests pass
+    - [x] 1.10.3 Check test coverage for SourceResolver.ts
+    - [x] 1.10.4 Fix any failing tests
+  - [x] 1.11 Commit SourceResolver work
+    - [x] 1.11.1 Stage changes: `git add src/lib/SourceResolver.ts test/unit/lib/SourceResolver.test.ts test/fixtures/flattening/`
+    - [x] 1.11.2 Commit with message: `feat: implement SourceResolver for Solidity file loading and import resolution`
+
+- [ ] 2.0 Dependency Graph Construction (Feature E3-F2)
+  - [ ] 2.1 Create `src/lib/DependencyGraph.ts` file with TypeScript interfaces
+    - [ ] 2.1.1 Import SourceResolver and LoadedSource
+    - [ ] 2.1.2 Define `DependencyNode` interface (name, source, dependencies, dependents, visited, imports)
+    - [ ] 2.1.3 Define `GraphStats` interface (totalContracts, uniqueContracts, circularDependencies, maxDepth)
+    - [ ] 2.1.4 Add JSDoc documentation for interfaces
+  - [ ] 2.2 Implement DependencyGraph class constructor
+    - [ ] 2.2.1 Accept SourceResolver parameter
+    - [ ] 2.2.2 Accept optional verbose flag
+    - [ ] 2.2.3 Initialize nodes Map (Map<string, DependencyNode>)
+    - [ ] 2.2.4 Initialize circularDependencies array
+    - [ ] 2.2.5 Store resolver reference
+  - [ ] 2.3 Implement addRoot() public method
+    - [ ] 2.3.1 Accept sourcePath parameter
+    - [ ] 2.3.2 Call resolver.loadSource() to load root file
+    - [ ] 2.3.3 Create DependencyNode for root
+    - [ ] 2.3.4 Add node to nodes Map
+    - [ ] 2.3.5 Call resolveDependencies() recursively
+    - [ ] 2.3.6 Add verbose logging for root addition
+  - [ ] 2.4 Implement resolveDependencies() private method
+    - [ ] 2.4.1 Accept node parameter (DependencyNode)
+    - [ ] 2.4.2 Mark node as visited (for cycle detection)
+    - [ ] 2.4.3 Loop through node.source.imports
+    - [ ] 2.4.4 For each import, resolve absolute path
+    - [ ] 2.4.5 Check if already in nodes Map
+    - [ ] 2.4.6 If not in map, load source and create node
+    - [ ] 2.4.7 Add to node.dependencies set
+    - [ ] 2.4.8 Add current node to import's dependents set
+    - [ ] 2.4.9 If import.visited is true, circular dependency detected
+    - [ ] 2.4.10 Record circular dependency with path
+    - [ ] 2.4.11 If not visited, recursively call resolveDependencies()
+    - [ ] 2.4.12 Add verbose logging for each dependency
+  - [ ] 2.5 Implement detectCircularDependencies() private method
+    - [ ] 2.5.1 Track visited nodes in current path
+    - [ ] 2.5.2 Perform depth-first search from each root
+    - [ ] 2.5.3 When revisiting node in current path, record cycle
+    - [ ] 2.5.4 Build circular path string for warning
+    - [ ] 2.5.5 Add to circularDependencies array
+    - [ ] 2.5.6 Log warning with cycle path
+  - [ ] 2.6 Implement topologicalSort() public method (Kahn's algorithm)
+    - [ ] 2.6.1 Create inDegree map for each node
+    - [ ] 2.6.2 Calculate in-degree (count of dependencies)
+    - [ ] 2.6.3 Create queue with nodes having zero in-degree
+    - [ ] 2.6.4 Process queue: remove edges, update in-degrees
+    - [ ] 2.6.5 Add processed nodes to result array
+    - [ ] 2.6.6 Check if all nodes processed (no cycles)
+    - [ ] 2.6.7 Return sorted array of DependencyNode
+    - [ ] 2.6.8 Add verbose logging for sort order
+  - [ ] 2.7 Implement getSortedForFlattening() public method
+    - [ ] 2.7.1 Call topologicalSort() to get base order
+    - [ ] 2.7.2 Separate into three groups: dependencies, facets, Diamond
+    - [ ] 2.7.3 Ensure Diamond contract is last
+    - [ ] 2.7.4 Ensure facets come after dependencies
+    - [ ] 2.7.5 Return array in correct flattening order
+    - [ ] 2.7.6 Add verbose logging for final order
+  - [ ] 2.8 Implement getStats() public method
+    - [ ] 2.8.1 Count total contracts (nodes.size)
+    - [ ] 2.8.2 Count unique contracts (after deduplication)
+    - [ ] 2.8.3 Count circular dependencies
+    - [ ] 2.8.4 Calculate max dependency depth
+    - [ ] 2.8.5 Return GraphStats object
+  - [ ] 2.9 Add verbose logging throughout DependencyGraph
+    - [ ] 2.9.1 Log each root addition
+    - [ ] 2.9.2 Log dependency resolution attempts
+    - [ ] 2.9.3 Log circular dependency detection
+    - [ ] 2.9.4 Log topological sort progress
+    - [ ] 2.9.5 Use chalk for colored output
+  - [ ] 2.10 Create unit test file `test/unit/lib/DependencyGraph.test.ts`
+    - [ ] 2.10.1 Set up test environment with mock SourceResolver
+    - [ ] 2.10.2 Test addRoot() with simple contract
+    - [ ] 2.10.3 Test addRoot() with contract that has imports
+    - [ ] 2.10.4 Test resolveDependencies() follows all imports
+    - [ ] 2.10.5 Test circular dependency detection (A→B→C→A)
+    - [ ] 2.10.6 Test topologicalSort() returns valid order
+    - [ ] 2.10.7 Test getSortedForFlattening() puts Diamond last
+    - [ ] 2.10.8 Test getStats() returns accurate counts
+    - [ ] 2.10.9 Test complex dependency tree (5+ levels)
+    - [ ] 2.10.10 Test multiple roots (facets)
+  - [ ] 2.11 Create test fixtures for circular dependencies
+    - [ ] 2.11.1 Create `test/fixtures/flattening/CircularA.sol` (imports CircularB)
+    - [ ] 2.11.2 Create `test/fixtures/flattening/CircularB.sol` (imports CircularC)
+    - [ ] 2.11.3 Create `test/fixtures/flattening/CircularC.sol` (imports CircularA)
+  - [ ] 2.12 Run tests and verify DependencyGraph works
+    - [ ] 2.12.1 Run `npm test -- test/unit/lib/DependencyGraph.test.ts`
+    - [ ] 2.12.2 Verify all tests pass
+    - [ ] 2.12.3 Check test coverage for DependencyGraph.ts
+    - [ ] 2.12.4 Fix any failing tests
+  - [ ] 2.13 Commit DependencyGraph work
+    - [ ] 2.13.1 Stage changes: `git add src/lib/DependencyGraph.ts test/unit/lib/DependencyGraph.test.ts test/fixtures/flattening/Circular*.sol`
+    - [ ] 2.13.2 Commit with message: `feat: implement DependencyGraph with circular dependency detection and topological sorting`
+
+- [ ] 3.0 Source Deduplication (Feature E3-F3)
+  - [ ] 3.1 Add deduplicateSources() method to DiamondFlattener
+    - [ ] 3.1.1 Open `src/lib/DiamondFlattener.ts`
+    - [ ] 3.1.2 Define `DeduplicatedSource` interface (name, path, content, kept)
+    - [ ] 3.1.3 Implement deduplicateSources() public method
+    - [ ] 3.1.4 Accept sortedNodes parameter (DependencyNode[])
+    - [ ] 3.1.5 Create Set to track seen contract definitions
+    - [ ] 3.1.6 Loop through each node in order
+    - [ ] 3.1.7 Extract contract/interface/library definitions
+    - [ ] 3.1.8 Check if definition already seen
+    - [ ] 3.1.9 If duplicate, mark as kept=false and add warning
+    - [ ] 3.1.10 If content differs, add version mismatch warning
+    - [ ] 3.1.11 If unique, mark as kept=true and add to result
+    - [ ] 3.1.12 Remove import statements from kept sources
+    - [ ] 3.1.13 Preserve all comments (inline, block, NatSpec)
+    - [ ] 3.1.14 Return array of DeduplicatedSource
+    - [ ] 3.1.15 Add verbose logging for deduplication
+  - [ ] 3.2 Implement extractDefinitions() private helper method
+    - [ ] 3.2.1 Accept source content parameter (string)
+    - [ ] 3.2.2 Use regex to find `contract ContractName`
+    - [ ] 3.2.3 Use regex to find `interface InterfaceName`
+    - [ ] 3.2.4 Use regex to find `library LibraryName`
+    - [ ] 3.2.5 Use regex to find `abstract contract AbstractName`
+    - [ ] 3.2.6 Extract definition names
+    - [ ] 3.2.7 Return array of definition strings
+    - [ ] 3.2.8 Handle edge cases (comments, strings)
+  - [ ] 3.3 Implement removeImports() private helper method
+    - [ ] 3.3.1 Accept source content parameter (string)
+    - [ ] 3.3.2 Use regex to match import statements
+    - [ ] 3.3.3 Replace imports with empty string
+    - [ ] 3.3.4 Preserve line numbers (replace with newlines)
+    - [ ] 3.3.5 Preserve all comments
+    - [ ] 3.3.6 Return cleaned source content
+  - [ ] 3.4 Add warning collection for deduplication
+    - [ ] 3.4.1 Use existing addWarning() method
+    - [ ] 3.4.2 Add warning for each duplicate found
+    - [ ] 3.4.3 Add warning for version mismatches
+    - [ ] 3.4.4 Include file paths in warnings
+    - [ ] 3.4.5 Track deduplication statistics
+  - [ ] 3.5 Add deduplication tests to existing DiamondFlattener test file
+    - [ ] 3.5.1 Open `test/unit/lib/DiamondFlattener.test.ts`
+    - [ ] 3.5.2 Add describe block for "Source Deduplication"
+    - [ ] 3.5.3 Test extractDefinitions() with various contracts
+    - [ ] 3.5.4 Test extractDefinitions() with interfaces
+    - [ ] 3.5.5 Test extractDefinitions() with libraries
+    - [ ] 3.5.6 Test extractDefinitions() with abstract contracts
+    - [ ] 3.5.7 Test removeImports() removes all import types
+    - [ ] 3.5.8 Test removeImports() preserves comments
+    - [ ] 3.5.9 Test deduplicateSources() with identical contracts
+    - [ ] 3.5.10 Test deduplicateSources() with different content
+    - [ ] 3.5.11 Test deduplicateSources() keeps first occurrence
+    - [ ] 3.5.12 Test deduplicateSources() adds warnings
+    - [ ] 3.5.13 Test comment preservation (inline, block, NatSpec)
+  - [ ] 3.6 Create test fixtures for deduplication
+    - [ ] 3.6.1 Create `test/fixtures/flattening/DuplicateContract.sol` (will appear twice)
+    - [ ] 3.6.2 Create `test/fixtures/flattening/DuplicateDifferentVersion.sol` (same name, different content)
+    - [ ] 3.6.3 Create `test/fixtures/flattening/ContractWithComments.sol` (extensive comments)
+  - [ ] 3.7 Run tests and verify deduplication works
+    - [ ] 3.7.1 Run `npm test -- test/unit/lib/DiamondFlattener.test.ts --grep "Deduplication"`
+    - [ ] 3.7.2 Verify all deduplication tests pass
+    - [ ] 3.7.3 Check test coverage for deduplication methods
+    - [ ] 3.7.4 Fix any failing tests
+  - [ ] 3.8 Commit deduplication work
+    - [ ] 3.8.1 Stage changes: `git add src/lib/DiamondFlattener.ts test/unit/lib/DiamondFlattener.test.ts test/fixtures/flattening/Duplicate*.sol test/fixtures/flattening/ContractWithComments.sol`
+    - [ ] 3.8.2 Commit with message: `feat: implement source deduplication with comment preservation`
+
+- [ ] 4.0 Integration Testing & Error Handling
+  - [ ] 4.1 Create integration test file
+    - [ ] 4.1.1 Create `test/integration/lib/FlatteningEngine.integration.test.ts`
+    - [ ] 4.1.2 Set up test environment with real HRE
+    - [ ] 4.1.3 Import SourceResolver, DependencyGraph, DiamondFlattener
+  - [ ] 4.2 Test end-to-end flattening with OpenZeppelin
+    - [ ] 4.2.1 Create test Diamond that imports @openzeppelin/contracts/access/Ownable.sol
+    - [ ] 4.2.2 Test SourceResolver loads OpenZeppelin files
+    - [ ] 4.2.3 Test DependencyGraph resolves OpenZeppelin dependencies
+    - [ ] 4.2.4 Test deduplication with OpenZeppelin contracts
+    - [ ] 4.2.5 Verify Context.sol appears before Ownable.sol in order
+    - [ ] 4.2.6 Verify all OpenZeppelin comments preserved
+  - [ ] 4.3 Test circular dependency handling
+    - [ ] 4.3.1 Use CircularA/B/C fixtures
+    - [ ] 4.3.2 Verify circular dependency detected
+    - [ ] 4.3.3 Verify warning logged with cycle path
+    - [ ] 4.3.4 Verify flattening continues (doesn't fail)
+    - [ ] 4.3.5 Verify only one copy of each contract kept
+  - [ ] 4.4 Test complex dependency trees
+    - [ ] 4.4.1 Create fixture with 5+ levels of nested imports
+    - [ ] 4.4.2 Test DependencyGraph resolves all levels
+    - [ ] 4.4.3 Test topological sort produces valid order
+    - [ ] 4.4.4 Verify deepest dependencies come first
+  - [ ] 4.5 Test all import syntax variants
+    - [ ] 4.5.1 Test relative imports: `import "./Contract.sol";`
+    - [ ] 4.5.2 Test parent imports: `import "../Contract.sol";`
+    - [ ] 4.5.3 Test named imports: `import { A } from "./Contract.sol";`
+    - [ ] 4.5.4 Test multiple named: `import { A, B, C } from "./Contract.sol";`
+    - [ ] 4.5.5 Test namespace: `import * as Lib from "./Contract.sol";`
+    - [ ] 4.5.6 Test node_modules: `import "@org/package/Contract.sol";`
+  - [ ] 4.6 Test duplicate contract handling
+    - [ ] 4.6.1 Use DuplicateContract fixtures
+    - [ ] 4.6.2 Verify first occurrence kept
+    - [ ] 4.6.3 Verify second occurrence skipped
+    - [ ] 4.6.4 Verify warning logged
+    - [ ] 4.6.5 Test with different content (version mismatch)
+    - [ ] 4.6.6 Verify version mismatch warning
+  - [ ] 4.7 Test comment preservation
+    - [ ] 4.7.1 Use ContractWithComments fixture
+    - [ ] 4.7.2 Verify inline comments preserved (`//`)
+    - [ ] 4.7.3 Verify block comments preserved (`/* */`)
+    - [ ] 4.7.4 Verify NatSpec preserved (`///` and `/** */`)
+    - [ ] 4.7.5 Count comments before and after
+    - [ ] 4.7.6 Verify count matches
+  - [ ] 4.8 Test error messages
+    - [ ] 4.8.1 Test missing source file error
+    - [ ] 4.8.2 Verify error includes import statement
+    - [ ] 4.8.3 Verify error includes source file path
+    - [ ] 4.8.4 Verify error includes searched paths
+    - [ ] 4.8.5 Verify error includes helpful suggestion
+    - [ ] 4.8.6 Test missing node_modules error
+    - [ ] 4.8.7 Verify suggestion to install package
+  - [ ] 4.9 Test verbose mode output
+    - [ ] 4.9.1 Enable verbose mode
+    - [ ] 4.9.2 Verify file resolution logged
+    - [ ] 4.9.3 Verify dependency resolution logged
+    - [ ] 4.9.4 Verify circular dependency warning logged
+    - [ ] 4.9.5 Verify deduplication logged
+    - [ ] 4.9.6 Verify topological sort logged
+  - [ ] 4.10 Run integration tests
+    - [ ] 4.10.1 Run `npm test -- test/integration/lib/FlatteningEngine.integration.test.ts`
+    - [ ] 4.10.2 Verify all integration tests pass
+    - [ ] 4.10.3 Fix any failing tests
+  - [ ] 4.11 Commit integration testing work
+    - [ ] 4.11.1 Stage changes: `git add test/integration/lib/FlatteningEngine.integration.test.ts`
+    - [ ] 4.11.2 Commit with message: `test: add comprehensive integration tests for flattening engine`
+
+- [ ] 5.0 Documentation & Final Verification
+  - [ ] 5.1 Add JSDoc documentation to all public methods
+    - [ ] 5.1.1 Document SourceResolver.loadSource()
+    - [ ] 5.1.2 Document DependencyGraph.addRoot()
+    - [ ] 5.1.3 Document DependencyGraph.topologicalSort()
+    - [ ] 5.1.4 Document DependencyGraph.getSortedForFlattening()
+    - [ ] 5.1.5 Document DependencyGraph.getStats()
+    - [ ] 5.1.6 Document DiamondFlattener.deduplicateSources()
+    - [ ] 5.1.7 Verify all public methods have @param, @returns, @throws tags
+  - [ ] 5.2 Update exports in src/lib/index.ts
+    - [ ] 5.2.1 Export SourceResolver class
+    - [ ] 5.2.2 Export DependencyGraph class
+    - [ ] 5.2.3 Export LoadedSource interface
+    - [ ] 5.2.4 Export ImportInfo interface
+    - [ ] 5.2.5 Export DependencyNode interface
+    - [ ] 5.2.6 Export DeduplicatedSource interface
+    - [ ] 5.2.7 Verify imports work correctly
+  - [ ] 5.3 Run full test suite
+    - [ ] 5.3.1 Run `npm test` to run all tests
+    - [ ] 5.3.2 Verify all tests pass (unit + integration)
+    - [ ] 5.3.3 Check for any pending tests
+    - [ ] 5.3.4 Fix any test failures
+  - [ ] 5.4 Verify test coverage
+    - [ ] 5.4.1 Run `npm test -- --coverage`
+    - [ ] 5.4.2 Check coverage for SourceResolver.ts (target: ≥95%)
+    - [ ] 5.4.3 Check coverage for DependencyGraph.ts (target: ≥95%)
+    - [ ] 5.4.4 Check coverage for DiamondFlattener.ts deduplication (target: ≥95%)
+    - [ ] 5.4.5 Add tests for any uncovered code paths
+  - [ ] 5.5 Run linting
+    - [ ] 5.5.1 Run `npm run lint`
+    - [ ] 5.5.2 Fix any linting errors
+    - [ ] 5.5.3 Run `npm run lint:fix` if needed
+    - [ ] 5.5.4 Verify no warnings remain
+  - [ ] 5.6 Run TypeScript checks
+    - [ ] 5.6.1 Run `yarn tsc --noEmit`
+    - [ ] 5.6.2 Fix any TypeScript errors
+    - [ ] 5.6.3 Verify no type errors
+    - [ ] 5.6.4 Check for any `: any` types (should be minimal)
+  - [ ] 5.7 Final verification
+    - [ ] 5.7.1 Run complete verification: `npm run build && npm test && npm run lint`
+    - [ ] 5.7.2 Verify all checks pass
+    - [ ] 5.7.3 Review all code changes
+    - [ ] 5.7.4 Verify all requirements from PRD implemented
