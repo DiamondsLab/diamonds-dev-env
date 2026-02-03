@@ -1,0 +1,452 @@
+# Tasks: Output Formatting & Generation (Epic 4)
+
+## Relevant Files
+
+- `packages/hardhat-diamonds/src/lib/OutputFormatter.ts` - New utility class for generating formatted output strings
+- `packages/hardhat-diamonds/test/unit/lib/OutputFormatter.test.ts` - Unit tests for OutputFormatter class
+- `packages/hardhat-diamonds/src/lib/DiamondFlattener.ts` - Modified to integrate OutputFormatter and add assembly method
+- `packages/hardhat-diamonds/test/unit/lib/DiamondFlattener.test.ts` - Updated tests for flattening with formatted output
+- `packages/hardhat-diamonds/test/integration/lib/OutputFormatting.integration.test.ts` - End-to-end tests for complete formatted output
+- `packages/hardhat-diamonds/src/tasks/shared/TaskOptions.ts` - May need new interfaces for formatting options
+- `packages/hardhat-diamonds/test/fixtures/flattening/` - Test fixtures for formatting tests
+
+### Notes
+
+- This epic builds on Epic 2 (Diamond Discovery) and Epic 3 (Flattening Engine)
+- OutputFormatter is a utility class that only returns strings (no file I/O)
+- All formatting specifications (widths, box-drawing characters) are hardcoded per PRD
+- Implementation follows two-phase approach: Phase 1 (Tables & Headers), Phase 2 (Summary & Assembly)
+- Use `npm test` to run all tests or `npm test -- <file-path>` for specific test files
+- Box-drawing characters use Unicode (U+2500-U+257F range)
+
+## Instructions for Completing Tasks
+
+**IMPORTANT:** As you complete each task, you must check it off in this markdown file by changing `- [ ]` to `- [x]`. This helps track progress and ensures you don't skip any steps.
+
+Example:
+
+- `- [ ] 1.1 Create file` → `- [x] 1.1 Create file` (after completing)
+
+Update the file after completing each sub-task, not just after completing an entire parent task.
+
+## Tasks
+
+- [x] 0.0 Create feature branch for Epic 4
+  - [x] 0.0.1 Navigate to packages/hardhat-diamonds directory
+  - [x] 0.0.2 Ensure on feature/flatten-engine-epic3 branch (base branch)
+  - [x] 0.0.3 Pull latest changes: `git pull origin feature/flatten-engine-epic3`
+  - [x] 0.0.4 Create and checkout new branch: `git checkout -b feature/output-formatting-epic4`
+  - [x] 0.0.5 Verify branch created: `git branch --show-current`
+
+- [x] 1.0 Create OutputFormatter class skeleton and infrastructure
+  - [x] 1.1 Create OutputFormatter.ts file
+    - [x] 1.1.1 Create `src/lib/OutputFormatter.ts`
+    - [x] 1.1.2 Add file header comment with description
+    - [x] 1.1.3 Import required types from TaskOptions (SelectorInfo, DiscoveredFacet)
+    - [x] 1.1.4 Define and export `SummaryHeaderOptions` interface
+  - [x] 1.2 Define OutputFormatter class structure
+    - [x] 1.2.1 Export `OutputFormatter` class (no constructor parameters)
+    - [x] 1.2.2 Add JSDoc comment for class with @example
+    - [x] 1.2.3 Add note that class is stateless utility (no instance state)
+  - [x] 1.3 Add public method stubs
+    - [x] 1.3.1 Add `generateSelectorTable(selectorMap: Map<string, SelectorInfo>): string` stub
+    - [x] 1.3.2 Add `generateFacetHeader(facet: DiscoveredFacet): string` stub
+    - [x] 1.3.3 Add `generateInitHeader(initContract: DiscoveredFacet): string` stub
+    - [x] 1.3.4 Add `generateDependenciesHeader(): string` stub
+    - [x] 1.3.5 Add `generateDiamondHeader(diamondName: string): string` stub
+    - [x] 1.3.6 Add `generateSummaryHeader(options: SummaryHeaderOptions): string` stub
+    - [x] 1.3.7 Add JSDoc to each method with @param, @returns, @example
+  - [x] 1.4 Add private helper method stubs
+    - [x] 1.4.1 Add `private padCell(content: string, width: number, align?: 'left' | 'center' | 'right'): string`
+    - [x] 1.4.2 Add `private wrapInBlockComment(content: string): string`
+    - [x] 1.4.3 Add `private truncateSignature(signature: string, maxLength: number): string`
+    - [x] 1.4.4 Add `private formatStatLine(label: string, value: string | number): string`
+    - [x] 1.4.5 Add JSDoc to private methods
+  - [x] 1.5 Create test file structure
+    - [x] 1.5.1 Create `test/unit/lib/OutputFormatter.test.ts`
+    - [x] 1.5.2 Add imports (expect from chai, OutputFormatter)
+    - [x] 1.5.3 Add main describe block: "OutputFormatter"
+    - [x] 1.5.4 Add nested describe blocks for each public method
+    - [x] 1.5.5 Add beforeEach hook to instantiate OutputFormatter
+  - [x] 1.6 Verify skeleton compiles
+    - [x] 1.6.1 Run `yarn tsc --noEmit` to check for TypeScript errors
+    - [x] 1.6.2 Run `npm run lint` to check for linting issues
+    - [x] 1.6.3 Fix any compilation or lint errors
+  - [x] 1.7 Commit skeleton
+    - [x] 1.7.1 Stage changes: `git add src/lib/OutputFormatter.ts test/unit/lib/OutputFormatter.test.ts`
+    - [x] 1.7.2 Commit: `git commit -m "feat: add OutputFormatter class skeleton with method stubs"`
+
+- [x] 2.0 Implement function selector table generation (Phase 1)
+  - [x] 2.1 Implement private helper: padCell
+    - [x] 2.1.1 Implement left alignment (default): pad with spaces on right
+    - [x] 2.1.2 Implement center alignment: pad equally on both sides
+    - [x] 2.1.3 Implement right alignment: pad with spaces on left
+    - [x] 2.1.4 Handle content longer than width (truncate or return as-is)
+    - [x] 2.1.5 Add unit tests for padCell (6 test cases)
+  - [x] 2.2 Implement private helper: truncateSignature
+    - [x] 2.2.1 Check if signature length > maxLength
+    - [x] 2.2.2 If yes, return signature.substring(0, maxLength - 3) + "..."
+    - [x] 2.2.3 If no, return signature unchanged
+    - [x] 2.2.4 Add unit tests for truncateSignature (4 test cases)
+  - [x] 2.3 Implement private helper: wrapInBlockComment
+    - [x] 2.3.1 Add `/*\n` at start
+    - [x] 2.3.2 Prefix each line with `*`
+    - [x] 2.3.3 Add ` */\n` at end
+    - [x] 2.3.4 Handle empty content gracefully
+    - [x] 2.3.5 Add unit tests for wrapInBlockComment (3 test cases)
+  - [x] 2.4 Define box-drawing character constants
+    - [x] 2.4.1 Add private constants at top of class: HORIZONTAL = '═', VERTICAL = '║'
+    - [x] 2.4.2 Add corner constants: TOP_LEFT = '╔', TOP_RIGHT = '╗', BOTTOM_LEFT = '╚', BOTTOM_RIGHT = '╝'
+    - [x] 2.4.3 Add T-junction constants: LEFT_T = '╠', RIGHT_T = '╣', TOP_T = '╦', BOTTOM_T = '╩'
+    - [x] 2.4.4 Add cross constant: CROSS = '╬'
+  - [x] 2.5 Define table column widths
+    - [x] 2.5.1 Add constants: SELECTOR_WIDTH = 12, FACET_WIDTH = 22, FUNCTION_WIDTH = 50
+    - [x] 2.5.2 Calculate TOTAL_WIDTH = SELECTOR_WIDTH + FACET_WIDTH + FUNCTION_WIDTH + 4 (for borders/spaces)
+  - [x] 2.6 Implement generateSelectorTable - handle empty map
+    - [x] 2.6.1 Check if selectorMap.size === 0
+    - [x] 2.6.2 If empty, return block comment with "No function selectors found" message
+    - [x] 2.6.3 Add test case for empty selector map
+  - [x] 2.7 Implement generateSelectorTable - build header
+    - [x] 2.7.1 Build top border: TOP_LEFT + HORIZONTAL.repeat(TOTAL_WIDTH - 2) + TOP_RIGHT
+    - [x] 2.7.2 Build title row: VERTICAL + padCell("DIAMOND FUNCTION SELECTOR MAP", TOTAL_WIDTH - 2, 'center') + VERTICAL
+    - [x] 2.7.3 Build separator: LEFT_T + HORIZONTAL.repeat(SELECTOR_WIDTH) + TOP_T + HORIZONTAL.repeat(FACET_WIDTH) + TOP_T + HORIZONTAL.repeat(FUNCTION_WIDTH) + RIGHT_T
+    - [x] 2.7.4 Build column headers row with "Selector", "Facet", "Function"
+    - [x] 2.7.5 Build data separator (same as above but with CROSS instead of TOP_T)
+  - [x] 2.8 Implement generateSelectorTable - sort and build data rows
+    - [x] 2.8.1 Convert Map to array: Array.from(selectorMap.entries())
+    - [x] 2.8.2 Sort by selector (first element): .sort((a, b) => a[0].localeCompare(b[0]))
+    - [x] 2.8.3 Map each entry to table row
+    - [x] 2.8.4 Extract selector, facet name, function signature from SelectorInfo
+    - [x] 2.8.5 Truncate signature if > 47 chars (leave room for padding)
+    - [x] 2.8.6 Build row: VERTICAL + padCell(selector, SELECTOR_WIDTH) + VERTICAL + padCell(facet, FACET_WIDTH) + VERTICAL + padCell(signature, FUNCTION_WIDTH) + VERTICAL
+    - [x] 2.8.7 Join all rows with newlines
+  - [x] 2.9 Implement generateSelectorTable - build footer
+    - [x] 2.9.1 Build bottom border: BOTTOM_LEFT + HORIZONTAL.repeat(SELECTOR_WIDTH) + BOTTOM_T + HORIZONTAL.repeat(FACET_WIDTH) + BOTTOM_T + HORIZONTAL.repeat(FUNCTION_WIDTH) + BOTTOM_RIGHT
+  - [x] 2.10 Implement generateSelectorTable - assemble and wrap
+    - [x] 2.10.1 Combine all parts: header + rows + footer
+    - [x] 2.10.2 Call wrapInBlockComment() on combined table
+    - [x] 2.10.3 Return wrapped table
+  - [x] 2.11 Add comprehensive tests for generateSelectorTable
+    - [x] 2.11.1 Test with 1 selector (minimal case)
+    - [x] 2.11.2 Test with 3 selectors (normal case)
+    - [x] 2.11.3 Test with 10+ selectors (large case)
+    - [x] 2.11.4 Test selector sorting (verify alphabetical order)
+    - [x] 2.11.5 Test long function signature truncation
+    - [x] 2.11.6 Test short function signature (no truncation)
+    - [x] 2.11.7 Test border alignment (all lines same width)
+    - [x] 2.11.8 Test wrapped in block comment (starts with /_, ends with _/)
+    - [x] 2.11.9 Test box-drawing characters present
+    - [x] 2.11.10 Visual inspection test (console.log output for manual review)
+  - [x] 2.12 Run tests and fix issues
+    - [x] 2.12.1 Run `npm test -- test/unit/lib/OutputFormatter.test.ts`
+    - [x] 2.12.2 Verify all selector table tests pass
+    - [x] 2.12.3 Fix any failing tests or implementation bugs
+    - [x] 2.12.4 Verify TypeScript compilation: `yarn tsc --noEmit`
+  - [x] 2.13 Commit selector table implementation
+    - [x] 2.13.1 Stage changes: `git add src/lib/OutputFormatter.ts test/unit/lib/OutputFormatter.test.ts`
+    - [x] 2.13.2 Commit: `git commit -m "feat: implement selector table generation with box-drawing characters"`
+
+- [x] 3.0 Implement section header generation methods (Phase 1)
+  - [x] 3.1 Implement generateFacetHeader
+    - [x] 3.1.1 Define header width constant: HEADER_WIDTH = 80
+    - [x] 3.1.2 Build top border: `// ` + `=`.repeat(76) (80 - 3 for "// ")
+    - [x] 3.1.3 Build title line: `// FACET: ${facet.name}`
+    - [x] 3.1.4 Extract priority (default to "N/A" if missing)
+    - [x] 3.1.5 Extract version (default to "N/A" if missing)
+    - [x] 3.1.6 Calculate selector count: facet.selectors.length
+    - [x] 3.1.7 Build info line: `// Priority: ${priority} | Version: ${version} | Selectors: ${count}`
+    - [x] 3.1.8 Build bottom border (same as top)
+    - [x] 3.1.9 Join with newlines and return
+    - [x] 3.1.10 Add unit tests (5 test cases: normal, missing priority, missing version, 0 selectors, long name)
+  - [x] 3.2 Implement generateInitHeader
+    - [x] 3.2.1 Similar to generateFacetHeader but title: `// INIT CONTRACT: ${initContract.name}`
+    - [x] 3.2.2 Same format for priority, version, selectors
+    - [x] 3.2.3 Add unit tests (3 test cases: normal, missing metadata, visual inspection)
+  - [x] 3.3 Implement generateDependenciesHeader
+    - [x] 3.3.1 Build top border: `// ` + `=`.repeat(76)
+    - [x] 3.3.2 Build title: `// SHARED DEPENDENCIES`
+    - [x] 3.3.3 Build bottom border
+    - [x] 3.3.4 Join with newlines and return
+    - [x] 3.3.5 Add unit tests (2 test cases: verify format, verify width)
+  - [x] 3.4 Implement generateDiamondHeader
+    - [x] 3.4.1 Build top border
+    - [x] 3.4.2 Build title: `// DIAMOND: ${diamondName}`
+    - [x] 3.4.3 Build bottom border
+    - [x] 3.4.4 Join and return
+    - [x] 3.4.5 Add unit tests (3 test cases: short name, long name, special chars)
+  - [x] 3.5 Verify all headers are exactly 80 characters wide
+    - [x] 3.5.1 Add test helper: checkHeaderWidth(header: string, expectedWidth: number)
+    - [x] 3.5.2 Test each header method output for exact width
+    - [x] 3.5.3 Test that all lines in multi-line headers have same width
+  - [x] 3.6 Run tests for section headers
+    - [x] 3.6.1 Run `npm test -- test/unit/lib/OutputFormatter.test.ts --grep "header"`
+    - [x] 3.6.2 Verify all 15+ header tests pass
+    - [x] 3.6.3 Fix any width alignment issues
+  - [x] 3.7 Commit section header implementation
+    - [x] 3.7.1 Stage changes: `git add src/lib/OutputFormatter.ts test/unit/lib/OutputFormatter.test.ts`
+    - [x] 3.7.2 Commit: `git commit -m "feat: implement section header generation (facet, init, dependencies, diamond)"`
+  - [x] 3.8 Phase 1 Complete - Create PR checkpoint
+    - [x] 3.8.1 Run full test suite: `npm test`
+    - [x] 3.8.2 Run lint: `npm run lint`
+    - [x] 3.8.3 Run TypeScript check: `yarn tsc --noEmit`
+    - [x] 3.8.4 Verify all checks pass
+    - [x] 3.8.5 Push branch: `git push -u origin feature/output-formatting-epic4`
+    - [x] 3.8.6 Note: Ready for Phase 1 PR (optional - can wait for Phase 2)
+
+- [x] 4.0 Implement summary header generation (Phase 2)
+  - [x] 4.1 Verify SummaryHeaderOptions interface
+    - [x] 4.1.1 Ensure interface exported from OutputFormatter.ts
+    - [x] 4.1.2 Verify required fields: diamondName, totalContracts, totalFacets, totalSelectors, totalDependencies, generatorVersion
+    - [x] 4.1.3 Verify optional field: networkName
+    - [x] 4.1.4 Add JSDoc to interface with example
+  - [x] 4.2 Implement generateSummaryHeader - build top section
+    - [x] 4.2.1 Build top border using box-drawing chars (same style as selector table)
+    - [x] 4.2.2 Build title row: "FLATTENED DIAMOND CONTRACT" (centered, 78 chars wide)
+    - [x] 4.2.3 Build diamond name row: options.diamondName (centered)
+    - [x] 4.2.4 Build separator line
+  - [x] 4.3 Implement generateSummaryHeader - build metadata section
+    - [x] 4.3.1 Generate timestamp: `new Date().toISOString()`
+    - [x] 4.3.2 Build generated line: `Generated: ${timestamp}` (left-aligned, 78 chars)
+    - [x] 4.3.3 Build generator line: `Generator: hardhat-diamonds v${options.generatorVersion}`
+    - [x] 4.3.4 Conditionally build network line if networkName provided
+    - [x] 4.3.5 Format network line: `Network: ${networkName}` or `Network: ${networkName} (${chainId})` if chainId available
+  - [x] 4.4 Implement generateSummaryHeader - build statistics section
+    - [x] 4.4.1 Build separator line
+    - [x] 4.4.2 Build statistics title: "Statistics:"
+    - [x] 4.4.3 Call formatStatLine helper for each stat
+    - [x] 4.4.4 Build stat: `• Total Contracts: ${options.totalContracts}`
+    - [x] 4.4.5 Build stat: `• Facets: ${options.totalFacets}`
+    - [x] 4.4.6 Build stat: `• Function Selectors: ${options.totalSelectors}`
+    - [x] 4.4.7 Build stat: `• Dependencies: ${options.totalDependencies}`
+  - [x] 4.5 Implement generateSummaryHeader - build warning section
+    - [x] 4.5.1 Build separator line
+    - [x] 4.5.2 Build warning line: "⚠️ AUTO-GENERATED FILE - DO NOT EDIT MANUALLY"
+    - [x] 4.5.3 Build explanation line: "This file was automatically generated by hardhat-diamonds."
+    - [x] 4.5.4 Build caution line: "Any manual changes will be lost on the next regeneration."
+  - [x] 4.6 Implement generateSummaryHeader - assemble and wrap
+    - [x] 4.6.1 Build bottom border
+    - [x] 4.6.2 Combine all sections with proper spacing
+    - [x] 4.6.3 Wrap in block comment using wrapInBlockComment()
+    - [x] 4.6.4 Return complete summary header
+  - [x] 4.7 Implement formatStatLine helper
+    - [x] 4.7.1 Accept label and value parameters
+    - [x] 4.7.2 Format as: `║  ${label}: ${value}`
+    - [x] 4.7.3 Pad to fill 78 characters (80 - 2 for borders)
+    - [x] 4.7.4 Return formatted line
+  - [x] 4.8 Add comprehensive tests for summary header
+    - [x] 4.8.1 Test with all fields provided (including optional networkName)
+    - [x] 4.8.2 Test without networkName (verify network line omitted)
+    - [x] 4.8.3 Test timestamp format (ISO 8601)
+    - [x] 4.8.4 Test all statistics appear
+    - [x] 4.8.5 Test warning section present
+    - [x] 4.8.6 Test box-drawing borders align
+    - [x] 4.8.7 Test wrapped in block comment
+    - [x] 4.8.8 Visual inspection test (console.log output)
+  - [x] 4.9 Run tests for summary header
+    - [x] 4.9.1 Run `npm test -- test/unit/lib/OutputFormatter.test.ts --grep "summary"`
+    - [x] 4.9.2 Verify all tests pass
+    - [x] 4.9.3 Fix any formatting or alignment issues
+  - [x] 4.10 Commit summary header implementation
+    - [x] 4.10.1 Stage changes: `git add src/lib/OutputFormatter.ts test/unit/lib/OutputFormatter.test.ts`
+    - [x] 4.10.2 Commit: `git commit -m "feat: implement summary header with metadata and statistics"`
+
+- [x] 5.0 Implement source cleaning and final assembly (Phase 2)
+  - [x] 5.1 Add source cleaning methods to OutputFormatter
+    - [x] 5.1.1 Add `public cleanSource(content: string): string` method
+    - [x] 5.1.2 Add `public extractPragma(content: string): string | null` method
+    - [x] 5.1.3 Add `public extractSPDX(content: string): string | null` method
+    - [x] 5.1.4 Add JSDoc to each method
+  - [x] 5.2 Implement extractSPDX
+    - [x] 5.2.1 Create regex: `/\/\/\s*SPDX-License-Identifier:\s*(.+)/i`
+    - [x] 5.2.2 Execute regex on content
+    - [x] 5.2.3 If match found, return captured group (license name)
+    - [x] 5.2.4 If no match, return null
+    - [x] 5.2.5 Add unit tests (4 cases: MIT, UNLICENSED, missing, multiple lines)
+  - [x] 5.3 Implement extractPragma
+    - [x] 5.3.1 Create regex: `/pragma\s+solidity\s+([^;]+);/`
+    - [x] 5.3.2 Execute regex on content
+    - [x] 5.3.3 If match found, return full pragma statement
+    - [x] 5.3.4 If no match, return null
+    - [x] 5.3.5 Add unit tests (4 cases: ^0.8.0, >=0.8.0, exact version, missing)
+  - [x] 5.4 Implement cleanSource - remove SPDX and pragma
+    - [x] 5.4.1 Remove SPDX lines: content.replace(/\/\/\s*SPDX-License-Identifier:[^\n]*/gi, '')
+    - [x] 5.4.2 Remove pragma lines: content.replace(/pragma\s+solidity\s+[^;]+;/g, '')
+    - [x] 5.4.3 Preserve line numbers (replace with empty line, not nothing)
+  - [x] 5.5 Implement cleanSource - remove imports
+    - [x] 5.5.1 Remove import statements (already done by deduplication, but verify)
+    - [x] 5.5.2 Regex: `/import\s+(?:(?:\{[^}]*\}|\*\s+as\s+\w+)\s+from\s+)?["'][^"']+["']\s*;/g`
+    - [x] 5.5.3 Replace with empty string
+  - [x] 5.6 Implement cleanSource - remove excess blank lines
+    - [x] 5.6.1 Replace 3+ consecutive newlines with 2 newlines: content.replace(/\n{3,}/g, '\n\n')
+    - [x] 5.6.2 Trim leading and trailing whitespace from entire content
+    - [x] 5.6.3 Return cleaned content
+  - [x] 5.7 Add tests for cleanSource
+    - [x] 5.7.1 Test SPDX removal
+    - [x] 5.7.2 Test pragma removal
+    - [x] 5.7.3 Test import removal
+    - [x] 5.7.4 Test excess blank line removal
+    - [x] 5.7.5 Test preserves comments
+    - [x] 5.7.6 Test preserves contract definitions
+    - [x] 5.7.7 Test full cleaning (all removals combined)
+  - [x] 5.8 Add assembleOutput method to DiamondFlattener
+    - [x] 5.8.1 Open `src/lib/DiamondFlattener.ts`
+    - [x] 5.8.2 Import OutputFormatter at top
+    - [x] 5.8.3 Add private method signature with all parameters per PRD
+    - [x] 5.8.4 Add JSDoc explaining assembly order and purpose
+  - [x] 5.9 Implement assembleOutput - extract SPDX and pragma
+    - [x] 5.9.1 Instantiate OutputFormatter
+    - [x] 5.9.2 Extract SPDX from first deduplicated source
+    - [x] 5.9.3 Fallback to "UNLICENSED" if not found
+    - [x] 5.9.4 Extract pragma from first deduplicated source
+    - [x] 5.9.5 Fallback to "^0.8.0" if not found
+  - [x] 5.10 Implement assembleOutput - build summary header
+    - [x] 5.10.1 Create SummaryHeaderOptions object
+    - [x] 5.10.2 Set diamondName from diamondInfo
+    - [x] 5.10.3 Calculate totalContracts (deduplicated.length)
+    - [x] 5.10.4 Calculate totalFacets (facets.length)
+    - [x] 5.10.5 Calculate totalSelectors (selectorMap.size)
+    - [x] 5.10.6 Calculate totalDependencies (deduplicated sources not in facets/diamond)
+    - [x] 5.10.7 Get generatorVersion from package.json or this.options
+    - [x] 5.10.8 Set networkName from this.options (if available)
+    - [x] 5.10.9 Call formatter.generateSummaryHeader(options)
+  - [x] 5.11 Implement assembleOutput - generate selector table
+    - [x] 5.11.1 Call formatter.generateSelectorTable(selectorMap)
+  - [x] 5.12 Implement assembleOutput - assemble dependencies section
+    - [x] 5.12.1 Filter deduplicated sources: kept=true AND not a facet AND not diamond
+    - [x] 5.12.2 If dependencies exist, add generateDependenciesHeader()
+    - [x] 5.12.3 For each dependency: clean source and add to parts
+    - [x] 5.12.4 If no dependencies, skip this section entirely
+  - [x] 5.13 Implement assembleOutput - assemble facets section
+    - [x] 5.13.1 Loop through facets array
+    - [x] 5.13.2 For each facet: check if isInit flag
+    - [x] 5.13.3 If init: call generateInitHeader(), else call generateFacetHeader()
+    - [x] 5.13.4 Find corresponding source in deduplicated array by facet.contractPath
+    - [x] 5.13.5 Clean source and add to parts
+  - [x] 5.14 Implement assembleOutput - assemble diamond section
+    - [x] 5.14.1 Add generateDiamondHeader(diamondInfo.name)
+    - [x] 5.14.2 Find diamond source in deduplicated array
+    - [x] 5.14.3 If found: clean and add source
+    - [x] 5.14.4 If not found: add warning comment "// Diamond contract not found"
+  - [x] 5.15 Implement assembleOutput - combine all parts
+    - [x] 5.15.1 Create parts array: string[]
+    - [x] 5.15.2 Add SPDX line: `// SPDX-License-Identifier: ${spdx}`
+    - [x] 5.15.3 Add pragma line: `pragma solidity ${pragma};`
+    - [x] 5.15.4 Add blank line
+    - [x] 5.15.5 Add summary header
+    - [x] 5.15.6 Add blank line
+    - [x] 5.15.7 Add selector table
+    - [x] 5.15.8 Add blank line
+    - [x] 5.15.9 Add dependencies section (if exists)
+    - [x] 5.15.10 Add blank line
+    - [x] 5.15.11 Add facets sections
+    - [x] 5.15.12 Add blank line
+    - [x] 5.15.13 Add diamond section
+    - [x] 5.15.14 Join all parts with '\n'
+    - [x] 5.15.15 Return final output string
+  - [x] 5.16 Add tests for assembleOutput
+    - [x] 5.16.1 Create mock data: selector map, deduplicated sources, facets, diamond info
+    - [x] 5.16.2 Test full assembly produces correct order
+    - [x] 5.16.3 Test SPDX extraction and placement
+    - [x] 5.16.4 Test pragma extraction and placement
+    - [x] 5.16.5 Test summary header appears
+    - [x] 5.16.6 Test selector table appears
+    - [x] 5.16.7 Test dependencies section (when present)
+    - [x] 5.16.8 Test facets sections with headers
+    - [x] 5.16.9 Test diamond section with header
+    - [x] 5.16.10 Test blank line spacing
+  - [x] 5.17 Integrate assembleOutput into flatten workflow
+    - [x] 5.17.1 Find the flatten() method in DiamondFlattener
+    - [x] 5.17.2 After deduplication, call this.assembleOutput()
+    - [x] 5.17.3 Pass all required parameters
+    - [x] 5.17.4 Assign result to output variable
+    - [x] 5.17.5 Write output to file using fs.writeFile
+    - [x] 5.17.6 Return output string (for testing)
+  - [x] 5.18 Run all OutputFormatter tests
+    - [x] 5.18.1 Run `npm test -- test/unit/lib/OutputFormatter.test.ts`
+    - [x] 5.18.2 Verify 40+ tests pass
+    - [x] 5.18.3 Check test coverage: should be ≥95%
+  - [x] 5.19 Run DiamondFlattener tests
+    - [x] 5.19.1 Run `npm test -- test/unit/lib/DiamondFlattener.test.ts`
+    - [x] 5.19.2 Verify existing tests still pass
+    - [x] 5.19.3 Fix any broken tests due to integration
+  - [x] 5.20 Commit source cleaning and assembly
+    - [x] 5.20.1 Stage all changes: `git add src/lib/OutputFormatter.ts src/lib/DiamondFlattener.ts test/`
+    - [x] 5.20.2 Commit: `git commit -m "feat: implement source cleaning and final output assembly"`
+
+- [x] 6.0 Integration testing and final verification
+  - [x] 6.1 Create integration test file
+    - [x] 6.1.1 Create `test/integration/lib/OutputFormatting.integration.test.ts`
+    - [x] 6.1.2 Import required modules (OutputFormatter, DiamondFlattener, test utilities)
+    - [x] 6.1.3 Add main describe block: "Output Formatting Integration"
+    - [x] 6.1.4 Set up mock HRE and test data in beforeEach
+  - [x] 6.2 Create end-to-end test - minimal diamond
+    - [x] 6.2.1 Test name: "should generate complete formatted output for minimal diamond"
+    - [x] 6.2.2 Create minimal test data (1 facet, 1 dependency, 3 selectors)
+    - [x] 6.2.3 Call flattener.flatten() or assembleOutput()
+    - [x] 6.2.4 Verify output starts with SPDX
+    - [x] 6.2.5 Verify pragma present
+    - [x] 6.2.6 Verify summary header present
+    - [x] 6.2.7 Verify selector table present
+    - [x] 6.2.8 Verify all sections present in correct order
+    - [x] 6.2.9 Verify output is valid Solidity (no syntax errors)
+  - [x] 6.3 Create end-to-end test - complex diamond
+    - [x] 6.3.1 Test name: "should generate formatted output for complex diamond with multiple facets"
+    - [x] 6.3.2 Create complex test data (5 facets, 10 dependencies, 50+ selectors)
+    - [x] 6.3.3 Include init contract in facets
+    - [x] 6.3.4 Verify all facet headers present
+    - [x] 6.3.5 Verify init contract header uses "INIT CONTRACT" label
+    - [x] 6.3.6 Verify selector table shows all selectors sorted
+    - [x] 6.3.7 Verify dependencies section present
+  - [x] 6.4 Test edge cases
+    - [x] 6.4.1 Test with empty selector map
+    - [x] 6.4.2 Test with no dependencies (skip dependencies section)
+    - [x] 6.4.3 Test with missing diamond contract
+    - [x] 6.4.4 Test with missing SPDX (uses UNLICENSED)
+    - [x] 6.4.5 Test with missing pragma (uses ^0.8.0)
+    - [x] 6.4.6 Test with very long function signatures (truncation)
+    - [x] 6.4.7 Test with very long diamond name
+  - [x] 6.5 Verify output compiles
+    - [x] 6.5.1 Write test that saves output to temp file
+    - [x] 6.5.2 Use Hardhat to compile the generated file
+    - [x] 6.5.3 Verify compilation succeeds with no errors
+    - [x] 6.5.4 Clean up temp file after test
+  - [x] 6.6 Run full test suite
+    - [x] 6.6.1 Run `npm test` (all tests)
+    - [x] 6.6.2 Verify total test count (should be 380+ tests now)
+    - [x] 6.6.3 Verify all tests pass
+    - [x] 6.6.4 Check for any pending tests
+  - [x] 6.7 Run linting and TypeScript checks
+    - [x] 6.7.1 Run `npm run lint`
+    - [x] 6.7.2 Fix any linting errors
+    - [x] 6.7.3 Run `yarn tsc --noEmit`
+    - [x] 6.7.4 Fix any TypeScript errors
+    - [x] 6.7.5 Run `npm run lint:fix` if needed
+  - [x] 6.8 Verify test coverage
+    - [x] 6.8.1 Run `npm test -- --coverage` (if coverage configured)
+    - [x] 6.8.2 Check OutputFormatter coverage (target: ≥95%)
+    - [x] 6.8.3 Check assembleOutput coverage (target: ≥90%)
+    - [x] 6.8.4 Add tests for any uncovered branches
+  - [x] 6.9 Update exports in index.ts
+    - [x] 6.9.1 Open `src/lib/index.ts`
+    - [x] 6.9.2 Add: `export { OutputFormatter } from './OutputFormatter';`
+    - [x] 6.9.3 Add: `export type { SummaryHeaderOptions } from './OutputFormatter';`
+    - [x] 6.9.4 Verify exports compile
+  - [x] 6.10 Commit integration tests
+    - [x] 6.10.1 Stage changes: `git add test/integration/lib/OutputFormatting.integration.test.ts src/lib/index.ts`
+    - [x] 6.10.2 Commit: `git commit -m "test: add comprehensive integration tests for output formatting"`
+  - [x] 6.11 Final verification and documentation
+    - [x] 6.11.1 Run complete build: `npm run build && npm test && npm run lint`
+    - [x] 6.11.2 Verify all steps pass
+    - [x] 6.11.3 Review all code changes for quality
+    - [x] 6.11.4 Verify JSDoc on all public methods
+    - [x] 6.11.5 Check that examples in JSDoc are accurate
+  - [x] 6.12 Push and prepare for PR
+    - [x] 6.12.1 Push all commits: `git push origin feature/output-formatting-epic4`
+    - [x] 6.12.2 Verify all tests pass in CI (if configured)
+    - [x] 6.12.3 Prepare PR description with:
+      - Summary of changes
+      - List of new features (selector table, headers, summary, assembly)
+      - Test coverage stats
+      - Example formatted output
+    - [x] 6.12.4 Open PR: `feature/output-formatting-epic4` → `feature/flatten-engine-epic3`
+    - [x] 6.12.5 Request code review

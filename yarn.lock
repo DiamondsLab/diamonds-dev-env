@@ -948,6 +948,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bcoe/v8-coverage@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "@bcoe/v8-coverage@npm:1.0.2"
+  checksum: 10c0/1eb1dc93cc17fb7abdcef21a6e7b867d6aa99a7ec88ec8207402b23d9083ab22a8011213f04b2cf26d535f1d22dc26139b7929e6c2134c254bd1e14ba5e678c3
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.6.0, @colors/colors@npm:^1.6.0":
   version: 1.6.0
   resolution: "@colors/colors@npm:1.6.0"
@@ -1346,15 +1353,18 @@ __metadata:
     "@typechain/ethers-v6": "npm:^0.5.0"
     "@typechain/hardhat": "npm:^9.0.0"
     "@types/chai": "npm:^4.3.19"
+    "@types/chai-as-promised": "npm:^8"
     "@types/fs-extra": "npm:^11.0.4"
     "@types/mocha": "npm:^10.0.8"
     "@types/node": "npm:^22.5.5"
-    "@types/sinon": "npm:^17.0.3"
+    "@types/sinon": "npm:^21.0.0"
     "@typescript-eslint/eslint-plugin": "npm:^8.8.0"
     "@typescript-eslint/parser": "npm:^8.8.0"
     "@typescript-eslint/types": "npm:^8.8.0"
+    c8: "npm:^10.1.3"
     chai: "npm:^4.5.0"
-    chalk: "npm:^5.6.2"
+    chai-as-promised: "npm:^8.0.2"
+    chalk: "npm:^4.1.2"
     eslint: "npm:^8.57.1"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.2.1"
@@ -1363,7 +1373,7 @@ __metadata:
     hardhat-gas-reporter: "npm:^1.0.9"
     mocha: "npm:^10.7.3"
     prettier: "npm:^3.3.3"
-    sinon: "npm:^19.0.2"
+    sinon: "npm:^21.0.1"
     solidity-coverage: "npm:^0.8.0"
     ts-node: "npm:^10.9.2"
     typechain: "npm:^8.3.0"
@@ -3564,7 +3574,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinonjs/samsam@npm:^8.0.1":
+"@sinonjs/fake-timers@npm:^15.1.0":
+  version: 15.1.0
+  resolution: "@sinonjs/fake-timers@npm:15.1.0"
+  dependencies:
+    "@sinonjs/commons": "npm:^3.0.1"
+  checksum: 10c0/e2913b96376d197be7dae561229879df7fab76745ab4e93fd9d6518cc5010e543b8a4503887c0bb1afcc25493f9c0a4523a01e72b04bd9832b3f3d2c21c00847
+  languageName: node
+  linkType: hard
+
+"@sinonjs/samsam@npm:^8.0.1, @sinonjs/samsam@npm:^8.0.3":
   version: 8.0.3
   resolution: "@sinonjs/samsam@npm:8.0.3"
   dependencies:
@@ -4318,7 +4337,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chai-as-promised@npm:^8.0.1":
+"@types/chai-as-promised@npm:^8, @types/chai-as-promised@npm:^8.0.1":
   version: 8.0.2
   resolution: "@types/chai-as-promised@npm:8.0.2"
   dependencies:
@@ -4669,7 +4688,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sinon@npm:*":
+"@types/sinon@npm:*, @types/sinon@npm:^21.0.0":
   version: 21.0.0
   resolution: "@types/sinon@npm:21.0.0"
   dependencies:
@@ -6235,6 +6254,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"c8@npm:^10.1.3":
+  version: 10.1.3
+  resolution: "c8@npm:10.1.3"
+  dependencies:
+    "@bcoe/v8-coverage": "npm:^1.0.1"
+    "@istanbuljs/schema": "npm:^0.1.3"
+    find-up: "npm:^5.0.0"
+    foreground-child: "npm:^3.1.1"
+    istanbul-lib-coverage: "npm:^3.2.0"
+    istanbul-lib-report: "npm:^3.0.1"
+    istanbul-reports: "npm:^3.1.6"
+    test-exclude: "npm:^7.0.1"
+    v8-to-istanbul: "npm:^9.0.0"
+    yargs: "npm:^17.7.2"
+    yargs-parser: "npm:^21.1.1"
+  peerDependencies:
+    monocart-coverage-reports: ^2
+  peerDependenciesMeta:
+    monocart-coverage-reports:
+      optional: true
+  bin:
+    c8: bin/c8.js
+  checksum: 10c0/1265ddbcb0e624fe200978e9263faf948cb9694ce8e6b858adbb14f1186de2e6c451aa4aabb821e9eb7f1972859e14691eaf2ff12ad96be7a3fc0e39946fc569
+  languageName: node
+  linkType: hard
+
 "cacache@npm:^20.0.1":
   version: 20.0.3
   resolution: "cacache@npm:20.0.3"
@@ -6384,6 +6429,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chai-as-promised@npm:^8.0.2":
+  version: 8.0.2
+  resolution: "chai-as-promised@npm:8.0.2"
+  dependencies:
+    check-error: "npm:^2.1.1"
+  peerDependencies:
+    chai: ">= 2.1.2 < 7"
+  checksum: 10c0/829bcd98c04f0b108b2f7379efd33c668e53fbf0bda8d460dc63c96a709fd5de79909392aa78b4256de16a4d57640641d7affc516111e371d6e9f6aec1cc6c8a
+  languageName: node
+  linkType: hard
+
 "chai@npm:^4.2.0, chai@npm:^4.3.0, chai@npm:^4.5.0":
   version: 4.5.0
   resolution: "chai@npm:4.5.0"
@@ -6420,7 +6476,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^5.3.0, chalk@npm:^5.4.1, chalk@npm:^5.6.2":
+"chalk@npm:^5.3.0, chalk@npm:^5.4.1":
   version: 5.6.2
   resolution: "chalk@npm:5.6.2"
   checksum: 10c0/99a4b0f0e7991796b1e7e3f52dceb9137cae2a9dfc8fc0784a550dc4c558e15ab32ed70b14b21b52beb2679b4892b41a0aa44249bcb996f01e125d58477c6976
@@ -6447,6 +6503,13 @@ __metadata:
   dependencies:
     get-func-name: "npm:^2.0.2"
   checksum: 10c0/94aa37a7315c0e8a83d0112b5bfb5a8624f7f0f81057c73e4707729cdd8077166c6aefb3d8e2b92c63ee130d4a2ff94bad46d547e12f3238cc1d78342a973841
+  languageName: node
+  linkType: hard
+
+"check-error@npm:^2.1.1":
+  version: 2.1.3
+  resolution: "check-error@npm:2.1.3"
+  checksum: 10c0/878e99038fb6476316b74668cd6a498c7e66df3efe48158fa40db80a06ba4258742ac3ee2229c4a2a98c5e73f5dff84eb3e50ceb6b65bbd8f831eafc8338607d
   languageName: node
   linkType: hard
 
@@ -7396,6 +7459,7 @@ __metadata:
     abi2oas: "npm:^0.1.4"
     chai: "npm:^4.2.0"
     chai-as-promised: "npm:^7.1.1"
+    chalk: "npm:^4.1.2"
     concurrently: "npm:^8.2.2"
     contracts-starter: "https://github.com/mudgen/diamond-2-hardhat.git"
     dotenv: "npm:^16.4.7"
@@ -7469,6 +7533,13 @@ __metadata:
   version: 7.0.0
   resolution: "diff@npm:7.0.0"
   checksum: 10c0/251fd15f85ffdf814cfc35a728d526b8d2ad3de338dcbd011ac6e57c461417090766b28995f8ff733135b5fbc3699c392db1d5e27711ac4e00244768cd1d577b
+  languageName: node
+  linkType: hard
+
+"diff@npm:^8.0.2":
+  version: 8.0.3
+  resolution: "diff@npm:8.0.3"
+  checksum: 10c0/d29321c70d3545fdcb56c5fdd76028c3f04c012462779e062303d4c3c531af80d2c360c26b871e6e2b9a971d2422d47e1779a859106c4cac4b5d2d143df70e20
   languageName: node
   linkType: hard
 
@@ -8854,7 +8925,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"foreground-child@npm:^3.1.0, foreground-child@npm:^3.3.0, foreground-child@npm:^3.3.1":
+"foreground-child@npm:^3.1.0, foreground-child@npm:^3.1.1, foreground-child@npm:^3.3.0, foreground-child@npm:^3.3.1":
   version: 3.3.1
   resolution: "foreground-child@npm:3.3.1"
   dependencies:
@@ -9263,7 +9334,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^10.3.10":
+"glob@npm:^10.3.10, glob@npm:^10.4.1":
   version: 10.5.0
   resolution: "glob@npm:10.5.0"
   dependencies:
@@ -10576,7 +10647,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"istanbul-lib-report@npm:^3.0.0":
+"istanbul-lib-report@npm:^3.0.0, istanbul-lib-report@npm:^3.0.1":
   version: 3.0.1
   resolution: "istanbul-lib-report@npm:3.0.1"
   dependencies:
@@ -10609,7 +10680,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"istanbul-reports@npm:^3.0.2, istanbul-reports@npm:^3.1.3":
+"istanbul-reports@npm:^3.0.2, istanbul-reports@npm:^3.1.3, istanbul-reports@npm:^3.1.6":
   version: 3.2.0
   resolution: "istanbul-reports@npm:3.2.0"
   dependencies:
@@ -14575,6 +14646,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sinon@npm:^21.0.1":
+  version: 21.0.1
+  resolution: "sinon@npm:21.0.1"
+  dependencies:
+    "@sinonjs/commons": "npm:^3.0.1"
+    "@sinonjs/fake-timers": "npm:^15.1.0"
+    "@sinonjs/samsam": "npm:^8.0.3"
+    diff: "npm:^8.0.2"
+    supports-color: "npm:^7.2.0"
+  checksum: 10c0/3ec6c26d303fdc056573995d53d31bd1c007cf0d152c1edc1bc60c914d12c5434e213b642e6cd63714f804950999f1c0740e02d42beb424f67c9d5692b83522a
+  languageName: node
+  linkType: hard
+
 "sisteransi@npm:^1.0.5":
   version: 1.0.5
   resolution: "sisteransi@npm:1.0.5"
@@ -15274,6 +15358,17 @@ __metadata:
     glob: "npm:^7.1.4"
     minimatch: "npm:^3.0.4"
   checksum: 10c0/019d33d81adff3f9f1bfcff18125fb2d3c65564f437d9be539270ee74b994986abb8260c7c2ce90e8f30162178b09dbbce33c6389273afac4f36069c48521f57
+  languageName: node
+  linkType: hard
+
+"test-exclude@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "test-exclude@npm:7.0.1"
+  dependencies:
+    "@istanbuljs/schema": "npm:^0.1.2"
+    glob: "npm:^10.4.1"
+    minimatch: "npm:^9.0.4"
+  checksum: 10c0/6d67b9af4336a2e12b26a68c83308c7863534c65f27ed4ff7068a56f5a58f7ac703e8fc80f698a19bb154fd8f705cdf7ec347d9512b2c522c737269507e7b263
   languageName: node
   linkType: hard
 
@@ -16113,7 +16208,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"v8-to-istanbul@npm:^9.0.1":
+"v8-to-istanbul@npm:^9.0.0, v8-to-istanbul@npm:^9.0.1":
   version: 9.3.0
   resolution: "v8-to-istanbul@npm:9.3.0"
   dependencies:

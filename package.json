@@ -125,6 +125,7 @@
     "abi2oas": "^0.1.4",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "chalk": "^4.1.2",
     "concurrently": "^8.2.2",
     "contracts-starter": "https://github.com/mudgen/diamond-2-hardhat.git",
     "dotenv": "^16.4.7",
@@ -162,5 +163,6 @@
     "@nomicfoundation/hardhat-chai-matchers": "^2.1.2",
     "hardhat": "2.26.5"
   },
-  "packageManager": "yarn@4.10.3"
+  "packageManager": "yarn@4.10.3",
+  "dependencies": {}
 }
