@@ -15,44 +15,44 @@ Update the file after completing each sub-task, not just after completing an ent
 - [x] 0.0 Create feature branch
   - [x] 0.1 Create and checkout new branch from main (e.g., `git checkout -b feature/github-actions-ci`)
 
-- [ ] 1.0 Set up workflow file structure and triggers
-  - [ ] 1.1 Create `.github/workflows/` directory if it doesn't exist
-  - [ ] 1.2 Create `ci.yml` file with workflow name and documentation header
-  - [ ] 1.3 Configure pull_request trigger with branch filters (main, develop)
-  - [ ] 1.4 Add workflow-level timeout and permissions settings
+- [x] 1.0 Set up workflow file structure and triggers
+  - [x] 1.1 Create `.github/workflows/` directory if it doesn't exist
+  - [x] 1.2 Create `ci.yml` file with workflow name and documentation header
+  - [x] 1.3 Configure pull_request trigger with branch filters (main, develop)
+  - [x] 1.4 Add workflow-level timeout and permissions settings
 
-- [ ] 2.0 Configure Node.js environment and dependency caching
-  - [ ] 2.1 Check for `.nvmrc` or `package.json` engines field to determine Node.js version
-  - [ ] 2.2 Add actions/checkout step with submodules: recursive
-  - [ ] 2.3 Add actions/setup-node step with version from context
-  - [ ] 2.4 Configure Yarn cache using actions/cache with yarn.lock hash as key
-  - [ ] 2.5 Add dependency installation step (yarn install)
+- [x] 2.0 Configure Node.js environment and dependency caching
+  - [x] 2.1 Check for `.nvmrc` or `package.json` engines field to determine Node.js version
+  - [x] 2.2 Add actions/checkout step with submodules: recursive
+  - [x] 2.3 Add actions/setup-node step with version from context
+  - [x] 2.4 Configure Yarn cache using actions/cache with yarn.lock hash as key
+  - [x] 2.5 Add dependency installation step (yarn install)
 
-- [ ] 3.0 Implement compile job
-  - [ ] 3.1 Define compile job with ubuntu-latest runner
-  - [ ] 3.2 Add checkout, Node.js setup, cache, and install steps (reuse from 2.0)
-  - [ ] 3.3 Add workspace build step (yarn workspace:build)
-  - [ ] 3.4 Add Hardhat compile step (npx hardhat compile)
-  - [ ] 3.5 Set job timeout to 15 minutes
+- [x] 3.0 Implement compile job
+  - [x] 3.1 Define compile job with ubuntu-latest runner
+  - [x] 3.2 Add checkout, Node.js setup, cache, and install steps (reuse from 2.0)
+  - [x] 3.3 Add workspace build step (yarn workspace:build)
+  - [x] 3.4 Add Hardhat compile step (npx hardhat compile)
+  - [x] 3.5 Set job timeout to 15 minutes
 
-- [ ] 4.0 Implement test job
-  - [ ] 4.1 Define test job with ubuntu-latest runner
-  - [ ] 4.2 Add checkout, Node.js setup, cache, and install steps
-  - [ ] 4.3 Add workspace build step (yarn workspace:build)
-  - [ ] 4.4 Add smoke test command to validate test framework runs (e.g., `yarn test --listTests` or similar)
-  - [ ] 4.5 Set job timeout to 15 minutes
+- [x] 4.0 Implement test job
+  - [x] 4.1 Define test job with ubuntu-latest runner
+  - [x] 4.2 Add checkout, Node.js setup, cache, and install steps
+  - [x] 4.3 Add workspace build step (yarn workspace:build)
+  - [x] 4.4 Add smoke test command to validate test framework runs (e.g., `yarn test --listTests` or similar)
+  - [x] 4.5 Set job timeout to 15 minutes
 
-- [ ] 5.0 Implement lint job
-  - [ ] 5.1 Define lint job with ubuntu-latest runner
-  - [ ] 5.2 Add checkout, Node.js setup, cache, and install steps
-  - [ ] 5.3 Add lint step using existing package.json script (yarn lint)
-  - [ ] 5.4 Set job timeout to 15 minutes
+- [x] 5.0 Implement lint job
+  - [x] 5.1 Define lint job with ubuntu-latest runner
+  - [x] 5.2 Add checkout, Node.js setup, cache, and install steps
+  - [x] 5.3 Add lint step using existing package.json script (yarn lint)
+  - [x] 5.4 Set job timeout to 15 minutes
 
-- [ ] 6.0 Implement security job placeholder
-  - [ ] 6.1 Define security job with ubuntu-latest runner
-  - [ ] 6.2 Add checkout, Node.js setup, cache, and install steps
-  - [ ] 6.3 Add placeholder step with echo message indicating future security scanning implementation
-  - [ ] 6.4 Set job timeout to 15 minutes
+- [x] 6.0 Implement security job placeholder
+  - [x] 6.1 Define security job with ubuntu-latest runner
+  - [x] 6.2 Add checkout, Node.js setup, cache, and install steps
+  - [x] 6.3 Add placeholder step with echo message indicating future security scanning implementation
+  - [x] 6.4 Set job timeout to 15 minutes
 
 - [ ] 7.0 Test and validate workflow
   - [ ] 7.1 Commit workflow file to feature branch
