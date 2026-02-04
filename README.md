@@ -283,14 +283,48 @@ Husky is configured to run checks before commits:
 
 ## 🚀 CI/CD
 
-GitHub Actions workflows are configured for:
+GitHub Actions workflows are configured for automated quality checks and publishing.
 
-### CI Pipeline (`ci.yml`)
+### CI Pipeline (`.github/workflows/ci.yml`)
 
-- **Testing**: Runs on Node.js 18.x and 20.x
-- **Linting**: ESLint and Prettier checks
-- **Building**: Compiles TypeScript and contracts
-- **Coverage**: Uploads coverage reports to Codecov
+The CI pipeline runs automatically on all pull requests to `main` and `develop` branches, ensuring code quality before merge.
+
+#### Jobs
+
+All jobs run in parallel for fast feedback:
+
+1. **Compile** - Builds workspace packages and compiles Hardhat contracts
+   - Verifies TypeScript compilation
+   - Validates Solidity contracts compile without errors
+   - Generates Diamond ABIs and TypeChain types
+
+2. **Test** - Validates test framework (smoke test in Epic 1)
+   - Full test suite execution will be added in future epics
+   - Currently validates test infrastructure is working
+
+3. **Lint** - Enforces code quality standards
+   - Runs ESLint with custom Diamond security rules
+   - Checks TypeScript and JavaScript code style
+   - Fails on errors, warns on style issues
+
+4. **Security** - Security scanning (placeholder in Epic 1)
+   - Future integration with Slither, Semgrep, and other tools
+   - Will include dependency vulnerability scanning
+   - Contract-specific security analysis
+
+#### Features
+
+- **Parallel Execution**: All jobs run simultaneously for faster feedback
+- **Dependency Caching**: Yarn dependencies cached for faster subsequent runs
+- **Node.js 18**: Runs on LTS version with Corepack for Yarn 4.x support
+- **Branch Protection**: Failed checks block PR merging (when configured)
+- **15-minute Timeout**: Prevents stuck workflows from consuming resources
+
+#### Workflow Triggers
+
+- Pull requests to `main` branch
+- Pull requests to `develop` branch
+- Does NOT trigger on pushes to feature branches
 
 ### Publishing Pipeline
 
