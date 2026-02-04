@@ -30,19 +30,19 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.2 Configure repository settings to allow package creation and publishing to GHCR
   - [x] 1.3 Set up GitHub Actions permissions for GHCR access (GITHUB_TOKEN with packages:write)
   - [x] 1.4 Test GHCR access by attempting to pull an existing image (if any)
-- [ ] 2.0 Create automated DevContainer build workflow
-  - [ ] 2.1 Create `.github/workflows/build-devcontainer.yml` file
-  - [ ] 2.2 Configure workflow triggers (push to main/develop branches, changes to .devcontainer/)
-  - [ ] 2.3 Add build steps: checkout code, build Docker image, tag with appropriate version
-  - [ ] 2.4 Add push step to publish image to GHCR
-  - [ ] 2.5 Configure build caching to optimize build times
-  - [ ] 2.6 Test the build workflow by pushing a change to trigger it
+- [x] 2.0 Create automated DevContainer build workflow
+  - [x] 2.1 Create `.github/workflows/build-devcontainer.yml` file
+  - [x] 2.2 Configure workflow triggers (push to main/develop branches, changes to .devcontainer/)
+  - [x] 2.3 Add build steps: checkout code, build Docker image, tag with appropriate version
+  - [x] 2.4 Add push step to publish image to GHCR
+  - [x] 2.5 Configure build caching to optimize build times
+  - [x] 2.6 Test the build workflow by pushing a change to trigger it
 - [ ] 3.0 Update CI workflow to use DevContainer image
-  - [ ] 3.1 Open `.github/workflows/ci.yml` and locate the jobs section
-  - [ ] 3.2 Add container configuration to each job using the GHCR image
-  - [ ] 3.3 Configure Yarn cache mounting for dependency caching
-  - [ ] 3.4 Set up environment variables for Node.js and Yarn
-  - [ ] 3.5 Verify parallel job execution still works with container setup
+  - [x] 3.1 Open `.github/workflows/ci.yml` and locate the jobs section
+  - [x] 3.2 Add container configuration to each job using the GHCR image
+  - [x] 3.3 Configure Yarn cache mounting for dependency caching
+  - [x] 3.4 Set up environment variables for Node.js and Yarn
+  - [x] 3.5 Verify parallel job execution still works with container setup
   - [ ] 3.6 Test the updated CI workflow with a sample PR
 - [ ] 4.0 Configure environment variables and GitHub Secrets
   - [ ] 4.1 Navigate to repository Settings > Secrets and variables > Actions
