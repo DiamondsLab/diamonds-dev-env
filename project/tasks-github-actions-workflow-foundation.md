@@ -12,6 +12,8 @@ Update the file after completing each sub-task, not just after completing an ent
 
 ## Tasks
 
+ub
+
 - [x] 0.0 Create feature branch
   - [x] 0.1 Create and checkout new branch from main (e.g., `git checkout -b feature/github-actions-ci`)
 
@@ -55,9 +57,9 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 6.4 Set job timeout to 15 minutes
 
 - [ ] 7.0 Test and validate workflow
-  - [ ] 7.1 Commit workflow file to feature branch
-  - [ ] 7.2 Push feature branch to GitHub
-  - [ ] 7.3 Create draft pull request targeting develop or main
+  - [x] 7.1 Commit workflow file to feature branch
+  - [x] 7.2 Push feature branch to GitHub
+  - [x] 7.3 Create draft pull request targeting develop or main
   - [ ] 7.4 Verify workflow triggers automatically
   - [ ] 7.5 Check all four jobs appear in GitHub Actions tab
   - [ ] 7.6 Verify jobs run in parallel (check timestamps)
