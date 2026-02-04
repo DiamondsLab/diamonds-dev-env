@@ -33,6 +33,7 @@
     "test:all": "yarn test && yarn forge:test",
     "test:deploy-diamond": "npx hardhat run scripts/test-deploy-diamond.ts --network localhost",
     "test:deploy-with-node": "bash scripts/foundry/deploy-for-tests.sh",
+    "workspace:build": "yarn workspaces foreach -Apt run build",
     "lint": "eslint . --ext .ts,.js --fix",
     "format": "prettier --write \"**/*.{ts,js,json,md,sol}\"",
     "install:frozen": "yarn install --frozen-lockfile",
