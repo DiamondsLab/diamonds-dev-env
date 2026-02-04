@@ -56,9 +56,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Build workspace packages
-        run: yarn workspace:build
-
       - name: Compile Hardhat contracts
         run: npx hardhat compile
 
