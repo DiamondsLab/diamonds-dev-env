@@ -65,10 +65,12 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build workspace packages
-        # TEMPORARY: Only build hardhat-diamonds (required for Diamond ABI generation)
+        # TEMPORARY: Only build required packages (hardhat-diamonds and hardhat-multichain)
         # TODO: Re-enable full workspace build after fixing TypeScript errors in other packages
         # See: project/EPIC3-TASK9-BLOCKER-REPORT.md
-        run: yarn workspace @diamondslab/hardhat-diamonds build
+        run: |
+          yarn workspace @diamondslab/hardhat-multichain build
+          yarn workspace @diamondslab/hardhat-diamonds build
 
       - name: Compile contracts
         run: yarn compile
