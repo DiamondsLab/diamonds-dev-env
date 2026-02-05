@@ -37,7 +37,7 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 2.4 Add push step to publish image to GHCR
   - [x] 2.5 Configure build caching to optimize build times
   - [x] 2.6 Test the build workflow by pushing a change to trigger it
-- [ ] 3.0 Update CI workflow to use DevContainer image
+- [x] 3.0 Update CI workflow to use DevContainer image
   - [x] 3.1 Open `.github/workflows/ci.yml` and locate the jobs section
   - [x] 3.2 Add container configuration to each job using the GHCR image
   - [x] 3.3 Configure Yarn cache mounting for dependency caching
@@ -45,12 +45,12 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 3.5 Verify parallel job execution still works with container setup
   - [ ] 3.6 Test the updated CI workflow with a sample PR
 - [ ] 4.0 Configure environment variables and GitHub Secrets
-  - [ ] 4.1 Navigate to repository Settings > Secrets and variables > Actions
-  - [ ] 4.2 Add SNYK_TOKEN secret for security scanning
-  - [ ] 4.3 Add ETHERSCAN_API_KEY secret for contract verification
-  - [ ] 4.4 Add RPC URL environment variables (e.g., MAINNET_RPC_URL, SEPOLIA_RPC_URL)
-  - [ ] 4.5 Configure environment variables in the CI workflow jobs
-  - [ ] 4.6 Verify secrets are accessible in CI runs (without logging values)
+  - [x] 4.1 Navigate to repository Settings > Secrets and variables > Actions
+  - [x] 4.2 Add SNYK_TOKEN secret for security scanning
+  - [x] 4.3 Add ETHERSCAN_API_KEY secret for contract verification
+  - [x] 4.4 Add RPC URL environment variables (e.g., MAINNET_RPC_URL, SEPOLIA_RPC_URL)
+  - [x] 4.5 Configure environment variables in the CI workflow jobs
+  - [x] 4.6 Verify secrets are accessible in CI runs (without logging values)
 - [ ] 5.0 Test and validate container setup in CI
   - [ ] 5.1 Create `scripts/test-container-setup.sh` script to validate container functionality
   - [ ] 5.2 Add validation steps: check Node.js/Yarn versions, verify tools availability
