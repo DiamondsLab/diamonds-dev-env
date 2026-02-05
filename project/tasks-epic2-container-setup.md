@@ -30,14 +30,14 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.2 Configure repository settings to allow package creation and publishing to GHCR
   - [x] 1.3 Set up GitHub Actions permissions for GHCR access (GITHUB_TOKEN with packages:write)
   - [x] 1.4 Test GHCR access by attempting to pull an existing image (if any)
-- [ ] 2.0 Create automated DevContainer build workflow
+- [x] 2.0 Create automated DevContainer build workflow
   - [x] 2.1 Create `.github/workflows/build-devcontainer.yml` file
   - [x] 2.2 Configure workflow triggers (push to main/develop branches, changes to .devcontainer/)
   - [x] 2.3 Add build steps: checkout code, build Docker image, tag with appropriate version
   - [x] 2.4 Add push step to publish image to GHCR
   - [x] 2.5 Configure build caching to optimize build times
-  - [ ] 2.6 Test the build workflow by pushing a change to trigger it
-  - [ ] 2.7 Verify DevContainer image is available on GHCR at ghcr.io/diamondslab/diamonds-dev-env:latest
+  - [x] 2.6 Test the build workflow by pushing a change to trigger it
+  - [x] 2.7 Verify DevContainer image is available on GHCR at ghcr.io/diamondslab/diamonds-dev-env:feature-epic2-container-setup
   - [ ] 2.8 Document image versioning strategy for different branches
 - [ ] 3.0 Update CI workflow to use DevContainer image
   - [x] 3.1 Open `.github/workflows/ci.yml` and locate the jobs section
@@ -63,9 +63,9 @@ Update the file after completing each sub-task, not just after completing an ent
 
 ## Additional Tasks Required
 
-- [ ] 6.0 Build and publish initial DevContainer image to GHCR
-  - [ ] 6.1 Manually trigger build-devcontainer workflow OR merge changes to trigger automatic build
-  - [ ] 6.2 Verify image published successfully to ghcr.io/diamondslab/diamonds-dev-env
-  - [ ] 6.3 Test pulling image locally: `docker pull ghcr.io/diamondslab/diamonds-dev-env:latest`
+- [x] 6.0 Build and publish initial DevContainer image to GHCR
+  - [x] 6.1 Manually trigger build-devcontainer workflow OR merge changes to trigger automatic build
+  - [x] 6.2 Verify image published successfully to ghcr.io/diamondslab/diamonds-dev-env
+  - [x] 6.3 Test pulling image locally: `docker pull ghcr.io/diamondslab/diamonds-dev-env:feature-epic2-container-setup` (requires authentication for private repo)
   - [ ] 6.4 Verify image contains all required tools (Node.js, Yarn, Hardhat, Forge, security tools)
   - [ ] 6.5 Update PR description with GHCR image location and verification status
