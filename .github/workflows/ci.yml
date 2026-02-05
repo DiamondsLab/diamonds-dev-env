@@ -35,8 +35,6 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-      volumes:
-        - ~/.cache/yarn:/root/.cache/yarn
     timeout-minutes: 10  # Epic 3 requirement: Target 2-5 min, hard limit 10 min
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -94,8 +92,6 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-      volumes:
-        - ~/.cache/yarn:/root/.cache/yarn
     timeout-minutes: 15
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -147,8 +143,6 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-      volumes:
-        - ~/.cache/yarn:/root/.cache/yarn
     timeout-minutes: 15
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -197,8 +191,6 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-      volumes:
-        - ~/.cache/yarn:/root/.cache/yarn
     timeout-minutes: 15
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -247,8 +239,6 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-      volumes:
-        - ~/.cache/yarn:/root/.cache/yarn
     timeout-minutes: 10
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
