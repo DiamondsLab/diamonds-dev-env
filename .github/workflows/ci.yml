@@ -86,7 +86,7 @@ jobs:
     name: Test Framework Validation
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/diamondsLab/diamonds-dev-env:latest
+      image: ghcr.io/diamondslab/diamonds-dev-env:latest
       volumes:
         - ~/.cache/yarn:/root/.cache/yarn
     timeout-minutes: 15
@@ -136,7 +136,7 @@ jobs:
     name: Lint Code
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/diamondsLab/diamonds-dev-env:latest
+      image: ghcr.io/diamondslab/diamonds-dev-env:latest
       volumes:
         - ~/.cache/yarn:/root/.cache/yarn
     timeout-minutes: 15
@@ -183,7 +183,7 @@ jobs:
     name: Security Checks (Placeholder)
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/diamondsLab/diamonds-dev-env:latest
+      image: ghcr.io/diamondslab/diamonds-dev-env:latest
       volumes:
         - ~/.cache/yarn:/root/.cache/yarn
     timeout-minutes: 15
@@ -230,7 +230,7 @@ jobs:
     name: Validate Container Setup
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/diamondsLab/diamonds-dev-env:latest
+      image: ghcr.io/diamondslab/diamonds-dev-env:latest
       volumes:
         - ~/.cache/yarn:/root/.cache/yarn
     timeout-minutes: 10
