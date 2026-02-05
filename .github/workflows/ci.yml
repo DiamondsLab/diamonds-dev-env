@@ -22,16 +22,18 @@ concurrency:
 
 jobs:
   # ============================================================================
-  # Compile Job - Verify code compiles successfully
+  # Epic 3: Compilation and Type Generation Job
+  # Compiles Solidity contracts, generates TypeChain types, and creates Diamond ABIs
+  # Artifacts are uploaded for downstream jobs (testing, security scanning)
   # ============================================================================
   compile:
-    name: Compile Contracts
+    name: Compile Contracts & Generate Types
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/diamondsLab/diamonds-dev-env:latest
+      image: ghcr.io/diamondslab/diamonds-dev-env:latest
       volumes:
         - ~/.cache/yarn:/root/.cache/yarn
-    timeout-minutes: 15
+    timeout-minutes: 10  # Epic 3 requirement: Target 2-5 min, hard limit 10 min
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
@@ -39,34 +41,43 @@ jobs:
       SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: recursive  # Required for monorepo workspace packages
+          fetch-depth: 0  # Full history for accurate commit info
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v4
+      - name: Cache dependencies
+        uses: actions/cache@v3
         with:
           path: |
             ~/.cache/yarn
             node_modules
+            **/node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: yarn install --frozen-lockfile
 
-      - name: Compile Hardhat contracts
-        run: npx hardhat compile
+      - name: Compile contracts
+        run: yarn compile
+
+      - name: Generate Diamond ABIs
+        run: yarn diamond:generate-abi-typechain
+
+      - name: Upload compilation artifacts
+        uses: actions/upload-artifact@v4
+        if: always()  # Upload even if previous steps fail for debugging
+        with:
+          name: compilation-artifacts
+          path: |
+            artifacts/
+            typechain-types/
+            diamond-abi/
+            diamond-typechain-types/
+          retention-days: 7
 
   # ============================================================================
   # Test Job - Validate test framework runs successfully
