@@ -211,3 +211,29 @@ jobs:
 
       - name: Security scan placeholder
         run: echo "Security scanning placeholder - Slither, Semgrep, and other tools will be integrated in future epic"
+
+  # ============================================================================
+  # Validate Container Job - Test container setup and functionality
+  # ============================================================================
+  validate-container:
+    name: Validate Container Setup
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/diamondsLab/diamonds-dev-env:latest
+      volumes:
+        - ~/.cache/yarn:/root/.cache/yarn
+    timeout-minutes: 10
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+      MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
+      SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Run container validation
+        run: ./scripts/test-container-setup.sh

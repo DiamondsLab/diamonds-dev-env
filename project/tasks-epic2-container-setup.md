@@ -44,7 +44,7 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 3.4 Set up environment variables for Node.js and Yarn
   - [x] 3.5 Verify parallel job execution still works with container setup
   - [ ] 3.6 Test the updated CI workflow with a sample PR
-- [ ] 4.0 Configure environment variables and GitHub Secrets
+- [x] 4.0 Configure environment variables and GitHub Secrets
   - [x] 4.1 Navigate to repository Settings > Secrets and variables > Actions
   - [x] 4.2 Add SNYK_TOKEN secret for security scanning
   - [x] 4.3 Add ETHERSCAN_API_KEY secret for contract verification
@@ -52,9 +52,9 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 4.5 Configure environment variables in the CI workflow jobs
   - [x] 4.6 Verify secrets are accessible in CI runs (without logging values)
 - [ ] 5.0 Test and validate container setup in CI
-  - [ ] 5.1 Create `scripts/test-container-setup.sh` script to validate container functionality
-  - [ ] 5.2 Add validation steps: check Node.js/Yarn versions, verify tools availability
-  - [ ] 5.3 Measure dependency installation time to ensure under 5 minutes
-  - [ ] 5.4 Add container validation job to CI workflow
+  - [x] 5.1 Create `scripts/test-container-setup.sh` script to validate container functionality
+  - [x] 5.2 Add validation steps: check Node.js/Yarn versions, verify tools availability
+  - [x] 5.3 Measure dependency installation time to ensure under 5 minutes
+  - [x] 5.4 Add container validation job to CI workflow
   - [ ] 5.5 Run full CI pipeline and verify all jobs pass with container setup
   - [ ] 5.6 Monitor for "works on my machine" issues and environment discrepancies
