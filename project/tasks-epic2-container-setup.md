@@ -30,20 +30,22 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 1.2 Configure repository settings to allow package creation and publishing to GHCR
   - [x] 1.3 Set up GitHub Actions permissions for GHCR access (GITHUB_TOKEN with packages:write)
   - [x] 1.4 Test GHCR access by attempting to pull an existing image (if any)
-- [x] 2.0 Create automated DevContainer build workflow
+- [ ] 2.0 Create automated DevContainer build workflow
   - [x] 2.1 Create `.github/workflows/build-devcontainer.yml` file
   - [x] 2.2 Configure workflow triggers (push to main/develop branches, changes to .devcontainer/)
   - [x] 2.3 Add build steps: checkout code, build Docker image, tag with appropriate version
   - [x] 2.4 Add push step to publish image to GHCR
   - [x] 2.5 Configure build caching to optimize build times
-  - [x] 2.6 Test the build workflow by pushing a change to trigger it
-- [x] 3.0 Update CI workflow to use DevContainer image
+  - [ ] 2.6 Test the build workflow by pushing a change to trigger it
+  - [ ] 2.7 Verify DevContainer image is available on GHCR at ghcr.io/diamondslab/diamonds-dev-env:latest
+  - [ ] 2.8 Document image versioning strategy for different branches
+- [ ] 3.0 Update CI workflow to use DevContainer image
   - [x] 3.1 Open `.github/workflows/ci.yml` and locate the jobs section
   - [x] 3.2 Add container configuration to each job using the GHCR image
   - [x] 3.3 Configure Yarn cache mounting for dependency caching
   - [x] 3.4 Set up environment variables for Node.js and Yarn
   - [x] 3.5 Verify parallel job execution still works with container setup
-  - [ ] 3.6 Test the updated CI workflow with a sample PR
+  - [ ] 3.6 Test the updated CI workflow with a sample PR (BLOCKED: requires GHCR image to exist first)
 - [x] 4.0 Configure environment variables and GitHub Secrets
   - [x] 4.1 Navigate to repository Settings > Secrets and variables > Actions
   - [x] 4.2 Add SNYK_TOKEN secret for security scanning
@@ -56,5 +58,14 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 5.2 Add validation steps: check Node.js/Yarn versions, verify tools availability
   - [x] 5.3 Measure dependency installation time to ensure under 5 minutes
   - [x] 5.4 Add container validation job to CI workflow
-  - [ ] 5.5 Run full CI pipeline and verify all jobs pass with container setup
+  - [ ] 5.5 Run full CI pipeline and verify all jobs pass with container setup (BLOCKED: requires GHCR image)
   - [ ] 5.6 Monitor for "works on my machine" issues and environment discrepancies
+
+## Additional Tasks Required
+
+- [ ] 6.0 Build and publish initial DevContainer image to GHCR
+  - [ ] 6.1 Manually trigger build-devcontainer workflow OR merge changes to trigger automatic build
+  - [ ] 6.2 Verify image published successfully to ghcr.io/diamondslab/diamonds-dev-env
+  - [ ] 6.3 Test pulling image locally: `docker pull ghcr.io/diamondslab/diamonds-dev-env:latest`
+  - [ ] 6.4 Verify image contains all required tools (Node.js, Yarn, Hardhat, Forge, security tools)
+  - [ ] 6.5 Update PR description with GHCR image location and verification status
