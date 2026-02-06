@@ -11,10 +11,10 @@ echo "=================================="
 # Check Node.js version
 echo "📦 Node.js version: $(node --version)"
 NODE_VERSION=$(node --version | sed 's/v//')
-if [[ "$NODE_VERSION" =~ ^18 ]]; then
-    echo "✅ Node.js 18.x detected"
+if [[ "$NODE_VERSION" =~ ^(18|22) ]]; then
+    echo "✅ Node.js ${NODE_VERSION%%.*}.x detected"
 else
-    echo "❌ Expected Node.js 18.x, got $NODE_VERSION"
+    echo "❌ Expected Node.js 18.x or 22.x, got $NODE_VERSION"
     exit 1
 fi
 
