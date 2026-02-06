@@ -87,9 +87,9 @@ done
 # Test basic functionality
 echo "🧪 Testing basic functionality..."
 
-# Test Hardhat compilation
+# Test Hardhat compilation (use yarn to run local hardhat, not npx global)
 echo "Testing Hardhat compilation..."
-if npx hardhat compile --quiet; then
+if yarn hardhat compile --quiet; then
     echo "✅ Hardhat compilation successful"
 else
     echo "❌ Hardhat compilation failed"
