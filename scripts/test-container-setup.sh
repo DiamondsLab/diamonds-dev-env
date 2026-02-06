@@ -31,14 +31,25 @@ fi
 # Check core tools
 echo "🔧 Checking core development tools..."
 
-# Check global tools
-TOOLS=("forge" "solc" "git" "curl" "wget")
-for tool in "${TOOLS[@]}"; do
+# Check essential tools (required for Epic 3)
+ESSENTIAL_TOOLS=("git" "curl" "wget")
+for tool in "${ESSENTIAL_TOOLS[@]}"; do
     if command -v "$tool" &> /dev/null; then
         echo "✅ $tool: $(which $tool)"
     else
         echo "❌ $tool: not found"
         exit 1
+    fi
+done
+
+# Check optional tools (nice to have but not critical)
+echo "🔧 Checking optional development tools..."
+OPTIONAL_TOOLS=("forge" "solc")
+for tool in "${OPTIONAL_TOOLS[@]}"; do
+    if command -v "$tool" &> /dev/null; then
+        echo "✅ $tool: $(which $tool)"
+    else
+        echo "⚠️  $tool: not found (optional)"
     fi
 done
 
