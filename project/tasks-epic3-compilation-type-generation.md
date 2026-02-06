@@ -142,6 +142,21 @@ Update the file after completing each sub-task, not just after completing an ent
   - ✅ Subsequent steps skipped (Generate Diamond ABIs not run)
   - ✅ Artifacts step still runs (if: always()) but reports no files found
 
+- [ ] 11.0 Test dependency caching behavior (IN PROGRESS)
+  - [x] 11.1 Trigger workflow run and note "Cache hit" or "Cache miss" in logs: ✅ Run 21768888942 - Cache HIT
+  - [ ] 11.2 Trigger second workflow run without changes
+  - [ ] 11.3 Verify cache hit occurs on second run
+  - [ ] 11.4 Verify dependency installation takes <30 seconds with cache hit
+  - [ ] 11.5 Make trivial change to yarn.lock to test cache invalidation
+  - [ ] 11.6 Verify cache miss and full dependency installation on next run
+  - [ ] 11.7 Revert yarn.lock change
+  
+  **Cache Analysis (Run 21768888942):**
+  - Cache Key: `Linux-yarn-f87a6a4fdcc519d43dc043aa07f0a6e4cbfd34c2148ce574fb609b05ee91a159`
+  - Cache Size: ~316 MB
+  - Cache Restore Time: ~17 seconds
+  - Install Time with Cache: ~57 seconds (needs verification for <30s target)
+
 - [ ] 11.0 Test dependency caching behavior
   - [ ] 11.1 Trigger workflow run and note "Cache hit" or "Cache miss" in logs
   - [ ] 11.2 Trigger second workflow run without changes
