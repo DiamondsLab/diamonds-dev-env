@@ -28,6 +28,9 @@ string constant XMPL_URI = "https://nft.XMPL.io/{id}";
 /// @dev The unique ID for the Example Token (XMPL) in the ERC1155 token standard.
 uint256 constant XMPL_TOKEN_ID = 0;
 
+// INTENTIONAL ERROR FOR CI TESTING - This line will cause compilation to fail
+this is not valid solidity syntax and should cause an error;
+
 // Maximum Value for a uint128
 /// @dev The maximum possible value for a uint128 variable.
 uint128 constant MAX_UINT128 = uint128(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF);
