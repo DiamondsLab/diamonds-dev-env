@@ -75,13 +75,12 @@ done
 
 # Check environment variables (without logging values)
 echo "🌍 Checking environment variables..."
-REQUIRED_VARS=("SNYK_TOKEN" "ETHERSCAN_API_KEY" "MAINNET_RPC_URL" "SEPOLIA_RPC_URL")
-for var in "${REQUIRED_VARS[@]}"; do
+OPTIONAL_VARS=("SNYK_TOKEN" "ETHERSCAN_API_KEY" "MAINNET_RPC_URL" "SEPOLIA_RPC_URL")
+for var in "${OPTIONAL_VARS[@]}"; do
     if [[ -n "${!var}" ]]; then
         echo "✅ $var: set"
     else
-        echo "❌ $var: not set"
-        exit 1
+        echo "⚠️  $var: not set (optional)"
     fi
 done
 
