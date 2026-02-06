@@ -21,10 +21,10 @@ fi
 # Check Yarn version
 echo "🧶 Yarn version: $(yarn --version)"
 YARN_VERSION=$(yarn --version)
-if [[ "$YARN_VERSION" =~ ^1\.22 ]]; then
-    echo "✅ Yarn 1.22+ detected"
+if [[ "$YARN_VERSION" =~ ^(1\.22|[4-9]\.|[1-9][0-9]+\.) ]]; then
+    echo "✅ Yarn ${YARN_VERSION%%.*}.x detected"
 else
-    echo "❌ Expected Yarn 1.22+, got $YARN_VERSION"
+    echo "❌ Expected Yarn 1.22+ or 4+, got $YARN_VERSION"
     exit 1
 fi
 
