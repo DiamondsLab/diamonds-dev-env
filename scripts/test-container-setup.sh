@@ -31,7 +31,8 @@ fi
 # Check core tools
 echo "🔧 Checking core development tools..."
 
-TOOLS=("hardhat" "forge" "solc" "git" "curl" "wget")
+# Check global tools
+TOOLS=("forge" "solc" "git" "curl" "wget")
 for tool in "${TOOLS[@]}"; do
     if command -v "$tool" &> /dev/null; then
         echo "✅ $tool: $(which $tool)"
@@ -40,6 +41,15 @@ for tool in "${TOOLS[@]}"; do
         exit 1
     fi
 done
+
+# Check npx-accessible tools (installed via package.json)
+echo "🔧 Checking project tools..."
+if npx hardhat --version &> /dev/null; then
+    echo "✅ hardhat: available via npx"
+else
+    echo "❌ hardhat: not available"
+    exit 1
+fi
 
 # Check security tools (placeholders for now)
 echo "🔒 Checking security tools..."
