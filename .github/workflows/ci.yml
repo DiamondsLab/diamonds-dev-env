@@ -70,7 +70,7 @@ jobs:
         # TODO: Re-enable full workspace build after fixing TypeScript errors
         # See: project/EPIC3-TASK9-BLOCKER-REPORT.md
         run: |
-          yarn workspace @diamondslab/hardhat-multichain build
+          yarn workspace hardhat-multichain build
           yarn workspace @diamondslab/hardhat-diamonds build
 
       - name: Compile contracts
