@@ -76,13 +76,12 @@ jobs:
           yarn workspace hardhat-multichain build
           yarn workspace @diamondslab/hardhat-diamonds build
 
-      - name: Compile contracts
-        # Note: yarn compile includes contract compilation + Diamond ABI generation
-        # We rely on pre-generated Diamond ABIs committed to repo
-        # TEMPORARY: Diamond ABI generation requires @diamondslab/diamonds package
-        # which has TypeScript errors preventing build in CI
-        # TODO: Re-enable after fixing workspace package errors
-        run: npx hardhat compile
+      - name: Compile contracts and generate types
+        # Note: yarn compile includes:
+        #   1. Solidity contract compilation (hardhat compile)
+        #   2. TypeChain type generation
+        #   3. Diamond ABI generation (diamond:generate-abi-typechain)
+        run: yarn compile
 
       - name: Upload compilation artifacts
         uses: actions/upload-artifact@v4
