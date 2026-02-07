@@ -17,7 +17,7 @@
     "coverage": "npx hardhat coverage",
     "clean-compile": "yarn clean && yarn compile",
     "diamond:generate-abi": "npx hardhat diamond:generate-abi --diamond-name ExampleDiamond",
-    "diamond:generate-abi-typechain": "npx hardhat diamond:generate-abi-typechain --diamond-name ExampleDiamond",
+    "diamond:generate-abi-typechain": "npx hardhat diamond:generate-abi-typechain --diamond-name ExampleDiamond --verbose",
     "forge:build": "forge build",
     "forge:test": "npx hardhat diamonds-forge:test --diamond-name ExampleDiamond --network localhost --force",
     "forge:test:verbose": "forge test -vvv",

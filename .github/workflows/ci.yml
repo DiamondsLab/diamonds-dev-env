@@ -89,6 +89,7 @@ jobs:
             typechain-types/
             diamond-abi/
             diamond-typechain-types/
+            diamonds/
           retention-days: 7
 
   # ============================================================================
