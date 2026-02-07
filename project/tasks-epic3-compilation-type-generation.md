@@ -133,7 +133,7 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 10.4 Verify error message is clear and actionable: ✅ Shows ParserError with exact file/line (line 32)
   - [x] 10.5 Verify GitHub annotations show error in PR file view: ✅ Annotations present
   - [x] 10.6 Revert intentional error commit: ✅ Fixed in commit 79cc5cc
-  
+
   **Verification Results:**
   - ✅ Compilation fails immediately (not after timeout)
   - ✅ Error message includes: file path, line number, exact error location
@@ -150,9 +150,9 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 11.5 Make trivial change to yarn.lock to test cache invalidation: ✅ Added comment to yarn.lock
   - [x] 11.6 Verify cache miss and full dependency installation on next run: ✅ Run 21769251505 - Lockfile validation error (correct behavior)
   - [x] 11.7 Revert yarn.lock change: ✅ Reverted in commit 6378404
-  
+
   **Cache Analysis:**
-  - **Cache Key Format**: `Linux-yarn-<hash of yarn.lock>`  
+  - **Cache Key Format**: `Linux-yarn-<hash of yarn.lock>`
   - **Cache Size**: ~316 MB
   - **Cache Restore Time**: ~17 seconds (excellent)
   - **Install Time with Cache**: ~64 seconds (over 30s target)
@@ -160,7 +160,7 @@ Update the file after completing each sub-task, not just after completing an ent
     - Time includes: validation (30s), resolution (30s), fetch (fast with cache), link (5s)
   - **Cache Invalidation**: ✅ Works correctly - lockfile changes trigger cache miss
   - **Error Handling**: ✅ `--frozen-lockfile` correctly prevents lockfile modifications
-  
+
   **Findings:**
   - Cache is working as designed
   - Cache hit consistently occurs on repeated runs
@@ -177,13 +177,15 @@ Update the file after completing each sub-task, not just after completing an ent
   - [ ] 11.6 Verify cache miss and full dependency installation on next run
   - [ ] 11.7 Revert yarn.lock change
 
-- [ ] 12.0 Verify Diamond ABI generation
-  - [ ] 12.1 Download artifacts from successful workflow run
-  - [ ] 12.2 Extract and inspect `diamond-abi/ExampleDiamond.json`
-  - [ ] 12.3 Verify combined ABI includes functions from all facets
-  - [ ] 12.4 Inspect `diamond-typechain-types/ExampleDiamond.ts`
-  - [ ] 12.5 Verify TypeChain types include all Diamond functions
-  - [ ] 12.6 Compare Diamond ABI with local generation output for consistency
+- [x] 12.0 Verify Diamond ABI generation ✅ **IN PROGRESS** - Fixing workspace build issues
+  - [x] 12.1 Enable Diamond ABI generation in CI workflow (changed npx hardhat compile → yarn compile)
+  - [x] 12.2 Fix workspace package builds (use yarn workspaces foreach for proper topological build)
+  - [ ] 12.3 Download artifacts from successful workflow run
+  - [ ] 12.4 Extract and inspect `diamond-abi/ExampleDiamond.json`
+  - [ ] 12.5 Verify combined ABI includes functions from all facets
+  - [ ] 12.6 Inspect `diamond-typechain-types/ExampleDiamond.ts`
+  - [ ] 12.7 Verify TypeChain types include all Diamond functions
+  - [ ] 12.8 Compare Diamond ABI with local generation output for consistency
 
 - [ ] 13.0 Performance validation and optimization
   - [ ] 13.1 Review compilation duration across multiple workflow runs

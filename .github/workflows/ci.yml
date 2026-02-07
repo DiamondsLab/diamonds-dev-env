@@ -66,11 +66,12 @@ jobs:
 
       - name: Build workspace packages
         # Build workspace packages required by Hardhat config and Diamond ABI generation
-        # - @diamondslab/diamonds: Core Diamond library (dependency of hardhat-diamonds)
-        # - hardhat-multichain: Multi-chain testing utilities (imported by hardhat.config.ts)
-        # - @diamondslab/hardhat-diamonds: Hardhat plugin for Diamond deployment and ABI generation
-        # Note: Using yarn workspaces foreach to build in dependency order
-        run: yarn workspaces foreach --all --topological-dev run build
+        # NOTE: Workspace packages need explicit build due to TypeScript project references
+        # Build in dependency order: diamonds → hardhat-multichain → hardhat-diamonds
+        run: |
+          cd packages/diamonds && yarn build
+          cd ../hardhat-multichain && yarn build
+          cd ../hardhat-diamonds && yarn build
 
       - name: Compile contracts and generate types
         # Note: yarn compile includes:
