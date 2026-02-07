@@ -5,7 +5,7 @@
 
 import chalk from 'chalk';
 
-async function main() {
+async function main(): Promise<void> {
 	console.log(chalk.blue('🔄 Starting Sepolia Diamond upgrade and monitoring...'));
 
 	try {
@@ -13,7 +13,7 @@ async function main() {
 		console.log(chalk.cyan('📡 Initializing upgrade monitoring system...'));
 
 		// Import and run the upgrade monitoring function
-		const { runSepoliaUpgradeMonitoring } = await import('./monitor-sepolia-upgrade');
+		const { runSepoliaUpgradeMonitoring } = await import('./monitor-sepolia-upgrade.js');
 		await runSepoliaUpgradeMonitoring();
 	} catch (error) {
 		console.error(chalk.red('❌ Upgrade monitoring failed:'), error);

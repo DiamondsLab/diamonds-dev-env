@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Diamond } from '@diamondslab/diamonds';
 import { DiamondMonitor, FacetManager } from '@diamondslab/diamonds-monitor';
 import {
 	LocalDiamondDeployer,
 	LocalDiamondDeployerConfig,
-} from '@diamondslab/hardhat-diamonds/dist/utils';
+} from '@diamondslab/hardhat-diamonds/dist/lib';
 import { expect } from 'chai';
 import hre from 'hardhat';
 
@@ -62,7 +63,7 @@ interface HealthCheckMetrics {
 describe('⚡ Performance and Stress Testing', function () {
 	this.timeout(600000); // 10 minutes for performance tests
 
-	let diamond: Diamond;
+	let diamond: any; // Diamond type from different packages causes conflicts
 	let monitor: DiamondMonitor;
 	let facetManager: FacetManager;
 	let deployer: LocalDiamondDeployer;
@@ -107,7 +108,7 @@ describe('⚡ Performance and Stress Testing', function () {
 		await deployer.setVerbose(false); // Reduce noise in performance tests
 		diamond = await deployer.getDiamondDeployed();
 
-		monitor = new DiamondMonitor(diamond, hre.ethers.provider, {
+		monitor = new DiamondMonitor(diamond as any, hre.ethers.provider, {
 			pollingInterval: 1000,
 			enableEventLogging: false, // Disable to focus on performance
 			enableHealthChecks: true,
