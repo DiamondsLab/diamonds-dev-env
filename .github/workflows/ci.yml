@@ -64,9 +64,13 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      # NOTE: Skipping explicit workspace package builds
-      # Workspace packages will be loaded from source by Hardhat
-      # TypeScript errors have been resolved, so direct source loading works
+      - name: Build workspace packages
+        # Build workspace packages required by Hardhat - they must be compiled to dist/
+        # Using npm run build to avoid Yarn workspace protocol state issues
+        run: |
+          (cd packages/diamonds && npm run build)
+          (cd packages/hardhat-multichain && npm run build)
+          (cd packages/hardhat-diamonds && npm run build)
 
       - name: Compile contracts and generate types
         # Note: yarn compile includes:
