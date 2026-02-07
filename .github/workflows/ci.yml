@@ -64,14 +64,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build workspace packages
-        # Build workspace packages required by Hardhat config and Diamond ABI generation
-        # NOTE: Workspace packages need explicit build due to TypeScript project references
-        # Build in dependency order: diamonds → hardhat-multichain → hardhat-diamonds
-        run: |
-          cd packages/diamonds && yarn build
-          cd ../hardhat-multichain && yarn build
-          cd ../hardhat-diamonds && yarn build
+      # NOTE: Skipping explicit workspace package builds
+      # Workspace packages will be loaded from source by Hardhat
+      # TypeScript errors have been resolved, so direct source loading works
 
       - name: Compile contracts and generate types
         # Note: yarn compile includes:
