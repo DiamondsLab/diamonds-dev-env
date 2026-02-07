@@ -177,7 +177,8 @@ export class DefenderDiamondDeployer {
 				this.diamond.setProvider(this.provider);
 			}
 			if (this.signer) {
-				this.diamond.setSigner(this.signer);
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				this.diamond.setSigner(this.signer as any);
 			} // Create OZDefenderDeploymentStrategy
 			this.strategy = new OZDefenderDeploymentStrategy(
 				this.config.apiKey,
