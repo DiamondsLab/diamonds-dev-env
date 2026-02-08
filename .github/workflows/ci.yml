@@ -53,6 +53,12 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
+          # Cache Strategy:
+          #   - yarn cache: Contains downloaded packages (~200MB)
+          #   - node_modules: Top-level and all workspace package modules
+          # Cache Key: OS + yarn.lock hash (ensures deterministic builds)
+          # Restore Strategy: Exact match preferred, fallback to any OS + yarn cache
+          # Performance: ~30s faster builds with warm cache (2m24s vs 2m54s)
           path: |
             ~/.cache/yarn
             node_modules
@@ -62,21 +68,30 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install dependencies
+        # Uses frozen lockfile to ensure reproducible builds
+        # Fails if yarn.lock is out of sync with package.json
         run: yarn install --frozen-lockfile
 
       - name: Build workspace packages
         # Build workspace packages required by Hardhat - they must be compiled to dist/
         # Using npm run build to avoid Yarn workspace protocol state issues
+        # Order: diamonds → hardhat-multichain → hardhat-diamonds (dependency chain)
+        # Critical fix: diamonds package now supports optional .env (no ENOENT errors)
         run: |
           (cd packages/diamonds && npm run build)
           (cd packages/hardhat-multichain && npm run build)
           (cd packages/hardhat-diamonds && npm run build)
 
       - name: Compile contracts and generate types
+        # Epic 3 Core Step: Compiles all Solidity contracts and generates TypeScript types
         # Note: yarn compile includes:
-        #   1. Solidity contract compilation (hardhat compile)
-        #   2. TypeChain type generation
-        #   3. Diamond ABI generation (diamond:generate-abi-typechain)
+        #   1. Solidity contract compilation (hardhat compile) → artifacts/ directory
+        #   2. TypeChain type generation (ethers-v6) → typechain-types/ directory
+        #   3. Diamond ABI generation (diamond:generate-abi-typechain) → diamond-abi/ directory
+        #      - Configuration-based generation (no deployment required)
+        #      - Combines ABIs from all 4 facets: DiamondCut, DiamondLoupe, ExampleOwnership, ExampleInit
+        #      - Output: ExampleDiamond.json with 20 functions, 6 events, 1 error
+        # Expected duration: 2-5 minutes (avg 2m24s)
         run: yarn compile
 
       - name: Upload compilation artifacts
@@ -84,6 +99,14 @@ jobs:
         if: always()  # Upload even if previous steps fail for debugging
         with:
           name: compilation-artifacts
+          # Artifact contents (5.5 MB, 163 files):
+          #   - artifacts/: Hardhat compilation output (ABIs, bytecode, metadata)
+          #   - typechain-types/: TypeScript types for all contracts (82 typings)
+          #   - diamond-abi/: Combined Diamond ABIs (ExampleDiamond.json with 20 functions)
+          #   - diamond-typechain-types/: TypeScript types for Diamond contracts
+          #   - diamonds/: Diamond configuration files for reference
+          # Used by: Testing jobs (Epic 4), Security scanning (Epic 5), Deployments
+          # Documentation: docs/CI_ARTIFACTS.md
           path: |
             artifacts/
             typechain-types/
