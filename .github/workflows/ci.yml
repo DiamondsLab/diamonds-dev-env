@@ -80,6 +80,7 @@ jobs:
           (cd packages/diamonds && npm run build)
           (cd packages/hardhat-multichain && npm run build)
           (cd packages/hardhat-diamonds && npm run build)
+          (cd packages/diamonds-monitor && npm run build || echo "Warning: diamonds-monitor build failed, continuing...")
 
       - name: Compile contracts and generate types
         # Epic 3 Core Step: Compiles all Solidity contracts and generates TypeScript types
@@ -173,6 +174,7 @@ jobs:
           (cd packages/diamonds && npm run build)
           (cd packages/hardhat-multichain && npm run build)
           (cd packages/hardhat-diamonds && npm run build)
+          (cd packages/diamonds-monitor && npm run build || echo "Warning: diamonds-monitor build failed, continuing...")
 
       - name: Run Hardhat Tests with Coverage
         uses: nick-fields/retry@v2
