@@ -73,15 +73,14 @@ jobs:
 
       - name: Build workspace packages
         # Build workspace packages required by Hardhat - they must be compiled to dist/
-        # Using yarn for workspace packages to ensure proper script execution
+        # Using npm run to avoid Yarn workspace state issues
         # Order: diamonds → hardhat-multichain → hardhat-diamonds (dependency chain)
-        # Critical fix: diamonds package now supports optional .env (no ENOENT errors)
         run: |
-          (cd packages/diamonds && yarn build)
-          (cd packages/hardhat-multichain && yarn build)
-          (cd packages/hardhat-diamonds && yarn build)
-          (cd packages/diamonds-monitor && yarn build || echo "Warning: diamonds-monitor build failed, continuing...")
-          (cd packages/diamonds-hardhat-foundry && yarn build || echo "Warning: diamonds-hardhat-foundry build failed, continuing...")
+          (cd packages/diamonds && npm run build)
+          (cd packages/hardhat-multichain && npm run build)
+          (cd packages/hardhat-diamonds && npm run build)
+          (cd packages/diamonds-monitor && npm run build)
+          (cd packages/diamonds-hardhat-foundry && npm run build)
 
       - name: Compile contracts and generate types
         # Epic 3 Core Step: Compiles all Solidity contracts and generates TypeScript types
@@ -172,11 +171,11 @@ jobs:
 
       - name: Build workspace packages
         run: |
-          (cd packages/diamonds && yarn build)
-          (cd packages/hardhat-multichain && yarn build)
-          (cd packages/hardhat-diamonds && yarn build)
-          (cd packages/diamonds-monitor && yarn build || echo "Warning: diamonds-monitor build failed, continuing...")
-          (cd packages/diamonds-hardhat-foundry && yarn build || echo "Warning: diamonds-hardhat-foundry build failed, continuing...")
+          (cd packages/diamonds && npm run build)
+          (cd packages/hardhat-multichain && npm run build)
+          (cd packages/hardhat-diamonds && npm run build)
+          (cd packages/diamonds-monitor && npm run build)
+          (cd packages/diamonds-hardhat-foundry && npm run build)
 
       - name: Run Hardhat Tests with Coverage
         uses: nick-fields/retry@v2
