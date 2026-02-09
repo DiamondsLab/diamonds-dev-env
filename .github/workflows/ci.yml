@@ -169,33 +169,12 @@ jobs:
           (cd packages/hardhat-multichain && npm run build)
           (cd packages/hardhat-diamonds && npm run build)
 
-      - name: Run Unit Tests
+      - name: Run Hardhat Tests with Coverage
         uses: nick-fields/retry@v2
         with:
-          timeout_minutes: 5
+          timeout_minutes: 15
           max_attempts: 2
-          command: yarn test test/unit --coverage
-
-      - name: Run Integration Tests
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 5
-          max_attempts: 2
-          command: yarn test test/integration --coverage
-
-      - name: Run Deployment Tests
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 5
-          max_attempts: 2
-          command: yarn test test/deployment --coverage
-
-      - name: Run Fuzzing Tests
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 5
-          max_attempts: 2
-          command: yarn test test/fuzzing --coverage
+          command: npx hardhat coverage
 
       - name: Generate Coverage Report Summary
         if: always()
