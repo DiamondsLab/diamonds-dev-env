@@ -148,6 +148,12 @@ jobs:
         with:
           name: compilation-artifacts
 
+      - name: Create .env file
+        run: |
+          # solidity-coverage plugin requires a .env file to exist
+          touch .env
+          echo "# CI environment - no secrets needed" > .env
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
