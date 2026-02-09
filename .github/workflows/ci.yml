@@ -116,59 +116,181 @@ jobs:
           retention-days: 7
 
   # ============================================================================
-  # Test Job - Validate test framework runs successfully
+  # Epic 4: Testing Pipeline
+  # Runs complete Hardhat test suite with coverage reporting
+  # Enforces 80% coverage threshold and uploads reports as artifacts
   # ============================================================================
   test:
-    name: Test Framework Validation
+    name: Run Hardhat Tests with Coverage
     runs-on: ubuntu-latest
+    needs: compile  # Depends on successful compilation
     container:
       image: ghcr.io/diamondslab/diamonds-dev-env:feature-epic2-container-setup
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
       options: --user root
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
+      NODE_ENV: test
+      HARDHAT_NETWORK: hardhat
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
-      MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
       SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: recursive
+          fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
         with:
-          node-version: '18'
+          name: compilation-artifacts
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v4
+      - name: Cache dependencies
+        uses: actions/cache@v3
         with:
           path: |
             ~/.cache/yarn
             node_modules
+            **/node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: yarn install --frozen-lockfile
 
       - name: Build workspace packages
-        # TEMPORARY: Skip workspace build in test job
-        # TODO: Re-enable after fixing TypeScript errors in workspace packages
-        # See: project/EPIC3-TASK9-BLOCKER-REPORT.md
-        run: echo "Skipping workspace build - see blocker report"
+        run: |
+          (cd packages/diamonds && npm run build)
+          (cd packages/hardhat-multichain && npm run build)
+          (cd packages/hardhat-diamonds && npm run build)
 
-      - name: Validate test framework
-        run: echo "Test framework validated - full test suite will be added in future epic"
+      - name: Run Unit Tests
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 2
+          command: yarn test test/unit --coverage
+
+      - name: Run Integration Tests
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 2
+          command: yarn test test/integration --coverage
+
+      - name: Run Deployment Tests
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 2
+          command: yarn test test/deployment --coverage
+
+      - name: Run Fuzzing Tests
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 2
+          command: yarn test test/fuzzing --coverage
+
+      - name: Generate Coverage Report Summary
+        if: always()
+        run: |
+          if [ -f coverage/coverage-summary.json ]; then
+            echo "📊 Coverage Summary:"
+            cat coverage/coverage-summary.json
+          else
+            echo "⚠️ Coverage report not found"
+          fi
+
+      - name: Check Coverage Threshold
+        run: |
+          if [ ! -f coverage/coverage-summary.json ]; then
+            echo "❌ Coverage report not found - tests may have failed"
+            exit 1
+          fi
+          
+          # Parse coverage metrics
+          lines=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+          branches=$(jq '.total.branches.pct' coverage/coverage-summary.json)
+          functions=$(jq '.total.functions.pct' coverage/coverage-summary.json)
+          statements=$(jq '.total.statements.pct' coverage/coverage-summary.json)
+          
+          echo "📊 Coverage Metrics:"
+          echo "  Lines:      ${lines}%"
+          echo "  Branches:   ${branches}%"
+          echo "  Functions:  ${functions}%"
+          echo "  Statements: ${statements}%"
+          
+          # Check threshold (80%)
+          threshold=80
+          failed=false
+          
+          if (( $(echo "$lines < $threshold" | bc -l) )); then
+            echo "❌ Line coverage ${lines}% is below ${threshold}% threshold"
+            failed=true
+          fi
+          
+          if (( $(echo "$branches < $threshold" | bc -l) )); then
+            echo "❌ Branch coverage ${branches}% is below ${threshold}% threshold"
+            failed=true
+          fi
+          
+          if (( $(echo "$functions < $threshold" | bc -l) )); then
+            echo "❌ Function coverage ${functions}% is below ${threshold}% threshold"
+            failed=true
+          fi
+          
+          if [ "$failed" = true ]; then
+            echo ""
+            echo "❌ Coverage check FAILED - one or more metrics below 80% threshold"
+            exit 1
+          fi
+          
+          echo ""
+          echo "✅ Coverage check PASSED - all metrics meet or exceed 80% threshold"
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-coverage-report
+          path: coverage/
+          retention-days: 90
+
+      - name: Generate Job Summary
+        if: always()
+        run: |
+          echo "## 📋 Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f coverage/coverage-summary.json ]; then
+            lines=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+            branches=$(jq '.total.branches.pct' coverage/coverage-summary.json)
+            functions=$(jq '.total.functions.pct' coverage/coverage-summary.json)
+            statements=$(jq '.total.statements.pct' coverage/coverage-summary.json)
+            
+            echo "### ✅ Coverage Metrics" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| Metric | Coverage |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|----------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Lines | ${lines}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| Branches | ${branches}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| Functions | ${functions}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| Statements | ${statements}% |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "📦 Coverage report available as artifact: \`test-coverage-report\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ❌ Tests Failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Coverage report was not generated. Check test execution logs for errors." >> $GITHUB_STEP_SUMMARY
+          fi
+
 
   # ============================================================================
   # Lint Job - TEMPORARILY DISABLED
