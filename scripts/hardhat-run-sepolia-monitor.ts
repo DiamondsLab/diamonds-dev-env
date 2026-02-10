@@ -6,7 +6,7 @@
 import { execSync } from 'child_process';
 import chalk from 'chalk';
 
-async function main() {
+async function main(): Promise<void> {
 	console.log(chalk.blue('🚀 Starting Sepolia deployment and monitoring...'));
 
 	try {
@@ -14,7 +14,7 @@ async function main() {
 		console.log(chalk.cyan('📡 Initializing monitoring system...'));
 
 		// Import and run the monitoring function
-		const { runSepoliaMonitoring } = await import('./monitor-sepolia-deployment');
+		const { runSepoliaMonitoring } = await import('./monitor-sepolia-deployment.js');
 		await runSepoliaMonitoring();
 	} catch (error) {
 		console.error(chalk.red('❌ Deployment monitoring failed:'), error);

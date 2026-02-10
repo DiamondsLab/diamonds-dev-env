@@ -367,7 +367,7 @@ async function executeUpgrade(config: UpgradeMonitoringConfig): Promise<void> {
 	}
 
 	// Import the upgrade function from the upgrade-rpc script
-	const { createRPCConfig } = await import('./deploy/rpc/common');
+	const { createRPCConfig } = await import('./deploy/rpc/common.js');
 
 	// Create RPC config for the upgrade
 	const upgradeConfig = createRPCConfig({

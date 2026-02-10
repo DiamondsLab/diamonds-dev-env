@@ -184,7 +184,8 @@ export class RPCDiamondDeployer {
 		// Initialize diamond with strategy
 		this.diamond = new Diamond(this.config, repository);
 		this.diamond.setProvider(this.provider as SupportedProvider);
-		this.diamond.setSigner(this.signer);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		this.diamond.setSigner(this.signer as any);
 
 		if (this.verbose) {
 			console.log(

@@ -1,6 +1,9 @@
-import '@diamondslab/diamonds-hardhat-foundry';
-import '@diamondslab/diamonds-monitor';
-import '@diamondslab/hardhat-diamonds';
+// TEMPORARY: Commented out to unblock Epic 3 testing due to TypeScript errors in workspace packages
+// See: project/EPIC3-TASK9-BLOCKER-REPORT.md
+// TODO: Re-enable after fixing workspace package TypeScript errors
+// import '@diamondslab/diamonds-hardhat-foundry';
+// import '@diamondslab/diamonds-monitor';
+import '@diamondslab/hardhat-diamonds'; // Required for Diamond ABI generation
 
 import 'hardhat-multichain';
 

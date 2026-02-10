@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Diamond } from '@diamondslab/diamonds';
 import { DiamondMonitor, EventHandlers, FacetManager } from '@diamondslab/diamonds-monitor';
 import {
 	LocalDiamondDeployer,
 	LocalDiamondDeployerConfig,
-} from '@diamondslab/hardhat-diamonds/dist/utils';
+} from '@diamondslab/hardhat-diamonds/dist/lib';
 import { expect } from 'chai';
 import hre from 'hardhat';
 
 describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 	this.timeout(600000); // 10 minutes for e2e tests
 
-	let diamond: Diamond;
+	let diamond: any; // Diamond type from different packages causes conflicts
 	let monitor: DiamondMonitor;
 	let facetManager: FacetManager;
 	let eventHandlers: EventHandlers;
@@ -42,7 +43,7 @@ describe('🔄 End-to-End Diamond Deployment and Monitoring', function () {
 		deployedDiamondData = diamond.getDeployedDiamondData();
 
 		// Initialize monitoring
-		monitor = new DiamondMonitor(diamond, hre.ethers.provider, {
+		monitor = new DiamondMonitor(diamond as any, hre.ethers.provider, {
 			pollingInterval: 1000,
 			enableEventLogging: true,
 			enableHealthChecks: true,

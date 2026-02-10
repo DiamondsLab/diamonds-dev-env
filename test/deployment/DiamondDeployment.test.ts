@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Diamond } from '@diamondslab/diamonds';
 import {
 	LocalDiamondDeployer,
 	LocalDiamondDeployerConfig,
 	loadDiamondContract,
-} from '@diamondslab/hardhat-diamonds/dist/utils';
+} from '@diamondslab/hardhat-diamonds/dist/lib';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { debug } from 'debug';
@@ -24,11 +25,9 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 	if (process.argv.includes('test-multichain')) {
 		const networkNames = process.argv[process.argv.indexOf('--chains') + 1].split(',');
 		if (networkNames.includes('hardhat')) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			networkProviders.set('hardhat', hre.ethers.provider as any);
 		}
 	} else if (process.argv.includes('test') ?? process.argv.includes('coverage')) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		networkProviders.set('hardhat', hre.ethers.provider as any);
 	}
 
@@ -67,15 +66,15 @@ describe('🧪 Multichain Fork and Diamond Deployment Tests', async function () 
 				let exampleDiamondPlain: ExampleDiamond;
 
 				// Load the Diamond contract using the utility function
-				const exampleDiamondContract = await loadDiamondContract<ExampleDiamond>(
+				const exampleDiamondContract = (await loadDiamondContract(
 					diamond,
 					deployedDiamondData.DiamondAddress ?? '',
 					hre.ethers,
-				);
+				)) as ExampleDiamond;
 				exampleDiamond = exampleDiamondContract;
 
 				ethersMultichain = hre.ethers;
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 				ethersMultichain.provider = provider as any;
 
 				// Retrieve the signers for the chain

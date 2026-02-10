@@ -26,7 +26,7 @@ async function main(): Promise<void> {
 
 	try {
 		// Import the deployment module
-		const { deployDiamond } = await import('./deploy-rpc-core');
+		const { deployDiamond } = await import('./deploy-rpc-core.js');
 
 		// Run deployment with options from environment or defaults
 		await deployDiamond({
