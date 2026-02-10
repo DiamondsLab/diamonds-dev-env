@@ -75,13 +75,13 @@ jobs:
         # Build workspace packages required by Hardhat - they must be compiled to dist/
         # Using npm run build from package directories (yarn workspace requires state file)
         # Order: diamonds → hardhat-multichain → hardhat-diamonds (dependency chain)
-        # Using || true to continue even if optional packages fail
+        # Special handling for diamonds-hardhat-foundry: run tsc and copy-templates separately
         run: |
           (cd packages/diamonds && npm run build)
           (cd packages/hardhat-multichain && npm run build)
           (cd packages/hardhat-diamonds && npm run build)
           (cd packages/diamonds-monitor && npm run build || true)
-          (cd packages/diamonds-hardhat-foundry && npm run build || true)
+          (cd packages/diamonds-hardhat-foundry && npx tsc --build . && mkdir -p dist/templates && cp src/templates/*.template dist/templates/ || true)
 
       - name: Compile contracts and generate types
         # Epic 3 Core Step: Compiles all Solidity contracts and generates TypeScript types
@@ -176,7 +176,7 @@ jobs:
           (cd packages/hardhat-multichain && npm run build)
           (cd packages/hardhat-diamonds && npm run build)
           (cd packages/diamonds-monitor && npm run build || true)
-          (cd packages/diamonds-hardhat-foundry && npm run build || true)
+          (cd packages/diamonds-hardhat-foundry && npx tsc --build . && mkdir -p dist/templates && cp src/templates/*.template dist/templates/ || true)
 
       - name: Run Hardhat Tests with Coverage
         uses: nick-fields/retry@v2
