@@ -188,25 +188,25 @@ jobs:
       - name: Generate Coverage Report Summary
         if: always()
         run: |
-          if [ -f coverage/coverage-summary.json ]; then
+          if [ -f coverage.json ]; then
             echo "📊 Coverage Summary:"
-            cat coverage/coverage-summary.json
+            cat coverage.json
           else
             echo "⚠️ Coverage report not found"
           fi
 
       - name: Check Coverage Threshold
         run: |
-          if [ ! -f coverage/coverage-summary.json ]; then
+          if [ ! -f coverage.json ]; then
             echo "❌ Coverage report not found - tests may have failed"
             exit 1
           fi
           
-          # Parse coverage metrics
-          lines=$(jq '.total.lines.pct' coverage/coverage-summary.json)
-          branches=$(jq '.total.branches.pct' coverage/coverage-summary.json)
-          functions=$(jq '.total.functions.pct' coverage/coverage-summary.json)
-          statements=$(jq '.total.statements.pct' coverage/coverage-summary.json)
+          # Parse coverage metrics from Istanbul's coverage.json format
+          lines=$(jq '.total.lines.pct' coverage.json)
+          branches=$(jq '.total.branches.pct' coverage.json)
+          functions=$(jq '.total.functions.pct' coverage.json)
+          statements=$(jq '.total.statements.pct' coverage.json)
           
           echo "📊 Coverage Metrics:"
           echo "  Lines:      ${lines}%"
