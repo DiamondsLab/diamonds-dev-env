@@ -176,7 +176,7 @@ jobs:
           (cd packages/hardhat-multichain && npm run build)
           (cd packages/hardhat-diamonds && npm run build)
           (cd packages/diamonds-monitor && npm run build || true)
-          (cd packages/diamonds-hardhat-foundry && npx tsc && mkdir -p dist/templates && cp src/templates/*.template dist/templates/ && echo "✓ Build complete" && ls -laR dist/ || (echo "⚠ Build failed" && ls -la . && exit 1))
+          (cd packages/diamonds-hardhat-foundry && npm install && npm run build && echo "✓ Build complete" && ls -laR dist/)
 
       - name: Run Hardhat Tests with Coverage
         uses: nick-fields/retry@v2
