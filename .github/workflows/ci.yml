@@ -81,7 +81,7 @@ jobs:
           (cd packages/hardhat-multichain && npm run build)
           (cd packages/hardhat-diamonds && npm run build)
           (cd packages/diamonds-monitor && npm run build || true)
-          (cd packages/diamonds-hardhat-foundry && npx tsc --build . && mkdir -p dist/templates && cp src/templates/*.template dist/templates/ || true)
+          (cd packages/diamonds-hardhat-foundry && npx tsc --build . && mkdir -p dist/templates && cp src/templates/*.template dist/templates/ && echo "✓ diamonds-hardhat-foundry built successfully" && ls -la dist/ || echo "⚠ diamonds-hardhat-foundry build may have failed")
 
       - name: Compile contracts and generate types
         # Epic 3 Core Step: Compiles all Solidity contracts and generates TypeScript types
@@ -176,7 +176,7 @@ jobs:
           (cd packages/hardhat-multichain && npm run build)
           (cd packages/hardhat-diamonds && npm run build)
           (cd packages/diamonds-monitor && npm run build || true)
-          (cd packages/diamonds-hardhat-foundry && npx tsc --build . && mkdir -p dist/templates && cp src/templates/*.template dist/templates/ || true)
+          (cd packages/diamonds-hardhat-foundry && npx tsc --build . && mkdir -p dist/templates && cp src/templates/*.template dist/templates/ && ls -la dist/ || echo "⚠ diamonds-hardhat-foundry build may have failed")
 
       - name: Run Hardhat Tests with Coverage
         uses: nick-fields/retry@v2
