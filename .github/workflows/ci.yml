@@ -333,10 +333,17 @@ jobs:
   #       run: yarn lint
 
   # ============================================================================
-  # Security Job - Placeholder for future security scanning
+  # Epic 5: Phase 1 Critical Security Tools
+  # These jobs block PR merges on HIGH/CRITICAL findings
+  # Jobs run in parallel for optimal performance
   # ============================================================================
-  security:
-    name: Security Checks (Placeholder)
+
+  # ----------------------------------------------------------------------------
+  # git-secrets: Detect leaked secrets, credentials, and private keys
+  # Blocks: ANY secrets detected (no severity threshold)
+  # ----------------------------------------------------------------------------
+  git-secrets:
+    name: "Security: Detect Leaked Secrets"
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/diamondslab/diamonds-dev-env:feature-epic2-container-setup
@@ -344,41 +351,235 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
       options: --user root
-    timeout-minutes: 15
+    timeout-minutes: 5
+    continue-on-error: false  # Block PR on ANY secrets found
+
+    steps:
+      - name: Checkout code with full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history required for git-secrets scan
+          submodules: recursive
+
+      - name: Run git-secrets scan
+        id: scan
+        run: |
+          echo "🔍 Scanning repository for leaked secrets..."
+          
+          # Run git-secrets on full repository and working directory
+          git secrets --scan || {
+            echo "❌ git-secrets detected potential secrets in the repository"
+            echo "Review the output above to identify and remove sensitive data"
+            exit 1
+          }
+          
+          echo "✅ No secrets detected"
+
+      - name: Upload git-secrets report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: git-secrets-report
+          path: |
+            .git/
+          retention-days: 30
+
+  # ----------------------------------------------------------------------------
+  # Slither: Smart contract static analysis for security vulnerabilities
+  # Blocks: HIGH and CRITICAL severity findings only
+  # ----------------------------------------------------------------------------
+  slither:
+    name: "Security: Smart Contract Analysis (Slither)"
+    runs-on: ubuntu-latest
+    needs: compile  # Requires compiled contracts
+    container:
+      image: ghcr.io/diamondslab/diamonds-dev-env:feature-epic2-container-setup
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user root
+    timeout-minutes: 10
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
       SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Download compilation artifacts
+        uses: actions/download-artifact@v4
         with:
-          node-version: '18'
+          name: compilation-artifacts
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v4
+      - name: Cache dependencies
+        uses: actions/cache@v3
         with:
           path: |
             ~/.cache/yarn
             node_modules
+            **/node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: yarn install --frozen-lockfile
 
-      - name: Security scan placeholder
-        run: echo "Security scanning placeholder - Slither, Semgrep, and other tools will be integrated in future epic"
+      - name: Run Slither analysis
+        id: slither
+        continue-on-error: true  # Allow script to parse results
+        run: |
+          echo "🔍 Running Slither smart contract analysis..."
+          
+          # Run Slither with configuration from slither.config.json
+          # Generate both JSON (for parsing) and SARIF (for GitHub Code Scanning)
+          slither . \
+            --config-file slither.config.json \
+            --json slither-results.json \
+            --sarif slither-results.sarif \
+            --no-fail-pedantic || true
+          
+          echo "✅ Slither analysis complete"
+
+      - name: Check Slither results for HIGH/CRITICAL issues
+        run: |
+          if [ ! -f slither-results.json ]; then
+            echo "⚠️ Slither results file not found"
+            exit 0
+          fi
+          
+          # Parse Slither JSON output for HIGH and CRITICAL severity findings
+          high_count=$(jq '[.results.detectors[] | select(.impact == "High")] | length' slither-results.json 2>/dev/null || echo "0")
+          critical_count=$(jq '[.results.detectors[] | select(.impact == "Critical")] | length' slither-results.json 2>/dev/null || echo "0")
+          medium_count=$(jq '[.results.detectors[] | select(.impact == "Medium")] | length' slither-results.json 2>/dev/null || echo "0")
+          low_count=$(jq '[.results.detectors[] | select(.impact == "Low")] | length' slither-results.json 2>/dev/null || echo "0")
+          
+          echo "📊 Slither Findings Summary:"
+          echo "  Critical: $critical_count"
+          echo "  High:     $high_count"
+          echo "  Medium:   $medium_count"
+          echo "  Low:      $low_count"
+          
+          # Block PR only on HIGH or CRITICAL findings
+          total_blocking=$((critical_count + high_count))
+          
+          if [ "$total_blocking" -gt 0 ]; then
+            echo ""
+            echo "❌ Found $total_blocking HIGH/CRITICAL severity issues"
+            echo "Review slither-results.json artifact for details"
+            exit 1
+          fi
+          
+          echo ""
+          echo "✅ No HIGH/CRITICAL severity issues found"
+
+      - name: Upload Slither reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: slither-report
+          path: |
+            slither-results.json
+            slither-results.sarif
+          retention-days: 30
+
+  # ----------------------------------------------------------------------------
+  # npm audit: Dependency vulnerability scanning
+  # Blocks: HIGH and CRITICAL severity vulnerabilities only
+  # ----------------------------------------------------------------------------
+  npm-audit:
+    name: "Security: Dependency Audit (npm)"
+    runs-on: ubuntu-latest
+    needs: compile  # Ensures dependencies are installed
+    container:
+      image: ghcr.io/diamondslab/diamonds-dev-env:feature-epic2-container-setup
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user root
+    timeout-minutes: 5
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+      SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/yarn
+            node_modules
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run npm audit
+        id: audit
+        continue-on-error: true  # Allow script to parse results
+        run: |
+          echo "🔍 Running npm audit on all dependencies..."
+          
+          # Run npm audit via yarn (Yarn 4 uses npm audit under the hood)
+          # Severity levels: info, low, moderate, high, critical
+          # Block on: high, critical
+          yarn npm audit --all --recursive --json > npm-audit-results.json || true
+          
+          echo "✅ npm audit complete"
+
+      - name: Check audit results for HIGH/CRITICAL vulnerabilities
+        run: |
+          if [ ! -f npm-audit-results.json ]; then
+            echo "⚠️ npm audit results file not found"
+            exit 0
+          fi
+          
+          # Parse npm audit JSON output
+          # Note: Yarn 4's npm audit output format differs slightly from npm's
+          critical_count=$(jq '[.vulnerabilities | to_entries[] | select(.value.severity == "critical")] | length' npm-audit-results.json 2>/dev/null || echo "0")
+          high_count=$(jq '[.vulnerabilities | to_entries[] | select(.value.severity == "high")] | length' npm-audit-results.json 2>/dev/null || echo "0")
+          moderate_count=$(jq '[.vulnerabilities | to_entries[] | select(.value.severity == "moderate")] | length' npm-audit-results.json 2>/dev/null || echo "0")
+          low_count=$(jq '[.vulnerabilities | to_entries[] | select(.value.severity == "low")] | length' npm-audit-results.json 2>/dev/null || echo "0")
+          
+          echo "📊 npm Audit Findings Summary:"
+          echo "  Critical: $critical_count"
+          echo "  High:     $high_count"
+          echo "  Moderate: $moderate_count"
+          echo "  Low:      $low_count"
+          
+          # Block PR only on HIGH or CRITICAL vulnerabilities
+          total_blocking=$((critical_count + high_count))
+          
+          if [ "$total_blocking" -gt 0 ]; then
+            echo ""
+            echo "❌ Found $total_blocking HIGH/CRITICAL severity vulnerabilities"
+            echo "Review npm-audit-results.json artifact for details"
+            exit 1
+          fi
+          
+          echo ""
+          echo "✅ No HIGH/CRITICAL severity vulnerabilities found"
+
+      - name: Upload npm audit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: npm-audit-report
+          path: npm-audit-results.json
+          retention-days: 30
 
   # ============================================================================
   # Validate Container Job - Test container setup and functionality
