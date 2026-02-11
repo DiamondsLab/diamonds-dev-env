@@ -582,6 +582,264 @@ jobs:
           retention-days: 30
 
   # ============================================================================
+  # Epic 5: Phase 2 Extended Security Tools
+  # These jobs report warnings only (non-blocking) during initial rollout
+  # Jobs run in parallel for optimal performance
+  # ============================================================================
+
+  # ----------------------------------------------------------------------------
+  # Snyk: Comprehensive vulnerability database scanning
+  # Blocks: No (warning-only for Phase 2)
+  # ----------------------------------------------------------------------------
+  snyk:
+    name: "Security: Snyk Vulnerability Scan"
+    runs-on: ubuntu-latest
+    needs: compile  # Requires compiled contracts and installed dependencies
+    container:
+      image: ghcr.io/diamondslab/diamonds-dev-env:feature-epic2-container-setup
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user root
+    timeout-minutes: 10
+    continue-on-error: true  # Warning-only (non-blocking)
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+      SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/yarn
+            node_modules
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install Snyk CLI
+        run: |
+          echo "📦 Installing Snyk CLI..."
+          npm install -g snyk
+          snyk --version
+
+      - name: Authenticate with Snyk
+        run: |
+          if [ -z "${{ secrets.SNYK_TOKEN }}" ]; then
+            echo "⚠️ SNYK_TOKEN not configured"
+            echo "Snyk scanning will be skipped"
+            echo "See .github/SNYK_TOKEN_SETUP.md for configuration instructions"
+            exit 0
+          fi
+          
+          echo "🔑 Authenticating with Snyk..."
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run Snyk vulnerability scan
+        id: snyk
+        continue-on-error: true
+        run: |
+          if [ -z "${{ secrets.SNYK_TOKEN }}" ]; then
+            echo "⚠️ Skipping Snyk scan - token not configured"
+            exit 0
+          fi
+          
+          echo "🔍 Running Snyk vulnerability scan on entire monorepo..."
+          
+          # Run Snyk test with JSON and SARIF outputs
+          snyk test --all-projects --json --json-file-output=snyk-results.json --sarif-file-output=snyk-results.sarif || {
+            echo "⚠️ Snyk found vulnerabilities or encountered an error"
+            echo "Check snyk-results.json for details"
+          }
+          
+          echo "✅ Snyk scan complete"
+
+      - name: Generate Snyk summary
+        if: always()
+        run: |
+          if [ ! -f snyk-results.json ]; then
+            echo "⚠️ Snyk results not available"
+            exit 0
+          fi
+          
+          # Parse Snyk JSON output for vulnerability counts
+          critical_count=$(jq '[.vulnerabilities[]? | select(.severity == "critical")] | length' snyk-results.json 2>/dev/null || echo "0")
+          high_count=$(jq '[.vulnerabilities[]? | select(.severity == "high")] | length' snyk-results.json 2>/dev/null || echo "0")
+          medium_count=$(jq '[.vulnerabilities[]? | select(.severity == "medium")] | length' snyk-results.json 2>/dev/null || echo "0")
+          low_count=$(jq '[.vulnerabilities[]? | select(.severity == "low")] | length' snyk-results.json 2>/dev/null || echo "0")
+          
+          echo "📊 Snyk Findings Summary:"
+          echo "  Critical: $critical_count"
+          echo "  High:     $high_count"
+          echo "  Medium:   $medium_count"
+          echo "  Low:      $low_count"
+          echo ""
+          echo "ℹ️  Phase 2: Snyk findings are informational (non-blocking)"
+
+      - name: Upload Snyk reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: snyk-report
+          path: |
+            snyk-results.json
+            snyk-results.sarif
+          retention-days: 30
+
+  # ----------------------------------------------------------------------------
+  # Semgrep: Static analysis for code security issues
+  # Blocks: No (warning-only for Phase 2)
+  # ----------------------------------------------------------------------------
+  semgrep:
+    name: "Security: Static Analysis (Semgrep)"
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/diamondslab/diamonds-dev-env:feature-epic2-container-setup
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user root
+    timeout-minutes: 10
+    continue-on-error: true  # Warning-only (non-blocking)
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+      SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Run Semgrep security scan
+        id: semgrep
+        run: |
+          echo "🔍 Running Semgrep static analysis..."
+          
+          # Run Semgrep with community security rules
+          # Target: TypeScript, JavaScript, and Solidity files
+          # Output: SARIF format for GitHub Code Scanning integration
+          semgrep scan \
+            --config=auto \
+            --sarif \
+            --output=semgrep-results.sarif \
+            --json \
+            --json-output=semgrep-results.json \
+            --verbose \
+            . || {
+            echo "⚠️ Semgrep found security issues or encountered an error"
+            echo "Check semgrep-results.json for details"
+          }
+          
+          echo "✅ Semgrep scan complete"
+
+      - name: Generate Semgrep summary
+        if: always()
+        run: |
+          if [ ! -f semgrep-results.json ]; then
+            echo "⚠️ Semgrep results not available"
+            exit 0
+          fi
+          
+          # Parse Semgrep JSON output for finding counts by severity
+          error_count=$(jq '[.results[]? | select(.extra.severity == "ERROR")] | length' semgrep-results.json 2>/dev/null || echo "0")
+          warning_count=$(jq '[.results[]? | select(.extra.severity == "WARNING")] | length' semgrep-results.json 2>/dev/null || echo "0")
+          info_count=$(jq '[.results[]? | select(.extra.severity == "INFO")] | length' semgrep-results.json 2>/dev/null || echo "0")
+          
+          echo "📊 Semgrep Findings Summary:"
+          echo "  Error:   $error_count"
+          echo "  Warning: $warning_count"
+          echo "  Info:    $info_count"
+          echo ""
+          echo "ℹ️  Phase 2: Semgrep findings are informational (non-blocking)"
+
+      - name: Upload Semgrep reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: semgrep-report
+          path: |
+            semgrep-results.json
+            semgrep-results.sarif
+          retention-days: 30
+
+  # ----------------------------------------------------------------------------
+  # OSV-Scanner: Open Source Vulnerabilities detection
+  # Blocks: No (warning-only for Phase 2)
+  # ----------------------------------------------------------------------------
+  osv-scanner:
+    name: "Security: OSV Database Check"
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/diamondslab/diamonds-dev-env:feature-epic2-container-setup
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user root
+    timeout-minutes: 5
+    continue-on-error: true  # Warning-only (non-blocking)
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+      SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Run OSV-Scanner
+        id: osv
+        run: |
+          echo "🔍 Running OSV-Scanner on lock files..."
+          
+          # Run OSV-Scanner on yarn.lock
+          # OSV-Scanner checks Google's Open Source Vulnerabilities database
+          osv-scanner scan --lockfile=yarn.lock --format=json --output=osv-results.json || {
+            echo "⚠️ OSV-Scanner found vulnerabilities or encountered an error"
+            echo "Check osv-results.json for details"
+          }
+          
+          echo "✅ OSV-Scanner complete"
+
+      - name: Generate OSV-Scanner summary
+        if: always()
+        run: |
+          if [ ! -f osv-results.json ]; then
+            echo "⚠️ OSV-Scanner results not available"
+            exit 0
+          fi
+          
+          # Parse OSV-Scanner JSON output
+          vuln_count=$(jq '[.results[]?.packages[]?.vulnerabilities[]?] | length' osv-results.json 2>/dev/null || echo "0")
+          
+          echo "📊 OSV-Scanner Findings Summary:"
+          echo "  Vulnerabilities found: $vuln_count"
+          echo ""
+          echo "ℹ️  Phase 2: OSV-Scanner findings are informational (non-blocking)"
+
+      - name: Upload OSV-Scanner report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: osv-scanner-report
+          path: osv-results.json
+          retention-days: 30
+
+  # ============================================================================
   # Validate Container Job - Test container setup and functionality
   # ============================================================================
   validate-container:
