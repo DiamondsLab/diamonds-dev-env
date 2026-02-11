@@ -15,6 +15,7 @@ permissions:
   contents: read
   pull-requests: read
   packages: read  # Required to pull container images from GHCR
+  security-events: write  # Required to upload SARIF reports to GitHub Code Scanning
 
 # Cancel in-progress runs when new commits are pushed
 concurrency:
@@ -477,6 +478,14 @@ jobs:
           echo ""
           echo "✅ No HIGH/CRITICAL severity issues found"
 
+      - name: Upload Slither SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('slither-results.sarif') != ''
+        with:
+          sarif_file: slither-results.sarif
+          category: slither-smart-contract-analysis
+        continue-on-error: true  # Don't fail if Code Scanning upload fails
+
       - name: Upload Slither reports
         uses: actions/upload-artifact@v4
         if: always()
@@ -687,6 +696,14 @@ jobs:
           echo ""
           echo "ℹ️  Phase 2: Snyk findings are informational (non-blocking)"
 
+      - name: Upload Snyk SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('snyk-results.sarif') != ''
+        with:
+          sarif_file: snyk-results.sarif
+          category: snyk-vulnerability-scan
+        continue-on-error: true  # Don't fail if Code Scanning upload fails
+
       - name: Upload Snyk reports
         uses: actions/upload-artifact@v4
         if: always()
@@ -764,6 +781,14 @@ jobs:
           echo "  Info:    $info_count"
           echo ""
           echo "ℹ️  Phase 2: Semgrep findings are informational (non-blocking)"
+
+      - name: Upload Semgrep SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('semgrep-results.sarif') != ''
+        with:
+          sarif_file: semgrep-results.sarif
+          category: semgrep-static-analysis
+        continue-on-error: true  # Don't fail if Code Scanning upload fails
 
       - name: Upload Semgrep reports
         uses: actions/upload-artifact@v4

@@ -75,18 +75,18 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 3.11 Configure OSV-Scanner to scan `yarn.lock` and `package-lock.json`
   - [x] 3.12 Set OSV-Scanner job as non-blocking (`continue-on-error: true`)
   - [x] 3.13 Add artifact upload step for OSV-Scanner JSON report
-  - [ ] 3.14 Commit Phase 2 changes with message: `feat(ci): add Phase 2 security scanning (Snyk, Semgrep, OSV-Scanner)`
+  - [x] 3.14 Commit Phase 2 changes with message: `feat(ci): add Phase 2 security scanning (Snyk, Semgrep, OSV-Scanner)`
 
-- [ ] 4.0 GitHub Code Scanning Integration and Artifact Management
-  - [ ] 4.1 Add `github/codeql-action/upload-sarif@v3` step to Slither job
-  - [ ] 4.2 Configure Slither SARIF upload with correct category and tool name
-  - [ ] 4.3 Add `github/codeql-action/upload-sarif@v3` step to Snyk job
-  - [ ] 4.4 Configure Snyk SARIF upload with correct category and tool name
-  - [ ] 4.5 Add `github/codeql-action/upload-sarif@v3` step to Semgrep job
-  - [ ] 4.6 Configure Semgrep SARIF upload with correct category and tool name
-  - [ ] 4.7 Verify all artifact uploads use consistent naming: `{tool-name}-report`
-  - [ ] 4.8 Set artifact retention to 30 days for all security reports
-  - [ ] 4.9 Add conditional logic to handle SARIF upload failures gracefully
+- [x] 4.0 GitHub Code Scanning Integration and Artifact Management
+  - [x] 4.1 Add `github/codeql-action/upload-sarif@v3` step to Slither job
+  - [x] 4.2 Configure Slither SARIF upload with correct category and tool name
+  - [x] 4.3 Add `github/codeql-action/upload-sarif@v3` step to Snyk job
+  - [x] 4.4 Configure Snyk SARIF upload with correct category and tool name
+  - [x] 4.5 Add `github/codeql-action/upload-sarif@v3` step to Semgrep job
+  - [x] 4.6 Configure Semgrep SARIF upload with correct category and tool name
+  - [x] 4.7 Verify all artifact uploads use consistent naming: `{tool-name}-report`
+  - [x] 4.8 Set artifact retention to 30 days for all security reports
+  - [x] 4.9 Add conditional logic to handle SARIF upload failures gracefully
   - [ ] 4.10 Commit Code Scanning integration with message: `feat(ci): integrate security tools with GitHub Code Scanning`
 
 - [ ] 5.0 Testing and Validation
